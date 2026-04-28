@@ -195,6 +195,8 @@ Strict rules:
 - Use employer-safe translated titles such as Food Service Worker, Facilities Support Worker, Warehouse Associate, Laundry Attendant, Grounds Maintenance Worker, Office Support Assistant, Customer Service Assistant, Program Support Assistant, or Peer Support Assistant.
 - Do not use filler words like hardworking, passionate, motivated, or dedicated unless backed by a concrete action.
 - Avoid corporate buzzwords.
+- If desired job is blank, generate best-fit pathways from experience.
+- If desired job is provided, connect prior experience to that target.
 - The tone should be respectful, practical, and confidence-building.
 - Write for a person who may need plain language and may be applying from a phone.
 - Return valid JSON only. No markdown, commentary, explanations, or code fences.
