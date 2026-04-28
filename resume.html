@@ -1,0 +1,1716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReEntry Job Translator </title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ── RESET & ROOT ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+:root {
+  --forest:   #2563EB; /* Primary blue */
+  --pine:     #1D4ED8; /* Dark blue */
+  --sage:     #3B82F6; /* Accent blue */
+  --mist:     #EFF6FF; /* Light blue surface */
+  --cream:    #F9FAFB; /* Page gray */
+  --parchment:#F3F4F6; /* Neutral panel */
+  --gold:     #2563EB; /* Reused as brand accent */
+  --gold-lt:  #93C5FD; /* Light accent */
+  --ink:      #111827;
+  --slate:    #374151;
+  --mid:      #6B7280;
+  --border:   rgba(37,99,235,0.18);
+  --border-lt: rgba(17,24,39,0.08);
+  --shadow:   0 1px 3px rgba(0,0,0,0.08), 0 8px 24px rgba(17,24,39,0.06);
+  --shadow-lg: 0 10px 30px rgba(37,99,235,0.16);
+  --radius:   12px;
+  --radius-sm: 8px;
+}
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── SCREENS ── */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+  padding: 0 5%;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  flex-shrink: 0;
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.topbar-logo {
+  width: 32px;
+  height: 32px;
+  background: var(--gold);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--forest);
+}
+
+.topbar-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--cream);
+  letter-spacing: 0.01em;
+}
+
+.topbar-name span {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.72);
+  margin-top: -1px;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.privacy-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.82);
+}
+
+.privacy-pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22C55E;
+}
+
+/* ── STEP INDICATOR ── */
+.step-track {
+  background: var(--parchment);
+  border-bottom: 1px solid var(--border);
+  padding: 0 5%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  height: 100%;
+  white-space: nowrap;
+  position: relative;
+}
+
+.step-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--mid);
+  background: var(--cream);
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.step-label-text {
+  font-size: 0.75rem;
+  color: var(--mid);
+  font-weight: 400;
+  transition: color 0.2s;
+}
+
+.step-item.active .step-num {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: var(--cream);
+}
+
+.step-item.active .step-label-text { color: var(--forest); font-weight: 500; }
+
+.step-item.done .step-num {
+  background: var(--sage);
+  border-color: var(--sage);
+  color: var(--cream);
+}
+
+.step-item.done .step-label-text { color: var(--sage); }
+
+.step-sep {
+  width: 28px;
+  height: 1px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+/* ── MAIN CONTENT ── */
+.main {
+  flex: 1;
+  padding: 2.5rem 5%;
+  max-width: 760px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ── CARD ── */
+.card {
+  background: white;
+  border: 1px solid var(--border-lt);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 1.25rem;
+}
+
+.card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--forest);
+  margin-bottom: 0.4rem;
+  line-height: 1.2;
+}
+
+.card-sub {
+  font-size: 0.88rem;
+  color: var(--mid);
+  line-height: 1.65;
+  margin-bottom: 1.5rem;
+  font-weight: 300;
+}
+
+/* ── FORM ELEMENTS ── */
+.field { margin-bottom: 1.25rem; }
+.field:last-child { margin-bottom: 0; }
+
+.field label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 5px;
+  letter-spacing: 0.01em;
+}
+
+.field .hint {
+  font-size: 0.75rem;
+  color: var(--mid);
+  margin-bottom: 6px;
+  display: block;
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+.field input[type="text"],
+.field input[type="password"],
+.field input[type="email"],
+.field select,
+.field textarea {
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  color: var(--ink);
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  font-weight: 300;
+  -webkit-appearance: none;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--sage);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+  background: white;
+}
+
+.field textarea { resize: vertical; min-height: 110px; line-height: 1.6; }
+.field select { cursor: pointer; }
+
+/* ── ROLE GRID ── */
+.role-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+  gap: 8px;
+}
+
+.role-btn {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.role-btn:hover {
+  border-color: var(--sage);
+  background: var(--mist);
+}
+
+.role-btn.selected {
+  border: 2px solid var(--forest);
+  background: var(--mist);
+}
+
+.role-btn .ri { font-size: 1.3rem; display: block; margin-bottom: 6px; }
+.role-btn .rn { font-size: 0.82rem; font-weight: 500; color: var(--ink); display: block; }
+.role-btn .re { font-size: 0.7rem; color: var(--mid); display: block; margin-top: 2px; line-height: 1.4; }
+
+/* ── EXPERIENCE BLOCK ── */
+.exp-block {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.exp-header {
+  background: var(--parchment);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.exp-header-title {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--forest);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.exp-num {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--forest);
+  color: var(--cream);
+  font-size: 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+}
+
+.exp-body { padding: 1.25rem; background: white; }
+
+.remove-btn {
+  background: none;
+  border: none;
+  font-size: 0.75rem;
+  color: var(--mid);
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.remove-btn:hover { color: #dc2626; }
+
+/* ── BUTTONS ── */
+.btn-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+.btn-primary {
+  background: var(--forest);
+  color: var(--cream);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 11px 24px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: background 0.15s, transform 0.1s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-primary:hover { background: var(--pine); }
+.btn-primary:active { transform: scale(0.98); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.btn-secondary {
+  background: white;
+  color: var(--forest);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.btn-secondary:hover { background: var(--cream); border-color: var(--sage); }
+
+.btn-ghost {
+  background: none;
+  border: none;
+  color: var(--mid);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  cursor: pointer;
+  padding: 8px 4px;
+  text-decoration: underline;
+}
+
+.btn-ghost:hover { color: var(--forest); }
+
+.btn-add {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  color: var(--mid);
+  cursor: pointer;
+  transition: all 0.15s;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.btn-add:hover { border-color: var(--sage); color: var(--forest); background: var(--mist); }
+
+.btn-icon {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 7px 12px;
+  font-size: 0.75rem;
+  color: var(--slate);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s;
+}
+
+.btn-icon:hover { background: var(--mist); border-color: var(--sage); color: var(--forest); }
+.btn-icon.copied { background: var(--mist); color: var(--forest); border-color: var(--sage); }
+
+/* ── NOTICE BOX ── */
+.notice {
+  background: var(--mist);
+  border: 1px solid rgba(37,99,235,0.18);
+  border-left: 3px solid var(--sage);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  margin-bottom: 1.25rem;
+  font-size: 0.82rem;
+  color: var(--forest);
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+.notice strong { font-weight: 500; }
+
+.notice-warn {
+  background: #FFFBEB;
+  border-color: #FDE68A;
+  border-left-color: #F59E0B;
+  color: #78350F;
+}
+
+/* ── LOADING SCREEN ── */
+.loading-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+}
+
+.loading-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  border-top-color: var(--forest);
+  animation: spin 0.9s linear infinite;
+  margin-bottom: 1.5rem;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--forest);
+  margin-bottom: 0.5rem;
+}
+
+.loading-sub {
+  font-size: 0.88rem;
+  color: var(--mid);
+  line-height: 1.65;
+  max-width: 340px;
+  font-weight: 300;
+}
+
+.loading-steps {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+  width: 100%;
+  max-width: 320px;
+}
+
+.loading-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.82rem;
+  color: var(--mid);
+  font-weight: 300;
+  opacity: 0.4;
+  transition: opacity 0.4s;
+}
+
+.loading-step.active { opacity: 1; color: var(--forest); }
+.loading-step.done { opacity: 0.6; color: var(--sage); }
+
+.ls-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
+  transition: background 0.4s;
+}
+
+.loading-step.active .ls-dot { background: var(--forest); }
+.loading-step.done .ls-dot { background: var(--sage); }
+
+/* ── OUTPUT SCREEN ── */
+.output-wrap {
+  flex: 1;
+  padding: 2rem 5% 3rem;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.output-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.output-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--forest);
+}
+
+.output-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ── RESUME OUTPUT ── */
+.resume-doc {
+  background: white;
+  border: 1px solid var(--border-lt);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.resume-header {
+  background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+  padding: 1.75rem 2rem;
+}
+
+.resume-candidate {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 0.5rem;
+}
+
+.resume-summary-text {
+  font-size: 1rem;
+  color: var(--cream);
+  line-height: 1.7;
+  font-weight: 300;
+  max-width: 680px;
+}
+
+.resume-body { padding: 2rem; }
+
+.resume-section { margin-bottom: 2rem; }
+.resume-section:last-child { margin-bottom: 0; }
+
+.rs-label {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rs-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-lt);
+}
+
+/* Experience entry in output */
+.exp-entry { margin-bottom: 1.5rem; }
+.exp-entry:last-child { margin-bottom: 0; }
+
+.exp-title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  gap: 1rem;
+}
+
+.exp-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--forest);
+  line-height: 1.1;
+}
+
+.exp-duration-badge {
+  font-size: 0.72rem;
+  color: var(--mid);
+  white-space: nowrap;
+  font-weight: 300;
+}
+
+.onet-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.onet-code {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  background: var(--parchment);
+  color: var(--slate);
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+
+.onet-title-text {
+  font-size: 0.75rem;
+  color: var(--mid);
+  font-style: italic;
+}
+
+.bullet-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+}
+
+.bullet-list li {
+  font-size: 0.9rem;
+  color: var(--ink);
+  padding-left: 18px;
+  position: relative;
+  line-height: 1.65;
+  font-weight: 300;
+}
+
+.bullet-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.exp-divider {
+  height: 1px;
+  background: var(--border-lt);
+  margin: 1.5rem 0;
+}
+
+/* Skills section */
+.skills-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.skill-chip {
+  background: var(--mist);
+  border: 1px solid rgba(37,99,235,0.18);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  color: var(--forest);
+  font-weight: 400;
+}
+
+/* Industries */
+.industry-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.industry-chip {
+  background: var(--parchment);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  color: var(--slate);
+}
+
+/* Pathway note */
+.pathway-note {
+  background: var(--parchment);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 14px 16px;
+  font-size: 0.88rem;
+  color: var(--ink);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+/* Copy section bar */
+.section-copy-bar {
+  display: flex;
+  gap: 6px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+/* ── WELCOME SCREEN ── */
+.welcome-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  flex: 1;
+  min-height: calc(100vh - 58px);
+}
+
+.welcome-left {
+  background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+  padding: 5% 8% 5% 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.wl-eyebrow {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wl-eyebrow::before {
+  content: '';
+  width: 20px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.wl-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 500;
+  color: var(--cream);
+  line-height: 1.1;
+  margin-bottom: 1.25rem;
+}
+
+.wl-title em { font-style: italic; color: var(--gold-lt); }
+
+.wl-body {
+  font-size: 0.92rem;
+  color: rgba(255,255,255,0.82);
+  line-height: 1.8;
+  font-weight: 300;
+  margin-bottom: 2rem;
+}
+
+.wl-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wl-fact {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.78);
+  line-height: 1.5;
+}
+
+.wl-fact-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.welcome-right {
+  background: var(--parchment);
+  padding: 5% 8%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.wr-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--forest);
+  margin-bottom: 0.5rem;
+}
+
+.wr-sub {
+  font-size: 0.82rem;
+  color: var(--mid);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+.api-input-wrap {
+  position: relative;
+}
+
+.api-input-wrap input {
+  width: 100%;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.82rem;
+  color: var(--ink);
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 11px 42px 11px 14px;
+  outline: none;
+  letter-spacing: 0.04em;
+  transition: border-color 0.15s;
+}
+
+.api-input-wrap input:focus { border-color: var(--sage); }
+
+.api-eye {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--mid);
+  font-size: 0.9rem;
+  padding: 2px;
+}
+
+.api-help {
+  font-size: 0.72rem;
+  color: var(--mid);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+.api-help a { color: var(--sage); }
+
+.demo-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 1.25rem 0;
+}
+
+.demo-divider::before, .demo-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.demo-divider span { font-size: 0.72rem; color: var(--mid); }
+
+.start-btn {
+  background: var(--forest);
+  color: var(--cream);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 12px 24px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.15s;
+  margin-top: 1rem;
+}
+
+.start-btn:hover { background: var(--pine); }
+.start-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.demo-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 24px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  color: var(--slate);
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.15s;
+}
+
+.demo-btn:hover { background: white; border-color: var(--sage); color: var(--forest); }
+
+.privacy-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 1.5rem;
+}
+
+.p-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.7rem;
+  color: var(--mid);
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 10px;
+}
+
+.p-badge-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #22C55E;
+}
+
+/* ── ERROR STATE ── */
+.error-box {
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  border-left: 3px solid #EF4444;
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  font-size: 0.85rem;
+  color: #7F1D1D;
+  line-height: 1.6;
+  margin-top: 1rem;
+  display: none;
+}
+
+/* ── PRINT STYLES ── */
+@media print {
+  .topbar, .step-track, .output-toolbar, .section-copy-bar,
+  .output-actions, .btn-row, .btn-primary, .btn-secondary,
+  .btn-icon, .notice, .pathway-note-label { display: none !important; }
+
+  .screen { display: block !important; }
+  #screen-output { display: block !important; }
+  #screen-welcome, #screen-form, #screen-loading { display: none !important; }
+
+  body { background: white; }
+  .resume-doc { box-shadow: none; border: none; }
+  .output-wrap { padding: 0; max-width: 100%; }
+  .resume-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 700px) {
+  .welcome-wrap { grid-template-columns: 1fr; }
+  .welcome-left { padding: 8% 6%; min-height: 50vh; }
+  .welcome-right { padding: 8% 6%; }
+  .main { padding: 1.5rem 4%; }
+  .output-wrap { padding: 1.5rem 4% 2rem; }
+  .card { padding: 1.25rem; }
+  .role-grid { grid-template-columns: repeat(2, 1fr); }
+  .resume-body { padding: 1.25rem; }
+  .resume-header { padding: 1.25rem; }
+  .step-track { padding: 0 4%; }
+  .topbar { padding: 0 4%; }
+}
+
+/* Landing-page blue brand refinements */
+.topbar-logo { background: white; color: #2563EB; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-weight: 700; }
+.topbar-name { font-family: 'DM Sans', sans-serif; font-weight: 700; }
+.card, .resume-doc { border-color: rgba(17,24,39,0.08); }
+.card-title, .output-headline, .loading-title, .exp-title, .wr-title { font-family: 'DM Sans', sans-serif; font-weight: 700; }
+.wl-eyebrow::before { background: #BFDBFE; }
+.wl-eyebrow { color: #DBEAFE !important; }
+.rs-label { color: #2563EB; }
+.bullet-list li::before { background: #2563EB; }
+.skill-chip { background: #EFF6FF; border-color: rgba(37,99,235,0.18); color: #1D4ED8; }
+.pathway-note { background: #EFF6FF; border-left-color: #2563EB; }
+.step-track { background: #F9FAFB; }
+.step-item.active .step-num, .exp-num { background: #2563EB; border-color: #2563EB; color: white; }
+.step-item.done .step-num { background: #3B82F6; border-color: #3B82F6; color: white; }
+.btn-primary, .start-btn { box-shadow: 0 8px 18px rgba(37,99,235,0.22); }
+.notice { background: #EFF6FF; border-left-color: #2563EB; color: #1E3A8A; }
+.notice strong { color: #1D4ED8; }
+</style>
+</head>
+<body>
+
+<!-- Homepage starts directly on intake form. No welcome gate. -->
+<!-- ══════════════════════════════════════════
+     SCREEN 2: INTAKE FORM
+══════════════════════════════════════════ -->
+<div class="screen active" id="screen-form">
+  <div class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-logo">R</div>
+      <div class="topbar-name">
+        ReEntry Job Translator
+        <span></span>
+      </div>
+    </div>
+    <div class="privacy-pill">
+      <div class="privacy-pill-dot"></div>
+      No signup
+    </div>
+  </div>
+
+  <div class="step-track">
+    <div class="step-item active" id="st1">
+      <div class="step-num">1</div>
+      <span class="step-label-text">Work experience</span>
+    </div>
+    <div class="step-sep"></div>
+    <div class="step-item" id="st2">
+      <div class="step-num">2</div>
+      <span class="step-label-text">Additional details</span>
+    </div>
+    <div class="step-sep"></div>
+    <div class="step-item" id="st3">
+      <div class="step-num">3</div>
+      <span class="step-label-text">Translate</span>
+    </div>
+  </div>
+
+  <!-- HOMEPAGE / FORM PAGE 1: Work Experience -->
+  <div id="fp1" class="main">
+    <div class="card" style="border-left:4px solid var(--forest); box-shadow: var(--shadow-lg);">
+      <div class="wl-eyebrow" style="color:var(--gold);margin-bottom:0.9rem;">Built for Returning Citizens</div>
+      <h1 class="card-title" style="font-size:2.05rem;margin-bottom:0.65rem;">Turn your work experience into employer-ready resume language.</h1>
+      <p class="card-sub" style="margin-bottom:0;">No account. Fill out the form below and get resume-ready language you can copy, print, or save as a PDF.</p>
+    </div>
+
+    <div class="notice">
+      <strong>Your privacy is protected.</strong> Nothing is saved or stored by this page. Only submit what you are comfortable using for your resume.
+    </div>
+
+    <div id="experiencesContainer"></div>
+
+    <button class="btn-add" id="addExpBtn" onclick="addExperience()">
+      + Add another work experience (optional · up to 3 total)
+    </button>
+
+    <div class="btn-row" style="margin-top: 1.5rem;">
+      <button class="btn-primary" id="fp1Next" onclick="goToFP2()" disabled>
+        Continue →
+      </button>
+    </div>
+  </div>
+
+  <!-- FORM PAGE 2: Additional Details -->
+  <div id="fp2" class="main" style="display:none;">
+    <div class="card">
+      <div class="card-title">A few more details</div>
+      <p class="card-sub">This helps us write better resume language and identify the right industries to target.</p>
+
+      <div class="field">
+        <label>Name for the resume heading (optional)</label>
+        <span class="hint">Leave blank if you do not want your name included.</span>
+        <input type="text" id="fullName" placeholder="e.g. Jordan Ellis">
+      </div>
+
+      <div class="field">
+        <label>What kind of job are you looking for? (optional)</label>
+        <span class="hint">Be as specific or general as you like — or leave blank if you're not sure yet.</span>
+        <input type="text" id="targetJob" placeholder="e.g. warehouse work, restaurant, any maintenance job, office work...">
+      </div>
+
+      <div class="field">
+        <label>What state or city are you job searching in?</label>
+        <input type="text" id="location" placeholder="e.g. Newark NJ, Philadelphia PA, anywhere in New Jersey...">
+      </div>
+
+      <div class="field">
+        <label>Any additional context you want included? (optional)</label>
+        <span class="hint">For example: you're looking for part-time only, you have transportation limitations, you have a specific license or skill not listed above, etc.</span>
+        <textarea id="additionalContext" style="min-height:80px;" placeholder="Optional — anything else that would help us write better language for you..."></textarea>
+      </div>
+
+      <div class="field">
+        <label>I am a... (optional — helps personalize career pathway advice)</label>
+        <select id="careerStage">
+          <option value="">Select if you'd like</option>
+          <option value="recently_released">Recently released (within 6 months)</option>
+          <option value="released_1yr">Released within the past year</option>
+          <option value="released_longer">Released more than a year ago</option>
+          <option value="pre_release">Pre-release / still incarcerated</option>
+          <option value="case_manager">Case manager using this for a client</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="goToFP1()">← Back</button>
+      <button class="btn-primary" onclick="runTranslation()">
+        Translate my experience →
+      </button>
+    </div>
+
+    <div class="error-box" id="formError"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 3: LOADING
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-loading">
+  <div class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-logo">R</div>
+      <div class="topbar-name">ReEntry Job Translator</div>
+    </div>
+    <div class="privacy-pill"><div class="privacy-pill-dot"></div>No signup</div>
+  </div>
+  <div class="loading-wrap">
+    <div class="loading-icon"></div>
+    <div class="loading-title">Translating your experience</div>
+    <p class="loading-sub">Mapping your work history to civilian occupations and writing your resume language. This takes about 10–20 seconds.</p>
+    <div class="loading-steps">
+      <div class="loading-step active" id="ls1"><div class="ls-dot"></div>Reading your work history</div>
+      <div class="loading-step" id="ls2"><div class="ls-dot"></div>Mapping to O*NET civilian occupations</div>
+      <div class="loading-step" id="ls3"><div class="ls-dot"></div>Writing resume bullet points</div>
+      <div class="loading-step" id="ls4"><div class="ls-dot"></div>Identifying transferable skills</div>
+      <div class="loading-step" id="ls5"><div class="ls-dot"></div>Building your career pathway</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 4: OUTPUT
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-output">
+  <div class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-logo">R</div>
+      <div class="topbar-name">ReEntry Job Translator</div>
+    </div>
+    <div class="privacy-pill"><div class="privacy-pill-dot"></div>No signup</div>
+  </div>
+
+  <div class="output-wrap">
+    <div class="output-toolbar">
+      <div class="output-headline">Your translation is ready</div>
+      <div class="output-actions">
+        <button class="btn-icon" onclick="copyAll()">📋 Copy all</button>
+        <button class="btn-icon" onclick="window.print()">🖨 Print / Save PDF</button>
+        <button class="btn-icon" onclick="startOver()">↺ Start over</button>
+      </div>
+    </div>
+
+    <div class="notice" style="margin-bottom:1.25rem;">
+      Review each bullet point and make it your own — add specific numbers you remember, adjust any details that don't feel right. This is your starting point, not the final word.
+    </div>
+
+    <div class="resume-doc" id="resumeDoc">
+      <!-- Rendered by JS -->
+    </div>
+
+    <div style="margin-top: 1.5rem; display: flex; gap: 10px; flex-wrap: wrap;">
+      <button class="btn-primary" onclick="window.print()">Save as PDF</button>
+      <button class="btn-secondary" onclick="startOver()">Translate another experience</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════ -->
+<script>
+/* Production frontend notes:
+   - No user API key is collected.
+   - Translation calls your protected backend at /api/translate.
+   - For full local API testing, run the project with `vercel dev`.
+   - For visual-only local testing, `python3 -m http.server 8000` is fine. */
+let experiences = [];
+let translationResult = null;
+let expCount = 0;
+let lastRequestPayload = null;
+
+const ROLE_TYPES = [
+  { id:'food', name:'Food service', ex:'Kitchen, cooking, serving', icon:'🍳', backendCategory:'kitchen', targetRole:'foodservice', context:'food service, kitchen operations, cooking, meal preparation, food safety, serving, cafeteria, dishwashing' },
+  { id:'maint', name:'Maintenance', ex:'Facilities, repairs, porter', icon:'🔧', backendCategory:'facility-operations', targetRole:'facilities', context:'building maintenance, cleaning, repairs, groundskeeping, porter, janitorial, facilities operations' },
+  { id:'laundry', name:'Laundry', ex:'Linen, garment processing', icon:'👕', backendCategory:'laundry', targetRole:'facilities', context:'commercial laundry, linen processing, garment care, washing, folding, textile services' },
+  { id:'clerical', name:'Clerical / Admin', ex:'Records, data entry, office', icon:'📋', backendCategory:'clerical', targetRole:'clerical', context:'administrative support, data entry, filing, records management, clerical work, office operations' },
+  { id:'logistics', name:'Logistics', ex:'Inventory, supply, stocking', icon:'📦', backendCategory:'warehouse', targetRole:'warehouse', context:'inventory management, supply chain, stocking, distribution, shipping and receiving, warehouse operations' },
+  { id:'education', name:'Education', ex:'Tutoring, peer instruction', icon:'📚', backendCategory:'peer', targetRole:'peerSupport', context:'tutoring, peer education, teaching assistance, GED preparation, educational support, peer mentorship' },
+  { id:'barbering', name:'Barbering / Cosmetology', ex:'Hair, grooming services', icon:'✂️', backendCategory:'peer', targetRole:'general', context:'barbering, cosmetology, hair cutting, grooming, personal care services' },
+  { id:'other', name:'Other work', ex:'Something not listed above', icon:'⭐', backendCategory:'warehouse', targetRole:'general', context:'general work experience' }
+];
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const screen = document.getElementById(id);
+  if (screen) screen.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function startNow() {
+  initForm();
+  showScreen('screen-form');
+}
+
+function goToWelcome() {
+  showScreen('screen-form');
+}
+
+function initForm() {
+  expCount = 0;
+  experiences = [];
+  translationResult = null;
+  document.getElementById('experiencesContainer').innerHTML = '';
+  document.getElementById('addExpBtn').style.display = 'flex';
+  addExperience();
+  goToFP1Steps();
+}
+
+function addExperience() {
+  if (expCount >= 3) return;
+  expCount++;
+  const idx = expCount;
+  experiences.push({
+  id: idx,
+  selectedRoles: [],
+  roleType: '',
+  backendCategory: '',
+  targetRole: '',
+  roleTitle: '',
+  duration: '',
+  duties: '',
+  supervision: 'no',
+  certs: ''
+});
+
+  const rolesHTML = ROLE_TYPES.map(r =>
+    `<button type="button" class="role-btn" data-id="${r.id}" onclick="selectRole(${idx}, '${r.id}', this)">
+      <span class="ri">${r.icon}</span>
+      <span class="rn">${r.name}</span>
+      <span class="re">${r.ex}</span>
+    </button>`
+  ).join('');
+
+  const html = `
+  <div class="exp-block" id="expBlock${idx}">
+    <div class="exp-header">
+      <div class="exp-header-title">
+        <div class="exp-num">${idx}</div>
+        Work experience ${idx === 1 ? '(required)' : '(optional)'}
+      </div>
+      ${idx > 1 ? `<button type="button" class="remove-btn" onclick="removeExperience(${idx})">Remove</button>` : ''}
+    </div>
+    <div class="exp-body">
+      <div class="field">
+        <label>What type of work?</label>
+        <span class="hint">Select the closest category. You can describe the details in your own words below.</span>
+        <div class="role-grid" id="roleGrid${idx}">${rolesHTML}</div>
+      </div>
+      <div class="field">
+        <label>What did they call your role?</label>
+        <span class="hint">Use the original name: kitchen worker, tier porter, laundry clerk, supply room helper, etc.</span>
+        <input type="text" id="roleTitle${idx}" placeholder="e.g. kitchen worker, porter, laundry clerk..." oninput="updateExp(${idx})">
+      </div>
+      <div class="field">
+        <label>How long did you do this work?</label>
+        <select id="duration${idx}" onchange="updateExp(${idx})">
+          <option value="">Select duration</option>
+          <option>Less than 6 months</option>
+          <option>6–12 months</option>
+          <option>1–2 years</option>
+          <option>2–4 years</option>
+          <option>4–7 years</option>
+          <option>7+ years</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Describe what you actually did day-to-day</label>
+        <span class="hint">Include numbers if you remember them: people served, rooms cleaned, supplies tracked, team members trained, tools used.</span>
+        <textarea id="duties${idx}" placeholder="e.g. Prepared and served meals for 300+ people daily. Managed inventory and tracked supply levels. Trained new workers on safety procedures..." oninput="updateExp(${idx})"></textarea>
+      </div>
+      <div class="field">
+        <label>Did you supervise or train anyone?</label>
+        <select id="supervision${idx}" onchange="updateExp(${idx})">
+          <option value="no">No — I did the work myself</option>
+          <option value="informal">Informally — I helped others learn the job</option>
+          <option value="formal">Yes — I was officially in charge of a team</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Any training, certifications, or special programs? (optional)</label>
+        <input type="text" id="certs${idx}" placeholder="e.g. ServSafe, forklift, OSHA, GED, barbering license..." oninput="updateExp(${idx})">
+      </div>
+    </div>
+  </div>`;
+
+  document.getElementById('experiencesContainer').insertAdjacentHTML('beforeend', html);
+  if (expCount >= 3) document.getElementById('addExpBtn').style.display = 'none';
+  checkFP1Valid();
+}
+
+function removeExperience(idx) {
+  const block = document.getElementById('expBlock'+idx);
+  if (block) block.remove();
+  experiences = experiences.filter(e => e.id !== idx);
+  expCount--;
+  if (expCount < 3) document.getElementById('addExpBtn').style.display = 'flex';
+  checkFP1Valid();
+}
+
+function selectRole(idx, roleId, btn) {
+  const role = ROLE_TYPES.find(r => r.id === roleId);
+  const exp = experiences.find(e => e.id === idx);
+  if (!exp || !role) return;
+
+  if (!exp.selectedRoles) exp.selectedRoles = [];
+
+  const alreadySelected = exp.selectedRoles.find(r => r.id === roleId);
+
+  if (alreadySelected) {
+    exp.selectedRoles = exp.selectedRoles.filter(r => r.id !== roleId);
+    btn.classList.remove('selected');
+  } else {
+    exp.selectedRoles.push(role);
+    btn.classList.add('selected');
+  }
+
+  exp.roleType = exp.selectedRoles.map(r => r.id).join(',');
+  exp.backendCategory = exp.selectedRoles[0]?.backendCategory || '';
+  exp.targetRole = exp.selectedRoles[0]?.targetRole || '';
+  exp.roleContext = exp.selectedRoles.map(r => r.context).join(' | ');
+  exp.roleName = exp.selectedRoles.map(r => r.name).join(', ');
+
+  checkFP1Valid();
+}
+
+function updateExp(idx) {
+  const exp = experiences.find(e => e.id === idx);
+  if (!exp) return;
+  exp.roleTitle = document.getElementById('roleTitle'+idx)?.value.trim() || '';
+  exp.duration = document.getElementById('duration'+idx)?.value || '';
+  exp.duties = document.getElementById('duties'+idx)?.value.trim() || '';
+  exp.supervision = document.getElementById('supervision'+idx)?.value || 'no';
+  exp.certs = document.getElementById('certs'+idx)?.value.trim() || '';
+  checkFP1Valid();
+}
+
+function checkFP1Valid() {
+  const anyValid = experiences.some(e => e.roleType && e.roleTitle && e.duration && e.duties && e.duties.length > 15);
+  document.getElementById('fp1Next').disabled = !anyValid;
+}
+
+function goToFP1() {
+  document.getElementById('fp1').style.display = 'block';
+  document.getElementById('fp2').style.display = 'none';
+  goToFP1Steps();
+}
+
+function goToFP1Steps() {
+  document.getElementById('st1').className = 'step-item active';
+  document.getElementById('st2').className = 'step-item';
+  document.getElementById('st3').className = 'step-item';
+}
+
+function goToFP2() {
+  document.getElementById('fp1').style.display = 'none';
+  document.getElementById('fp2').style.display = 'block';
+  document.getElementById('st1').className = 'step-item done';
+  document.getElementById('st2').className = 'step-item active';
+  document.getElementById('st3').className = 'step-item';
+  window.scrollTo(0,0);
+}
+
+function inferTargetRole(validExps, targetJob) {
+  const lower = String(targetJob || '').toLowerCase();
+  if (lower.includes('warehouse') || lower.includes('forklift') || lower.includes('shipping')) return 'warehouse';
+  if (lower.includes('food') || lower.includes('kitchen') || lower.includes('cook')) return 'foodservice';
+  if (lower.includes('maintenance') || lower.includes('repair')) return 'maintenance';
+  if (lower.includes('clean') || lower.includes('janitor') || lower.includes('porter') || lower.includes('facility')) return 'facilities';
+  if (lower.includes('office') || lower.includes('admin') || lower.includes('clerical')) return 'clerical';
+  return validExps.find(e => e.targetRole)?.targetRole || 'general';
+}
+
+function buildDetails(e) {
+  const supervisionText = e.supervision === 'formal' ? 'Officially supervised or led others.' : e.supervision === 'informal' ? 'Helped train or guide others informally.' : 'Individual contributor.';
+  return `${e.duties}\n${supervisionText}${e.certs ? '\nTraining/certifications: ' + e.certs : ''}`;
+}
+
+async function runTranslation() {
+  const validExps = experiences.filter(e => e.roleType && e.roleTitle && e.duration && e.duties && e.duties.length > 10);
+  if (validExps.length === 0) {
+    showError('formError', 'Please fill in at least one work experience to continue.');
+    return;
+  }
+
+  document.getElementById('st1').className = 'step-item done';
+  document.getElementById('st2').className = 'step-item done';
+  document.getElementById('st3').className = 'step-item active';
+
+  showScreen('screen-loading');
+  animateLoadingSteps();
+
+  const fullName = document.getElementById('fullName')?.value.trim() || 'Candidate';
+  const targetJob = document.getElementById('targetJob')?.value.trim() || '';
+  const location = document.getElementById('location')?.value.trim() || '';
+  const additionalContext = document.getElementById('additionalContext')?.value.trim() || '';
+  const careerStage = document.getElementById('careerStage')?.value || '';
+
+  const payload = {
+    fullName,
+    location,
+    targetRole: inferTargetRole(validExps, targetJob),
+    supportNote: targetJob || 'Open to suitable entry-level and advancement roles',
+    education: validExps.map(e => e.certs).filter(Boolean).join(', '),
+    certifications: validExps.map(e => e.certs).filter(Boolean).join(', '),
+    barriers: [additionalContext, careerStage ? `Career stage: ${careerStage}` : ''].filter(Boolean).join(' | '),
+    experiences: validExps.map(e => ({
+      category: e.backendCategory || 'warehouse',
+      title: e.roleTitle,
+      organization: 'Structured work program',
+      duration: e.duration,
+      details: buildDetails(e)
+    }))
+  };
+  lastRequestPayload = payload;
+
+  try {
+    const res = await fetch('/api/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    let data;
+    try { data = await res.json(); } catch (_) { data = {}; }
+    if (!res.ok) {
+      throw new Error(data.error || `Backend request failed (${res.status}). If testing locally, use vercel dev instead of python http.server for API calls.`);
+    }
+
+    translationResult = normalizeBackendResult(data, payload);
+    renderOutput(translationResult);
+    showScreen('screen-output');
+  } catch (err) {
+    showScreen('screen-form');
+    goToFP2();
+    showError('formError', err.message || 'Translation failed.');
+  }
+}
+
+function normalizeBackendResult(data, payload) {
+  if (data && data.output) {
+    return {
+      professional_summary: data.output.summary || '',
+      experiences: (data.output.experience || []).map((item) => ({
+        civilian_title: item.translated_title || 'Translated Work Experience',
+        duration: item.duration || '',
+        onet_code: item.onet_code || '',
+        onet_title: item.onet_title || item.onet_family || '',
+        bullets: item.bullets || [],
+        section_note: (item.aligned_tasks && item.aligned_tasks.length) ? `Aligned O*NET tasks: ${item.aligned_tasks.slice(0,3).join(' • ')}` : ''
+      })),
+      combined_skills: data.output.skills || [],
+      target_industries: (data.output.pathways || []).slice(0,3).map(p => ({ name: p, reason: 'Suggested next-step pathway based on your experience and target role.' })),
+      career_pathway: (data.output.pathways || []).length ? `Recommended starting pathways: ${data.output.pathways.join(', ')}.` : 'Use this translated language to apply for entry-level roles that match your strongest work experience.',
+      quick_wins: data.output.interviewTips || [],
+      onet: data.onet || null,
+      profile: data.profile || null,
+      payload
+    };
+  }
+  return data;
+}
+
+let lsTimer = null;
+function animateLoadingSteps() {
+  const steps = ['ls1','ls2','ls3','ls4','ls5'];
+  let i = 0;
+  clearInterval(lsTimer);
+  steps.forEach(s => document.getElementById(s).className = 'loading-step');
+  document.getElementById(steps[0]).classList.add('active');
+
+  lsTimer = setInterval(() => {
+    if (i < steps.length) {
+      if (i > 0) document.getElementById(steps[i-1]).className = 'loading-step done';
+      document.getElementById(steps[i]).classList.add('active');
+      i++;
+    } else {
+      clearInterval(lsTimer);
+    }
+  }, 1200);
+}
+
+function escapeHtml(str) {
+  return String(str || '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function renderOutput(r) {
+  const doc = document.getElementById('resumeDoc');
+  const expsHTML = (r.experiences || []).map((exp, i) => `
+    <div class="exp-entry">
+      <div class="exp-title-row">
+        <div class="exp-title">${escapeHtml(exp.civilian_title)}</div>
+        <div class="exp-duration-badge">${escapeHtml(exp.duration)}</div>
+      </div>
+      <div class="onet-row">
+        <span class="onet-code">${escapeHtml(exp.onet_code || 'O*NET')}</span>
+        <span class="onet-title-text">${escapeHtml(exp.onet_title || 'Occupation match')}</span>
+      </div>
+      <ul class="bullet-list" id="bullets${i}">
+        ${(exp.bullets || []).map(b => `<li>${escapeHtml(b)}</li>`).join('')}
+      </ul>
+      ${exp.section_note ? `<p style="font-size:0.78rem;color:var(--mid);margin-top:10px;font-style:italic;font-weight:300;">${escapeHtml(exp.section_note)}</p>` : ''}
+      <div class="section-copy-bar"><button class="btn-icon" onclick="copyBullets(${i})">📋 Copy bullet points</button></div>
+      ${i < (r.experiences || []).length - 1 ? '<div class="exp-divider"></div>' : ''}
+    </div>
+  `).join('');
+
+  const skillsHTML = (r.combined_skills || []).map(s => `<span class="skill-chip">${escapeHtml(s)}</span>`).join('');
+  const industriesHTML = (r.target_industries || []).map(ind => `
+    <div style="background:var(--parchment);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;flex:1;min-width:160px;">
+      <div style="font-size:0.82rem;font-weight:500;color:var(--forest);margin-bottom:3px;">${escapeHtml(ind.name)}</div>
+      <div style="font-size:0.75rem;color:var(--mid);line-height:1.5;font-weight:300;">${escapeHtml(ind.reason)}</div>
+    </div>
+  `).join('');
+  const quickWinsHTML = (r.quick_wins || []).map(tip => `<li style="font-size:0.88rem;color:var(--ink);padding-left:18px;position:relative;line-height:1.65;margin-bottom:6px;font-weight:300;"><span style="position:absolute;left:0;color:var(--gold);">→</span>${escapeHtml(tip)}</li>`).join('');
+  const onetAttribution = r.onet ? `<div class="resume-section"><div class="rs-label">O*NET attribution</div><p style="font-size:0.82rem;color:var(--mid);line-height:1.6;">${escapeHtml(r.onet.attribution || '')}</p><p style="font-size:0.82rem;color:var(--mid);"><a href="${escapeHtml(r.onet.sourceUrl || 'https://services.onetcenter.org/')}" target="_blank" rel="noreferrer">O*NET Web Services</a>${r.onet.version ? ' · Database version ' + escapeHtml(r.onet.version) : ''}</p></div>` : '';
+
+  doc.innerHTML = `
+    <div class="resume-header">
+      <div class="resume-candidate">Professional resume language ·</div>
+      <div class="resume-summary-text" id="summaryText">${escapeHtml(r.professional_summary || '')}</div>
+      <div class="section-copy-bar" style="margin-top:12px;"><button class="btn-icon" style="border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.86);" onclick="copySummary()">📋 Copy summary</button></div>
+    </div>
+    <div class="resume-body">
+      <div class="resume-section"><div class="rs-label">Work experience — translated</div>${expsHTML}</div>
+      <div class="resume-section"><div class="rs-label">Transferable skills</div><div class="skills-wrap" id="skillsWrap">${skillsHTML}</div><div class="section-copy-bar"><button class="btn-icon" onclick="copySkills()">📋 Copy skills</button></div></div>
+      <div class="resume-section"><div class="rs-label">Pathways to target</div><div style="display:flex;flex-wrap:wrap;gap:10px;">${industriesHTML}</div></div>
+      <div class="resume-section"><div class="rs-label">Your career pathway</div><div class="pathway-note" id="pathwayText">${escapeHtml(r.career_pathway || '')}</div></div>
+      <div class="resume-section"><div class="rs-label">Quick wins for your job search</div><ul style="list-style:none;padding:0;margin:0;">${quickWinsHTML}</ul></div>
+      ${onetAttribution}
+    </div>`;
+}
+
+function copyBullets(idx) {
+  const ul = document.getElementById('bullets'+idx);
+  if (!ul) return;
+  const text = Array.from(ul.querySelectorAll('li')).map(li => '• ' + li.textContent).join('\n');
+  navigator.clipboard.writeText(text).then(() => showCopied('Bullet points copied!'));
+}
+function copySummary() {
+  const el = document.getElementById('summaryText');
+  if (el) navigator.clipboard.writeText(el.textContent.trim()).then(() => showCopied('Summary copied!'));
+}
+function copySkills() {
+  const el = document.getElementById('skillsWrap');
+  if (!el) return;
+  const text = Array.from(el.querySelectorAll('.skill-chip')).map(c => c.textContent).join(' | ');
+  navigator.clipboard.writeText(text).then(() => showCopied('Skills copied!'));
+}
+function copyAll() {
+  if (!translationResult) return;
+  const r = translationResult;
+  let text = 'PROFESSIONAL SUMMARY\n' + (r.professional_summary || '') + '\n\nWORK EXPERIENCE\n';
+  (r.experiences || []).forEach(exp => {
+    text += `\n${exp.civilian_title || ''} | ${exp.duration || ''}\n`;
+    text += `O*NET: ${exp.onet_code || ''} — ${exp.onet_title || ''}\n`;
+    (exp.bullets || []).forEach(b => { text += '• ' + b + '\n'; });
+  });
+  text += '\nTRANSFERABLE SKILLS\n' + (r.combined_skills || []).join(' | ');
+  text += '\n\nPATHWAYS\n';
+  (r.target_industries || []).forEach(i => { text += `• ${i.name}: ${i.reason}\n`; });
+  text += '\nCAREER PATHWAY\n' + (r.career_pathway || '');
+  text += '\n\nQUICK WINS\n';
+  (r.quick_wins || []).forEach(q => { text += '• ' + q + '\n'; });
+  if (r.onet) text += `\n${r.onet.attribution || ''}\n${r.onet.sourceUrl || ''}`;
+  navigator.clipboard.writeText(text).then(() => showCopied('Full translation copied!'));
+}
+function showCopied(msg) {
+  const old = document.querySelector('.copy-toast');
+  if (old) old.remove();
+  const toast = document.createElement('div');
+  toast.className = 'copy-toast';
+  toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--forest);color:var(--cream);padding:10px 20px;border-radius:20px;font-size:0.82rem;z-index:999;pointer-events:none;font-family:DM Sans,sans-serif;';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2200);
+}
+
+function loadDemo() {
+  translationResult = {
+    professional_summary: 'Experienced food service professional with 4+ years operating high-volume kitchen environments, supporting meal production for large groups, and maintaining rigorous sanitation standards. Demonstrated ability to train new staff, follow procedures, and deliver consistent quality in structured operations.',
+    experiences: [{
+      civilian_title: 'Food Service Support Worker',
+      onet_code: '35-2021.00',
+      onet_title: 'Food Preparation Workers',
+      duration: '4–7 years',
+      bullets: [
+        'Supported daily meal preparation and service operations for 300+ people while meeting time-sensitive production needs.',
+        'Maintained kitchen sanitation standards through recurring cleaning routines and food safety procedures.',
+        'Tracked supplies, supported inventory organization, and helped reduce waste through careful portion control.',
+        'Trained new team members on equipment use, sanitation expectations, and daily workflow requirements.'
+      ],
+      section_note: 'Strong fit for institutional food service, healthcare dining, school dining, and contract food service roles.'
+    }],
+    combined_skills: ['Food Safety', 'Sanitation', 'Inventory Support', 'Team Training', 'High-Volume Operations', 'Workflow Coordination'],
+    target_industries: [
+      { name: 'Healthcare Food Service', reason: 'High-volume and procedure-driven environments value sanitation and consistency.' },
+      { name: 'School Dining', reason: 'Institutional meal service experience transfers well.' },
+      { name: 'Contract Food Service', reason: 'Companies like large-kitchen experience and reliable routines.' }
+    ],
+    career_pathway: 'Start with Food Service Worker, Prep Cook, Kitchen Helper, or Cafeteria Worker roles. With experience and certifications, move toward Kitchen Lead, Shift Lead, or Food Service Supervisor.',
+    quick_wins: ['Lead with food safety and reliability.', 'Use numbers wherever possible, such as meals served or people trained.', 'Apply to hospitals, schools, senior living facilities, and contract food service companies.'],
+    onet: { attribution: 'This demo references O*NET-style occupation data. Live results use O*NET Web Services through the protected backend.', sourceUrl: 'https://services.onetcenter.org/', version: '30.2' }
+  };
+  renderOutput(translationResult);
+  showScreen('screen-output');
+}
+
+function showError(elId, msg) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 10000);
+}
+function startOver() {
+  translationResult = null;
+  initForm();
+  showScreen('screen-form');
+}
+
+// Boot directly into the intake form. No welcome gate.
+document.addEventListener('DOMContentLoaded', () => {
+  initForm();
+  showScreen('screen-form');
+});
+</script>
+</body>
+</html>
