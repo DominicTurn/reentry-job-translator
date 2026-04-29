@@ -672,29 +672,29 @@ body {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   margin: 0;
   padding: 0;
 }
 
 .bullet-list li {
-  font-size: 0.92rem;
-  color: var(--forest); /* stronger contrast */
-  padding-left: 18px;
+  font-size: 0.95rem;
+  color: #1f2937; /* stronger readable dark */
+  padding-left: 20px;
   position: relative;
-  line-height: 1.65;
-  font-weight: 400; /* slightly heavier = more readable */
+  line-height: 1.7;
+  font-weight: 400; /* key fix */
 }
 
 .bullet-list li::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 10px;
-  width: 5px;
-  height: 5px;
+  top: 9px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: var(--gold);
+  background: var(--forest); /* match your headings */
 }
 
 .exp-divider {
