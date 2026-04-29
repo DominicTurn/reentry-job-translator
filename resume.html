@@ -679,11 +679,11 @@ body {
 
 .bullet-list li {
   font-size: 0.95rem;
-  color: #1f2937;
+  color: #111827 !important; /* force override */
   padding-left: 20px;
   position: relative;
   line-height: 1.7;
-  font-weight: 500; /* slight bump = more professional */
+  font-weight: 500;
 }
 
 .bullet-list li::before {
@@ -694,7 +694,7 @@ body {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--forest); /* match your headings */
+  background: #111827 !important;
 }
 
 .exp-divider {
