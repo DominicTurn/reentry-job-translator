@@ -211,3 +211,8 @@ textarea:focus {
   border-color: var(--green2) !important;
   color: #ffffff !important;
 }
+
+.footer-tagline {
+  color: #ffffff;
+  opacity: 0.85;
+}
