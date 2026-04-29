@@ -281,3 +281,66 @@ ${JSON.stringify(body)}
     return json(res, 200, fallbackResponse(req.body || {}));
   }
 }
+
+function getFairChanceEmployers(location, targetRole) {
+  const base = [
+    {
+      name: "Amazon",
+      roles: ["warehouse"],
+      locations: ["nj", "pa", "any"],
+      note: "High-volume hiring for warehouse and logistics roles",
+      link: "https://www.amazon.jobs"
+    },
+    {
+      name: "UPS",
+      roles: ["warehouse"],
+      locations: ["nj", "pa", "any"],
+      note: "Package handling and seasonal warehouse jobs",
+      link: "https://www.jobs-ups.com"
+    },
+    {
+      name: "Home Depot",
+      roles: ["retail", "general"],
+      locations: ["any"],
+      note: "Retail and stocking roles with consistent hiring",
+      link: "https://careers.homedepot.com"
+    },
+    {
+      name: "Walmart",
+      roles: ["retail", "warehouse"],
+      locations: ["any"],
+      note: "Stocking, fulfillment, and store positions",
+      link: "https://careers.walmart.com"
+    },
+    {
+      name: "Aramark",
+      roles: ["foodservice", "facilities"],
+      locations: ["nj", "pa", "any"],
+      note: "Food service and facility support contracts",
+      link: "https://careers.aramark.com"
+    },
+    {
+      name: "Sodexo",
+      roles: ["foodservice", "facilities"],
+      locations: ["nj", "pa", "any"],
+      note: "Hospitals, schools, and institutional roles",
+      link: "https://jobs.sodexo.com"
+    }
+  ];
+
+  const loc = (location || "").toLowerCase();
+
+  return base.filter(e => {
+    const roleMatch =
+      !targetRole ||
+      e.roles.includes(targetRole) ||
+      e.roles.includes("general");
+
+    const locationMatch =
+      !loc ||
+      e.locations.includes("any") ||
+      e.locations.some(l => loc.includes(l));
+
+    return roleMatch && locationMatch;
+  });
+}
