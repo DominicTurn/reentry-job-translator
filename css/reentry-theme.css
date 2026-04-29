@@ -3,23 +3,20 @@
   --cream2: #f3ede3;
   --white: #ffffff;
 
-  /* UPDATED GREEN SYSTEM (lighter + readable) */
-  --green: #2f7d4f;
-  --green2: #25663f;
-  --green-light: #eaf6ef;
+  --green: #1c3d2e;
+  --green2: #234d3a;
+  --green-light: #e8f0eb;
 
-  /* CTA COLOR (for buttons) */
   --terra: #e8602c;
-  --terra-dark: #cf4f22;
   --terra-light: #fdf0eb;
 
-  --text: #1a1a1a;
-  --muted: #5f5f5f;
+  --text: #111827;
+  --muted: #4b5563;
   --border: #e2dbd0;
 
-  --shadow-sm: 0 1px 3px rgba(47,125,79,0.08), 0 1px 2px rgba(47,125,79,0.04);
-  --shadow-md: 0 4px 16px rgba(47,125,79,0.10), 0 2px 6px rgba(47,125,79,0.06);
-  --shadow-lg: 0 12px 40px rgba(47,125,79,0.14), 0 4px 12px rgba(47,125,79,0.08);
+  --shadow-sm: 0 1px 3px rgba(28,61,46,0.08);
+  --shadow-md: 0 4px 16px rgba(28,61,46,0.10);
+  --shadow-lg: 0 12px 40px rgba(28,61,46,0.14);
 
   --radius: 14px;
   --radius-sm: 8px;
@@ -41,9 +38,9 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* TYPOGRAPHY */
-h1, h2, h3 {
-  font-family: 'Fraunces', Georgia, serif;
+h1,
+h2,
+h3 {
   color: var(--text);
   line-height: 1.15;
   letter-spacing: -0.02em;
@@ -81,31 +78,67 @@ a {
   box-shadow: var(--shadow-sm);
 }
 
-/* =========================
-   BUTTONS (MAJOR FIX)
-========================= */
+/* DARK HEADER AREAS */
+.topbar,
+.hero {
+  background: var(--green);
+  color: #ffffff;
+}
+
+.topbar *,
+.hero * {
+  color: inherit;
+}
+
+.hero p {
+  color: rgba(255,255,255,0.86);
+}
+
+/* RESUME HEADER / PREVIEW HEADER */
+.resume-header,
+.resume-head {
+  background: var(--green-light);
+  color: var(--text);
+}
+
+.resume-header *,
+.resume-head * {
+  color: inherit;
+}
+
+.resume-summary-text,
+.resume-head h2 {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.resume-candidate,
+.resume-head small {
+  color: #374151;
+}
+
+/* BUTTONS */
 .btn-primary,
 .primary,
 .start-btn,
 .nav-cta {
-  background: var(--terra) !important;
-  color: #ffffff !important;
+  background: var(--green);
+  color: #ffffff;
   border: none;
   border-radius: var(--radius-sm);
   font-weight: 800;
-  box-shadow: 0 6px 18px rgba(232, 96, 44, 0.25);
-  transition: all 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
 }
 
 .btn-primary:hover,
 .primary:hover,
 .start-btn:hover,
 .nav-cta:hover {
-  background: var(--terra-dark) !important;
-  transform: translateY(-1px);
+  background: var(--green2);
+  color: #ffffff;
 }
 
-/* SECONDARY BUTTONS */
 .btn-secondary,
 .btn-ghost,
 .btn-icon,
@@ -114,6 +147,7 @@ a {
   color: var(--green);
   border: 1px solid var(--green);
   border-radius: var(--radius-sm);
+  cursor: pointer;
 }
 
 .btn-secondary:hover,
@@ -123,48 +157,29 @@ a {
   background: var(--green-light);
 }
 
-/* =========================
-   HEADER / HERO FIX
-========================= */
-.topbar,
-.resume-header,
-.resume-head,
-.hero {
-  background: var(--green-light) !important; /* WAS DARK → NOW LIGHT */
-  color: var(--text) !important;
-}
-
-.topbar * ,
-.resume-header *,
-.resume-head *,
-.hero * {
-  color: inherit;
-}
-
-.topbar {
-  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-}
-
-/* =========================
-   UI ELEMENTS
-========================= */
+/* NOTICE / CHIPS */
 .notice,
 .pathway-note,
 .pathway,
 .skill-chip,
 .chip {
-  background: var(--green-light) !important;
-  border-color: var(--border) !important;
-  color: var(--green) !important;
+  background: var(--green-light);
+  border-color: var(--border);
+  color: var(--text);
 }
 
+.skill-chip,
+.chip {
+  color: var(--green);
+}
+
+/* LABELS */
 .section-tag,
 .wl-eyebrow {
-  color: var(--terra) !important;
+  color: var(--terra);
   background: var(--terra-light);
 }
 
-/* TITLES / LABELS */
 .rs-label,
 .label,
 .role strong,
@@ -173,18 +188,25 @@ a {
 .output-headline,
 .loading-title,
 .wr-title {
-  color: var(--green) !important;
+  color: var(--green);
+}
+
+/* BULLETS */
+.bullet-list li,
+.bullet li {
+  color: var(--text);
+  font-weight: 500;
 }
 
 .bullet-list li::before {
-  background: var(--green) !important;
+  background: var(--green);
 }
 
-/* FORM */
+/* FORMS */
 input,
 select,
 textarea {
-  border: 1px solid var(--border) !important;
+  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--white);
   color: var(--text);
@@ -194,22 +216,22 @@ input:focus,
 select:focus,
 textarea:focus {
   outline: none;
-  border-color: var(--green) !important;
-  box-shadow: 0 0 0 3px rgba(47,125,79,0.15);
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(28,61,46,0.12);
 }
 
 /* STEPS */
 .step-item.active .step-num,
 .exp-num {
-  background: var(--green) !important;
-  border-color: var(--green) !important;
-  color: #ffffff !important;
+  background: var(--green);
+  border-color: var(--green);
+  color: #ffffff;
 }
 
 .step-item.done .step-num {
-  background: var(--green2) !important;
-  border-color: var(--green2) !important;
-  color: #ffffff !important;
+  background: var(--green2);
+  border-color: var(--green2);
+  color: #ffffff;
 }
 
 .footer-tagline {
