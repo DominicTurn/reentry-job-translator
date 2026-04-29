@@ -1,148 +1,1037 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="ReEntry Job Translator is a free, private tool that turns prison, jail, or reentry work experience into professional resume language employers understand.">
-  <meta name="keywords" content="reentry jobs, second chance employment, resume help after prison, justice impacted careers">
-  <title>ReEntry Job Translator | Free Resume Builder for Reentry & Second Chance Jobs</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReEntry Job Translator | Free Resume Builder for Returning Citizens</title>
+<meta name="description" content="Turn your prison, jail, or program work experience into employer-ready resume language. Free for individuals. Built by a returning citizen. No account required.">
+<meta property="og:title" content="ReEntry Job Translator — Turn Your Experience Into a Resume Employers Understand">
+<meta property="og:description" content="Free resume tool for returning citizens. Translates institutional work into professional job titles, bullet points, and career paths. No login. No judgment.">
+<meta property="og:url" content="https://reentryjobtranslator.com">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- Shared design system -->
+  <link rel="stylesheet" href="/css/reentry-theme.css">
+
+  <!-- Page CSS -->
+  
+<style>
+/* ── Reset & Base ───────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: #faf7f2;
+  color: #1a1a1a;
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+
+/* ── Typography ─────────────────────────────────────────────────── */
+h1, h2, h3 { font-family: 'Fraunces', serif; line-height: 1.15; letter-spacing: -0.02em; }
+h1 { font-size: clamp(2.25rem, 5vw, 3.5rem); font-weight: 700; }
+h2 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); font-weight: 600; }
+h3 { font-size: 1.25rem; font-weight: 600; }
+p { color: var(--muted); }
+
+/* ── Layout ─────────────────────────────────────────────────────── */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+.container-narrow { max-width: 720px; margin: 0 auto; padding: 0 1.5rem; }
+section { padding: 5rem 0; }
+
+/* ── Nav ────────────────────────────────────────────────────────── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(250,247,242,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 1.5rem;
+}
+.nav-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo {
+  font-family: 'Fraunces', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--green);
+  text-decoration: none;
+  display: flex; align-items: center; gap: 10px;
+}
+.nav-logo-mark {
+  width: 32px; height: 32px;
+  background: var(--green);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.nav-right { display: flex; align-items: center; gap: 1rem; }
+.nav-link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-link:hover { color: var(--green); }
+.nav-cta {
+  background: var(--green);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.625rem 1.25rem;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+  white-space: nowrap;
+}
+.nav-cta:hover { background: var(--green2); transform: translateY(-1px); }
+
+/* ── Founder tag ────────────────────────────────────────────────── */
+.founder-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--terra-light);
+  border: 1px solid rgba(232,96,44,0.25);
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--terra);
+  margin-bottom: 1.5rem;
+}
+.founder-tag::before {
+  content: '';
+  width: 7px; height: 7px;
+  background: var(--terra);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── Buttons ────────────────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--green);
+  color: #fff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.9rem 2rem;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  border: none; cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(28,61,46,0.25);
+}
+.btn-primary:hover { background: var(--green2); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(28,61,46,0.3); }
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent;
+  color: var(--green);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.875rem 1.75rem;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  border: 1.5px solid var(--green);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-ghost:hover { background: var(--green-light); }
+.btn-terra {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--terra);
+  color: #fff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.9rem 2rem;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  border: none; cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(232,96,44,0.3);
+}
+.btn-terra:hover { background: #d4541f; transform: translateY(-2px); }
+
+/* ── Hero ───────────────────────────────────────────────────────── */
+.hero {
+  padding: 5rem 0 4rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -100px; right: -200px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(28,61,46,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+.hero-headline { color: var(--text); margin-bottom: 1.25rem; }
+.hero-headline em {
+  font-style: italic;
+  color: var(--terra);
+}
+.hero-sub {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  max-width: 480px;
+  line-height: 1.7;
+}
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 2rem; }
+.hero-trust {
+  display: flex; flex-wrap: wrap; gap: 1.25rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+.hero-trust span { display: flex; align-items: center; gap: 5px; }
+.hero-trust span::before { content: '✓'; color: var(--green); font-weight: 700; }
+
+/* ── Before/After Card ──────────────────────────────────────────── */
+.transform-card {
+  background: var(--white);
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  position: relative;
+}
+.transform-label {
+  position: absolute;
+  top: -1px; left: 50%; transform: translateX(-50%);
+  background: var(--terra);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 16px;
+  border-radius: 0 0 10px 10px;
+  white-space: nowrap;
+}
+.transform-before {
+  background: #f7f4f0;
+  padding: 1.5rem 1.75rem;
+  border-bottom: 2px dashed var(--border);
+}
+.transform-after {
+  background: var(--green-light);
+  padding: 1.5rem 1.75rem;
+}
+.transform-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  display: flex; align-items: center; gap: 6px;
+}
+.transform-tag.before { color: #999; }
+.transform-tag.after { color: var(--green); }
+.transform-tag .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+}
+.transform-tag.before .dot { background: #ccc; }
+.transform-tag.after .dot { background: var(--green); }
+.transform-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+.transform-desc {
+  font-size: 0.875rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.transform-after .transform-title { color: var(--green); }
+.transform-after .transform-desc { color: #3a6b50; }
+.transform-arrow {
+  text-align: center;
+  padding: 0.75rem;
+  background: var(--white);
+  color: var(--terra);
+  font-size: 1.1rem;
+}
+
+/* ── Trust bar ──────────────────────────────────────────────────── */
+.trust-bar-inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem 1.75rem;
+}
+
+.trust-item {
+  position: relative;              /* REQUIRED */
+  padding-left: 14px;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+/* clean dot divider */
+.trust-item::before {
+  content: '|';
+  position: absolute;
+  left: 0;
+  top: 0%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 5px;
+  color: rgba(28, 61, 46, 0.6);
+  font-weight: 500;
+}
+
+/* ── How It Works ───────────────────────────────────────────────── */
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+}
+.step-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem 1.75rem;
+  position: relative;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.step-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+.step-num {
+  font-family: 'Fraunces', serif;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--cream2);
+  line-height: 1;
+  margin-bottom: 1rem;
+  user-select: none;
+}
+.step-card h3 { color: var(--text); margin-bottom: 0.5rem; font-size: 1.1rem; }
+.step-card p { font-size: 0.9rem; }
+
+/* ── Why It Matters ─────────────────────────────────────────────── */
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+.why-card {
+  padding: 1.75rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--white);
+}
+.why-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+.why-card h3 { color: var(--text); font-size: 1rem; margin-bottom: 0.5rem; }
+.why-card p { font-size: 0.875rem; }
+
+/* ── Translation examples ───────────────────────────────────────── */
+.examples-section { background: var(--cream2); }
+.examples-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+.example-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+.example-before, .example-after {
+  padding: 1.25rem 1.5rem;
+}
+.example-before { border-bottom: 1px dashed var(--border); }
+.example-row-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.375rem;
+}
+.example-row-label.b { color: #aaa; }
+.example-row-label.a { color: var(--green); }
+.example-title { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.example-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.55; }
+.example-after { background: var(--green-light); }
+.example-after .example-title { color: var(--green); }
+.example-after .example-desc { color: #3a6b50; }
+
+/* ── Organizations ──────────────────────────────────────────────── */
+.org-section {
+  background: var(--green);
+  color: #fff;
+}
+.org-section h2 { color: #fff; }
+.org-section p { color: rgba(255,255,255,0.75); }
+.org-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin: 3rem 0;
+}
+.org-card {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+}
+.org-card h3 { color: #fff; font-size: 1rem; margin-bottom: 0.5rem; }
+.org-card p { color: rgba(255,255,255,0.65); font-size: 0.875rem; }
+.org-cta-row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+.btn-white {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #fff;
+  color: var(--green);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.9rem 2rem;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: all 0.2s;
+  border: none; cursor: pointer;
+}
+.btn-white:hover { background: var(--cream); transform: translateY(-2px); }
+.btn-white-ghost {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent;
+  color: rgba(255,255,255,0.85);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.875rem 1.75rem;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  transition: all 0.2s;
+}
+.btn-white-ghost:hover { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.08); }
+
+/* ── Email Capture ──────────────────────────────────────────────── */
+.email-section { background: var(--terra-light); }
+.email-card {
+  background: var(--white);
+  border: 1px solid rgba(232,96,44,0.2);
+  border-radius: 20px;
+  padding: 3rem;
+  max-width: 620px;
+  margin: 0 auto;
+  text-align: center;
+  box-shadow: var(--shadow-md);
+}
+.email-card h2 { color: var(--text); margin-bottom: 0.75rem; }
+.email-card p { margin-bottom: 2rem; }
+.email-row {
+  display: flex; gap: 10px;
+  max-width: 420px; margin: 0 auto;
+}
+.email-input {
+  flex: 1;
+  padding: 0.875rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.95rem;
+  background: var(--white);
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.email-input:focus { border-color: var(--terra); }
+.email-input::placeholder { color: #bbb; }
+.email-note { font-size: 0.75rem; color: #aaa; margin-top: 0.75rem; }
+
+/* ── FAQ ────────────────────────────────────────────────────────── */
+.faq-section { background: var(--white); }
+.faq-list {
+  max-width: 720px; margin: 3rem auto 0;
+  display: flex; flex-direction: column; gap: 0;
+}
+.faq-item {
+  border-bottom: 1px solid var(--border);
+}
+.faq-item:first-child { border-top: 1px solid var(--border); }
+.faq-q {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.25rem 0;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text);
+  gap: 1rem;
+  user-select: none;
+  list-style: none;
+}
+.faq-q::-webkit-details-marker { display: none; }
+.faq-icon {
+  width: 28px; height: 28px; min-width: 28px;
+  background: var(--green-light);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  color: var(--green);
+  transition: transform 0.3s, background 0.2s;
+  font-weight: 300;
+  line-height: 1;
+}
+details[open] .faq-icon {
+  transform: rotate(45deg);
+  background: var(--green);
+  color: #fff;
+}
+.faq-a {
+  padding: 0 0 1.25rem;
+  font-size: 0.925rem;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 90%;
+}
+
+/* ── Footer ─────────────────────────────────────────────────────── */
+footer {
+  background: var(--green);
+  color: rgba(255,255,255,0.7);
+  padding: 3rem 0 2rem;
+}
+.footer-inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+.footer-brand { }
+.footer-logo {
+  font-family: 'Fraunces', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 1rem;
+  text-decoration: none;
+}
+.footer-logo-mark {
+  width: 32px; height: 32px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; font-weight: 700; color: #fff;
+}
+.footer-tagline { font-size: 0.875rem; line-height: 1.6; max-width: 280px; }
+.footer-col h4 { color: #fff; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; }
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.625rem; }
+.footer-links a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.875rem; transition: color 0.2s; }
+.footer-links a:hover { color: #fff; }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 1.5rem;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 1rem;
+}
+.footer-bottom p { font-size: 0.8rem; }
+.footer-mission {
+  font-size: 0.8rem;
+  background: rgba(255,255,255,0.08);
+  border-radius: 100px;
+  padding: 5px 14px;
+  color: rgba(255,255,255,0.7);
+}
+
+/* ── Section headers ────────────────────────────────────────────── */
+.section-tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--terra);
+  background: var(--terra-light);
+  border-radius: 100px;
+  padding: 4px 14px;
+  margin-bottom: 1rem;
+}
+.section-header { margin-bottom: 0.75rem; }
+.section-header p { font-size: 1.05rem; max-width: 580px; }
+
+/* ── Animations ─────────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.6s ease forwards; }
+.fade-up-1 { animation-delay: 0.1s; opacity: 0; }
+.fade-up-2 { animation-delay: 0.2s; opacity: 0; }
+.fade-up-3 { animation-delay: 0.3s; opacity: 0; }
+.fade-up-4 { animation-delay: 0.4s; opacity: 0; }
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .steps-grid { grid-template-columns: 1fr; }
+  .why-grid { grid-template-columns: 1fr; }
+  .examples-grid { grid-template-columns: 1fr; }
+  .org-grid { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+  .footer-brand { grid-column: 1 / -1; }
+}
+@media (max-width: 600px) {
+  section { padding: 3.5rem 0; }
+  .nav-right .nav-link { display: none; }
+  .hero-actions { flex-direction: column; }
+  .hero-actions a { justify-content: center; }
+  .email-row { flex-direction: column; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+  .email-card { padding: 2rem 1.5rem; }
+  .org-cta-row { flex-direction: column; }
+  .org-cta-row a { justify-content: center; }
+  .transform-label { font-size: 0.6rem; padding: 4px 12px; }
+}
+</style>
 </head>
-<body class="bg-gray-50 text-gray-900">
-  <header class="bg-white shadow-sm sticky top-0 z-50">
-    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-      <a href="index.html" class="text-2xl font-bold text-blue-600">ReEntry Job Translator</a>
-      <a href="resume.html" class="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-700 transition">Build My Free Resume Now</a>
-    </nav>
-  </header>
+<body>
 
-  <section class="bg-gradient-to-br from-blue-600 to-blue-800 text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24">
-      <div class="grid lg:grid-cols-2 gap-12 items-center">
-        <div>
-          <p class="uppercase tracking-widest text-blue-200 font-semibold text-sm mb-4">Free resume help for reentry</p>
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">Turn your experience into a resume employers understand.</h1>
-          <p class="text-xl text-blue-100 mb-8 leading-relaxed">ReEntry Job Translator helps people returning home turn prison, jail, or program work into clean resume language: job titles, bullet points, skills, and career paths.</p>
-          <div class="flex flex-col sm:flex-row gap-4">
-            <a href="resume.html" class="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-50 transition shadow-lg text-center">Build My Free Resume</a>
-            <a href="resume_preview.html" class="border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-600 transition text-center">What does it do?</a>
-          </div>
-          <p class="mt-6 text-blue-200">No account required • Private by design • Built for and by a returning citizen.</p>
+<!-- ── Nav ──────────────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo">
+      <div class="nav-logo-mark">RJ</div>
+      ReEntry Job Translator
+    </a>
+    <div class="nav-right">
+      <a href="/resume_preview.html" class="nav-link">How it works</a>
+      <a href="#for-organizations" class="nav-link">For organizations</a>
+      <a href="/resume.html" class="nav-cta">Build My Resume →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ─────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="founder-tag fade-up">Built by a returning citizen who lived this</div>
+        <h1 class="hero-headline fade-up fade-up-1">
+          Turn your experience<br>into a resume <em>employers understand.</em>
+        </h1>
+        <p class="hero-sub fade-up fade-up-2">
+          ReEntry Job Translator helps people returning home turn prison, jail, or program work into clean resume language: job titles, bullet points, skills, and career paths.
+        </p>
+        <div class="hero-actions fade-up fade-up-3">
+          <a href="/resume.html" class="btn-primary">Build My Free Resume →</a>
+          <a href="/resume_preview.html" class="btn-ghost">See how it works</a>
         </div>
-        <div class="bg-white/10 border border-white/20 rounded-2xl p-6 sm:p-8 shadow-2xl backdrop-blur">
-          <div class="bg-white rounded-xl p-6 text-gray-900 shadow-xl">
-            <p class="text-sm font-semibold text-gray-500 mb-2">Example translation</p>
-            <div class="border-l-4 border-red-400 pl-4 mb-5">
-              <p class="text-sm uppercase tracking-wide text-gray-500 font-semibold">Before</p>
-              <p class="text-lg font-bold">Kitchen worker</p>
-              <p class="text-gray-600">Helped cook and clean inside the facility.</p>
+        <div class="hero-trust fade-up fade-up-4">
+          <span>No account required</span>
+          <span>Private by design</span>
+          <span>Works on mobile</span>
+          <span>100% free for individuals</span>
+        </div>
+      </div>
+
+      <!-- Before / After card -->
+      <div class="fade-up fade-up-2">
+        <div class="transform-card">
+          <div class="transform-label">Real translation example</div>
+          <div class="transform-before">
+            <div class="transform-tag before">
+              <div class="dot"></div>
+              Before — what you'd write
             </div>
-            <div class="border-l-4 border-blue-600 pl-4">
-              <p class="text-sm uppercase tracking-wide text-blue-600 font-semibold">After</p>
-              <p class="text-lg font-bold">Food Service Support Worker</p>
-              <p class="text-gray-600">Prepared meals, maintained sanitation standards, supported inventory, and followed high-volume kitchen procedures in a structured work environment.</p>
+            <div class="transform-title">Kitchen worker</div>
+            <div class="transform-desc">Helped cook and clean inside the facility.</div>
+          </div>
+          <div class="transform-arrow">↓</div>
+          <div class="transform-after">
+            <div class="transform-tag after">
+              <div class="dot"></div>
+              After — what employers see
+            </div>
+            <div class="transform-title">Food Service Support Worker</div>
+            <div class="transform-desc">
+              Prepared meals for 200+ individuals daily, maintained sanitation standards per health code requirements, supported FIFO inventory management, and supervised prep procedures in a high-volume, structured kitchen environment.
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section class="bg-white py-16" id="what-it-is">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h2 class="text-3xl sm:text-4xl font-bold mb-4">What is ReEntry Job Translator?</h2>
-      <p class="text-xl text-gray-600 leading-relaxed mb-8">It is a simple tool that helps you describe your work experience better.</p>
-      <div class="bg-blue-50 border border-blue-100 rounded-2xl p-8 sm:p-10 text-left">
-        <p class="text-xl sm:text-2xl leading-relaxed text-gray-800 font-medium">You type in what you actually did, such as kitchen work, laundry, cleaning, maintenance, inventory, clerical work, tutoring, or peer support. The tool rewrites that experience into professional resume language an employer can understand.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="bg-gray-50 py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-12">
-        <h2 class="text-3xl sm:text-4xl font-bold mb-4">Why this matters</h2>
-        <p class="text-xl text-gray-600 max-w-3xl mx-auto">A lot of people have real work experience, but the words used inside institutions do not always sound like job experience on the outside.</p>
-      </div>
-      <div class="grid md:grid-cols-3 gap-8">
-        <div class="bg-white rounded-xl shadow-sm p-8 border border-gray-100"><h3 class="text-xl font-bold mb-3">It removes confusing labels</h3><p class="text-gray-600 leading-relaxed">Instead of using words that might not help you, it turns your role into language that fits a normal resume.</p></div>
-        <div class="bg-white rounded-xl shadow-sm p-8 border border-gray-100"><h3 class="text-xl font-bold mb-3">It shows the skills behind the work</h3><p class="text-gray-600 leading-relaxed">Food service, cleaning, maintenance, inventory, and peer support all involve real skills employers care about.</p></div>
-        <div class="bg-white rounded-xl shadow-sm p-8 border border-gray-100"><h3 class="text-xl font-bold mb-3">It helps you apply faster</h3><p class="text-gray-600 leading-relaxed">You get resume-ready text you can copy, print, save as a PDF, or use when filling out job applications.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="bg-white py-16" id="how-it-works">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-12"><h2 class="text-3xl sm:text-4xl font-bold mb-4">How it works</h2><p class="text-xl text-gray-600">No resume-writing experience needed.</p></div>
-      <div class="grid lg:grid-cols-3 gap-8">
-        <div class="rounded-xl border border-gray-200 p-8 bg-white shadow-sm"><h3 class="text-2xl font-bold text-blue-600 mb-3">Tell it what you did</h3><p class="text-gray-600 leading-relaxed">Answer basic questions about your work: the role, how long you did it, your daily duties, and whether you trained or helped others.</p></div>
-        <div class="rounded-xl border border-gray-200 p-8 bg-white shadow-sm"><h3 class="text-2xl font-bold text-blue-600 mb-3">It rewrites the experience</h3><p class="text-gray-600 leading-relaxed">The tool turns your answers into professional job titles, resume bullet points, transferable skills, and suggested job paths.</p></div>
-        <div class="rounded-xl border border-gray-200 p-8 bg-white shadow-sm"><h3 class="text-2xl font-bold text-blue-600 mb-3">Use the results</h3><p class="text-gray-600 leading-relaxed">Copy the text into a resume, print it, save it as a PDF, or bring it to a case manager, counselor, workforce program, or job interview.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="bg-blue-600 py-16" id="start">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">Build resume language from the work you did.</h2>
-      <p class="text-xl text-blue-100 mb-8">Plain questions. Clear results. No judgment.</p>
-      <a href="resume.html" class="inline-block bg-white text-blue-600 px-10 py-4 rounded-lg text-xl font-semibold hover:bg-blue-50 transition shadow-lg">Start Now — Free</a>
-      <p class="mt-6 text-blue-200 text-sm">No login required • Works on mobile • Copy, print, or save your results</p>
-    </div>
-  </section>
-  <section class="bg-gray-50 py-16">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-12">
-      <h3 class="text-3xl font-bold text-gray-900 mb-4">Common Questions</h3>
-    </div>
-    <div class="space-y-6">
-      <details class="bg-white rounded-lg shadow-sm p-6">
-        <summary class="font-semibold text-gray-900 cursor-pointer">Is this really free?</summary>
-        <p class="mt-3 text-gray-600">Yes. Completely free for individuals. No hidden costs, no premium version, no upsells. We believe everyone deserves a fair shot at employment.</p>
-      </details>
-      <details class="bg-white rounded-lg shadow-sm p-6">
-        <summary class="font-semibold text-gray-900 cursor-pointer">Do I need to create an account?</summary>
-        <p class="mt-3 text-gray-600">No. You can use the tool anonymously without any login. We only ask for your name and contact info if you want them on your actual resume.</p>
-      </details>
-      <details class="bg-white rounded-lg shadow-sm p-6">
-        <summary class="font-semibold text-gray-900 cursor-pointer">What if I don't have much computer experience?</summary>
-        <p class="mt-3 text-gray-600">We designed this for people who might not be tech-savvy. If you can fill out a form, you can use this tool. It's mobile-friendly too, so you can do it from your phone.</p>
-      </details>
-      <details class="bg-white rounded-lg shadow-sm p-6">
-        <summary class="font-semibold text-gray-900 cursor-pointer">Will employers know about my background?</summary>
-        <p class="mt-3 text-gray-600">Your resume won't mention incarceration directly. We translate institutional experience into standard job descriptions. Whether and when to disclose your background is your choice.</p>
-      </details>
-      <details class="bg-white rounded-lg shadow-sm p-6">
-        <summary class="font-semibold text-gray-900 cursor-pointer">Can case managers use this with their clients?</summary>
-        <p class="mt-3 text-gray-600">Absolutely. Case managers love this tool because it saves time and produces better results than manual resume writing. Agencies can also license organizational features.</p>
-      </details>
     </div>
   </div>
 </section>
 
-<footer class="bg-gradient-to-br from-blue-700 to-blue-900 text-blue-100 py-12">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid md:grid-cols-3 gap-8">
-      <div>
-        <h4 class="text-white font-bold text-lg mb-4">ReEntry Job Translator</h4>
-        <p class="text-sm leading-relaxed">Designed for dignity, privacy, and results.</p>
+<!-- ── Trust bar ─────────────────────────────────────────────────── -->
+<div class="trust-bar">
+  <div class="container">
+    <div class="trust-bar-inner">
+      <div class="trust-item">Matched to O*NET federal job codes</div>
+		<div class="trust-item">Nothing stored or tracked</div>
+		<div class="trust-item">Copy, print, or save as PDF</div>
+		<div class="trust-item">Works on any phone</div>
+		<div class="trust-item">Free forever for individuals</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── How it works ──────────────────────────────────────────────── -->
+<section id="how-it-works">
+  <div class="container">
+    <div class="section-tag">How it works</div>
+    <div class="section-header">
+      <h2>Three steps. No resume<br>experience needed.</h2>
+      <p>If you can fill out a form, you can use this tool.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <h3>Tell it what you did</h3>
+        <p>Answer plain questions about your work — the role, how long you did it, your daily tasks, and whether you trained or helped others. No special words needed.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <h3>It rewrites your experience</h3>
+        <p>The tool maps your work to civilian job categories using the federal O*NET system — the same database employers use — and writes professional resume language you can actually use.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <h3>Take it anywhere</h3>
+        <p>Copy the text, print it, save it as a PDF, or bring it to a case manager, workforce program, or job interview. It's yours to use however you need.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Why it matters ────────────────────────────────────────────── -->
+<section style="background: var(--cream2); padding: 5rem 0;">
+  <div class="container">
+    <div class="section-tag">Why it matters</div>
+    <div class="section-header">
+      <h2>Your skills are real.<br>The words just needed translating.</h2>
+      <p>Work done inside institutions involves genuine skills employers care about but they just don't always sound that way on paper. This is where ReEntry Job Translator excels.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon"></div>
+        <h3>Removes confusing labels</h3>
+        <p>Institutional job titles don't translate to civilian hiring. The tool replaces them with language that fits a standard resume without mentioning incarceration.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"></div>
+        <h3>Surfaces the skills behind the work</h3>
+        <p>Food service, maintenance, canteen, houseman, chief orderly, outside grounds, medical orderly, etc. all of these involve skills employers actively look for. The tool names them clearly.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"></div>
+        <h3>Gets you applying faster</h3>
+        <p>Most people spend hours staring at a blank resume. This tool gives you a starting point in minutes so you can spend your energy on applying, not writing.</p>
+      </div>
+      <div class="why-card">
+       <div class="why-icon"></div>
+        <h3>Your disclosure is your choice</h3>
+        <p>The output won't mention incarceration. Whether, when, and how to disclose your background is entirely your decision not the tool's to make for you.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"></div>
+        <h3>Built for ATS systems</h3>
+        <p>Most hiring goes through automated screening before a human reads it. Translated resume language uses keywords that pass those filters so your application gets seen.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"></div>
+        <h3>Shows you what's possible</h3>
+        <p>Beyond the resume, the tool suggests career pathways based on your experience so you can see what roles your background actually qualifies you for.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Examples ──────────────────────────────────────────────────── -->
+<section id="examples" class="examples-section">
+  <div class="container">
+    <div class="section-tag">Translation examples</div>
+    <div class="section-header">
+      <h2>See what the translation<br>looks like for real work.</h2>
+      <p>Every role — from maintenance to houseman — has professional language behind it.</p>
+    </div>
+    <div class="examples-grid">
+
+      <div class="example-card">
+        <div class="example-before">
+          <div class="example-row-label b">Before</div>
+          <div class="example-title">Laundry worker</div>
+          <div class="example-desc">Washed and folded clothes for the unit.</div>
+        </div>
+        <div class="example-after">
+          <div class="example-row-label a">After</div>
+          <div class="example-title">Laundry & Textile Services Technician</div>
+          <div class="example-desc">Operated commercial washing and drying equipment, managed high-volume linen processing for 150+ individuals, followed sanitation protocols, and maintained organized distribution workflow under time constraints.</div>
+        </div>
+      </div>
+
+      <div class="example-card">
+        <div class="example-before">
+          <div class="example-row-label b">Before</div>
+          <div class="example-title">Maintenance crew</div>
+          <div class="example-desc">Fixed things around the building and did cleaning.</div>
+        </div>
+        <div class="example-after">
+          <div class="example-row-label a">After</div>
+          <div class="example-title">Facilities Maintenance Technician</div>
+          <div class="example-desc">Performed routine and corrective maintenance across electrical, plumbing, and HVAC systems, conducted safety inspections, completed work orders, and maintained facility compliance with operational standards.</div>
+        </div>
       </div>
       
-      <div>
-        <h4 class="text-white font-bold text-lg mb-4">Legal</h4>
-        <ul class="space-y-2 text-sm">
-          <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
-          <li><a href="#" class="hover:text-white">Terms of Use</a></li>
-          <li><a href="#" class="hover:text-white">Contact Us</a></li>
+		<div class="example-card">
+      <div class="example-before">
+  			<div class="example-row-label b">Before</div>
+  			<div class="example-title">Houseman</div>
+  			<div class="example-desc"> Cleaned dorms and showers every day for units with about 100 people.</div>
+		</div>	
+		<div class="example-after">
+ 		<div class="example-row-label a">After</div>
+  		<div class="example-title">Facilities Sanitation Worker</div>
+  		<div class="example-desc"> Performed daily cleaning and disinfection of dormitory and shower facilities serving 100+ residents, maintaining sanitation standards in high-traffic shared living environments.</div>
+		</div>
+		</div>
+
+      <div class="example-card">
+        <div class="example-before">
+          <div class="example-row-label b">Before</div>
+          <div class="example-title">Medical Orderly</div>
+          <div class="example-desc">Emptied medical waste, brought inmates to medical, and changed sheets.</div>
+        </div>
+        <div class="example-after">
+          <div class="example-row-label a">After</div>
+          <div class="example-title">Environmental Services</div>
+          <div class="example-desc"><div class="example-desc">Coordinated patient movement to medical services, safely handled medical waste in compliance with sanitation protocols, and maintained hygienic patient areas through routine cleaning and linen management.
+</div></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="text-align: center; margin-top: 2.5rem;">
+      <a href="/resume.html" class="btn-primary" style="display: inline-flex;">Translate Your Experience →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── For Organizations ─────────────────────────────────────────── -->
+<section id="for-organizations" class="org-section">
+  <div class="container">
+    <div class="section-tag" style="background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.9);">For organizations</div>
+    <div class="section-header">
+      <h2>Save hours per client.<br>Document outcomes for funders.</h2>
+      <p>Case managers, probation officers, and workforce program staff use ReEntry Job Translator to accelerate employment preparation and generate documentation that demonstrates impact.</p>
+    </div>
+    <div class="org-grid">
+      <div class="org-card">
+        <h3>Save 2–3 hours per client</h3>
+        <p>Replace manual resume coaching with a consistent, structured tool that produces professional output in minutes — freeing your staff for higher-value case management work.</p>
+      </div>
+      <div class="org-card">
+        <h3>Track outcomes for funders</h3>
+        <p>Organizational accounts include completion tracking and reporting that feeds directly into the employment outcome data your funders and compliance reports require.</p>
+      </div>
+      <div class="org-card">
+        <h3>Bulk access for your team</h3>
+        <p>A single organizational license gives every staff member access — no per-seat fees, no per-client charges. Priced per location for nonprofits, agencies, and corrections programs.</p>
+      </div>
+    </div>
+    <div class="org-cta-row">
+      <a href="mailto:info@reentryjobtranslator.com?subject=Organization Licensing Inquiry" class="btn-white">Request Licensing Info →</a>
+      <a href="mailto:info@reentryjobtranslator.com?subject=Pilot Program Request" class="btn-white-ghost">Ask about free pilots</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Email Capture ─────────────────────────────────────────────── -->
+<section class="email-section">
+  <div class="container">
+    <div class="email-card">
+      <div class="section-tag" style="margin: 0 auto 1rem;">Stay connected</div>
+      <h2>Get your results + job search tips</h2>
+      <p>Optional: enter your email to receive your translated resume and occasional tips on second-chance employment in your area. No spam. Unsubscribe anytime.</p>
+      <div class="email-row">
+        <input type="email" class="email-input" placeholder="your@email.com">
+        <button class="btn-terra" type="button" onclick="handleEmailSignup(this)">Send me tips</button>
+      </div>
+      <p class="email-note">Your email is never shared. This is purely to send you helpful resources.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ───────────────────────────────────────────────────────── -->
+<section class="faq-section">
+  <div class="container-narrow">
+    <div style="text-align: center; margin-bottom: 0;">
+      <div class="section-tag">Common questions</div>
+      <h2>Questions people ask before starting</h2>
+    </div>
+    <div class="faq-list">
+
+      <details class="faq-item">
+        <summary class="faq-q">Is this really free?<div class="faq-icon">+</div></summary>
+        <div class="faq-a">Yes — completely free for individuals. No hidden fees, no premium tier, no credit card required. The tool will always be free for people who are returning home and need employment help. Organizational licensing for nonprofits and agencies is separate and helps fund the free individual access.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">Do I need to create an account?<div class="faq-icon">+</div></summary>
+        <div class="faq-a">No account, no login, no sign-up. You can use the tool completely anonymously. We only ask for your name if you want it included on the resume itself. Nothing about your session is stored on our servers.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">Will employers know about my background from the resume?<div class="faq-icon">+</div></summary>
+        <div class="faq-a">No. The output uses standard civilian job language and does not mention incarceration, facility names, or conviction history. Whether, when, and how you choose to disclose your background is entirely your decision. We don't make that choice for you.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">What if I don't have much work experience from inside?<div class="faq-icon">+</div></summary>
+        <div class="faq-a">That's okay. Even participation in GED programs, vocational training, peer support groups, religious programs, or educational coursework can be translated into resume-relevant language. The tool is designed to find value in experiences that might not look like "work" on the surface.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">Does this work for federal and state convictions?<div class="faq-icon">+</div></summary>
+        <div class="faq-a">Yes. The translation tool works regardless of conviction type or facility. The resume output is the same — standard civilian job language — whether your experience came from a federal facility, state prison, county jail, or residential program.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">What if I don't have much computer experience?<div class="faq-icon">+</div></summary>
+        <div class="faq-a">The tool was designed specifically for people who aren't tech-savvy. If you can fill out a form on your phone, you can use it. The questions are plain, the steps are clear, and there's no technical knowledge required. It works on any smartphone.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">Can case managers use this with their clients?<div class="faq-icon">+</div></summary>
+        <div class="faq-a">Absolutely. Many case managers use the tool directly with clients during sessions or share the link as a self-service resource. Organizations that want dashboard features, outcome tracking, and bulk access for their full team can inquire about organizational licensing — which includes a free pilot period.</div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Final CTA ──────────────────────────────────────────────────── -->
+<section style="padding: 5rem 0; text-align: center; background: var(--cream2);">
+  <div class="container-narrow">
+    <div class="founder-tag" style="margin: 0 auto 1.5rem;">A note from the founder</div>
+    <h2 style="margin-bottom: 1.25rem;">Built because I needed it<br>and it didn't exist.</h2>
+    <p style="font-size: 1.05rem; margin-bottom: 2.5rem; max-width: 540px; margin-inline: auto; margin-bottom: 2.5rem;">
+      I built this tool as a returning citizen who sat in front of a blank resume and didn't know how to describe years of real work experience. If this helps one person walk into an interview with confidence, it's worth it.
+    </p>
+    <a href="/resume.html" class="btn-primary" style="font-size: 1.05rem; padding: 1rem 2.5rem; display: inline-flex;">
+      Start Building Your Resume — Free →
+    </a>
+    <p style="font-size: 0.8rem; color: #aaa; margin-top: 1rem;">No login. No account. No judgment.</p>
+  </div>
+</section>
+
+<!-- ── Footer ─────────────────────────────────────────────────────── -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="/" class="footer-logo">
+          <div class="footer-logo-mark">RJ</div>
+          ReEntry Job Translator
+        </a>
+        <p class="footer-tagline">
+          Helping returning citizens turn institutional work experience into employer-ready resume language. Free for individuals. Always.
+        </p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul class="footer-links">
+          <li><a href="/resume.html">Build My Resume</a></li>
+          <li><a href="/resume_preview.html">See a Preview</a></li>
+          <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="#examples">Translation Examples</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Organizations</h4>
+        <ul class="footer-links">
+          <li><a href="#for-organizations">For Nonprofits</a></li>
+          <li><a href="#for-organizations">For Probation/Parole</a></li>
+          <li><a href="#for-organizations">Workforce Programs</a></li>
+          <li><a href="mailto:info@reentryjobtranslator.com">Contact Us</a></li>
+          <li><a href="/privacy.html">Privacy Policy</a></li>
+          <li><a href="/terms.html">Terms of Use</a></li>
         </ul>
       </div>
     </div>
-    <div class="border-t border-blue-700 mt-8 pt-8 text-center text-sm">
-      <p>Built by <a href="" class="text-white hover:text-blue-200">someone who understands reentry.</a></p>
-      <p class="mt-2">© 2026 ReEntry Job Translator. All rights reserved.</p>
+    <div class="footer-bottom">
+      <p>© 2026 ReEntry Job Translator. All rights reserved.</p>
+      <span class="footer-mission">Designed for dignity, privacy, and results.</span>
     </div>
   </div>
 </footer>
+
+<script>
+// FAQ accordion is handled natively by <details>/<summary>
+
+// Email signup handler
+function handleEmailSignup(btn) {
+  const input = btn.previousElementSibling;
+  const email = input.value.trim();
+  if (!email || !email.includes('@')) {
+    input.style.borderColor = '#e8602c';
+    input.focus();
+    return;
+  }
+  // Replace with your email service endpoint (Mailchimp, ConvertKit, etc.)
+  btn.textContent = '✓ You\'re in!';
+  btn.style.background = '#1c3d2e';
+  btn.disabled = true;
+  input.disabled = true;
+  input.value = email;
+  // TODO: POST to your email service here
+  // fetch('/api/subscribe', { method: 'POST', body: JSON.stringify({ email }) })
+}
+
+// Scroll-based fade-in for non-hero elements
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.step-card, .why-card, .example-card, .org-card').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+  observer.observe(el);
+});
+</script>
 </body>
 </html>

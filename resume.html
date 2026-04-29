@@ -8,30 +8,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 
+<!-- Shared design system -->
+<link rel="stylesheet" href="/css/reentry-theme.css">
+
 <style>
+
 /* ── RESET & ROOT ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; font-size: 16px; }
 
-:root {
-  --forest:   #2563EB; /* Primary blue */
-  --pine:     #1D4ED8; /* Dark blue */
-  --sage:     #3B82F6; /* Accent blue */
-  --mist:     #EFF6FF; /* Light blue surface */
-  --cream:    #F9FAFB; /* Page gray */
-  --parchment:#F3F4F6; /* Neutral panel */
-  --gold:     #2563EB; /* Reused as brand accent */
-  --gold-lt:  #93C5FD; /* Light accent */
-  --ink:      #111827;
-  --slate:    #374151;
-  --mid:      #6B7280;
-  --border:   rgba(37,99,235,0.18);
-  --border-lt: rgba(17,24,39,0.08);
-  --shadow:   0 1px 3px rgba(0,0,0,0.08), 0 8px 24px rgba(17,24,39,0.06);
-  --shadow-lg: 0 10px 30px rgba(37,99,235,0.16);
-  --radius:   12px;
-  --radius-sm: 8px;
-}
 body {
   font-family: 'DM Sans', sans-serif;
   background: var(--cream);
@@ -46,7 +31,7 @@ body {
 
 /* ── TOPBAR ── */
 .topbar {
-  background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+  background: var(--green);
   padding: 0 5%;
   height: 58px;
   display: flex;
@@ -96,11 +81,6 @@ body {
   margin-top: -1px;
 }
 
-.topbar-right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
 
 .privacy-pill {
   display: flex;
@@ -170,8 +150,8 @@ body {
 }
 
 .step-item.active .step-num {
-  background: var(--forest);
-  border-color: var(--forest);
+  background: var(--green);
+  border-color: var(--green);
   color: var(--cream);
 }
 
@@ -273,7 +253,7 @@ body {
 .field select:focus,
 .field textarea:focus {
   border-color: var(--sage);
-  box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.12); /* or your green tone */
   background: white;
 }
 
@@ -340,7 +320,7 @@ body {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: var(--forest);
+  background: var(--green);
   color: var(--cream);
   font-size: 0.65rem;
   display: flex;
@@ -371,7 +351,7 @@ body {
 }
 
 .btn-primary {
-  background: var(--forest);
+  background: var(--green);
   color: var(--cream);
   border: none;
   border-radius: var(--radius-sm);
@@ -459,16 +439,14 @@ body {
 
 /* ── NOTICE BOX ── */
 .notice {
-  background: var(--mist);
-  border: 1px solid rgba(37,99,235,0.18);
-  border-left: 3px solid var(--sage);
+  background: var(--green-light);
+  border: 1px solid rgba(0,0,0,0.05);
+  border-left: 3px solid var(--green);
   border-radius: var(--radius-sm);
   padding: 12px 16px;
   margin-bottom: 1.25rem;
   font-size: 0.82rem;
-  color: var(--forest);
-  line-height: 1.6;
-  font-weight: 300;
+  color: var(--green-dark);
 }
 
 .notice strong { font-weight: 500; }
@@ -496,7 +474,7 @@ body {
   height: 56px;
   border-radius: 50%;
   border: 2px solid var(--border);
-  border-top-color: var(--forest);
+  border-top-color: var(--green);
   animation: spin 0.9s linear infinite;
   margin-bottom: 1.5rem;
 }
@@ -552,7 +530,7 @@ body {
   transition: background 0.4s;
 }
 
-.loading-step.active .ls-dot { background: var(--forest); }
+.loading-step.active .ls-dot { background: var(--green); }
 .loading-step.done .ls-dot { background: var(--sage); }
 
 /* ── OUTPUT SCREEN ── */
@@ -596,7 +574,7 @@ body {
 }
 
 .resume-header {
-  background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+  background: var(--green);
   padding: 1.75rem 2rem;
 }
 
@@ -734,7 +712,7 @@ body {
 
 .skill-chip {
   background: var(--mist);
-  border: 1px solid rgba(37,99,235,0.18);
+  border: 1px solid rgba(0,0,0,0.08);
   border-radius: 4px;
   padding: 4px 10px;
   font-size: 0.78rem;
@@ -787,7 +765,7 @@ body {
 }
 
 .welcome-left {
-  background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+  background: var(--green);
   padding: 5% 8% 5% 10%;
   display: flex;
   flex-direction: column;
@@ -938,7 +916,7 @@ body {
 .demo-divider span { font-size: 0.72rem; color: var(--mid); }
 
 .start-btn {
-  background: var(--forest);
+  background: var(--green);
   color: var(--cream);
   border: none;
   border-radius: var(--radius-sm);
@@ -1041,23 +1019,6 @@ body {
   .topbar { padding: 0 4%; }
 }
 
-/* Landing-page blue brand refinements */
-.topbar-logo { background: white; color: #2563EB; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-weight: 700; }
-.topbar-name { font-family: 'DM Sans', sans-serif; font-weight: 700; }
-.card, .resume-doc { border-color: rgba(17,24,39,0.08); }
-.card-title, .output-headline, .loading-title, .exp-title, .wr-title { font-family: 'DM Sans', sans-serif; font-weight: 700; }
-.wl-eyebrow::before { background: #BFDBFE; }
-.wl-eyebrow { color: #DBEAFE !important; }
-.rs-label { color: #2563EB; }
-.bullet-list li::before { background: #2563EB; }
-.skill-chip { background: #EFF6FF; border-color: rgba(37,99,235,0.18); color: #1D4ED8; }
-.pathway-note { background: #EFF6FF; border-left-color: #2563EB; }
-.step-track { background: #F9FAFB; }
-.step-item.active .step-num, .exp-num { background: #2563EB; border-color: #2563EB; color: white; }
-.step-item.done .step-num { background: #3B82F6; border-color: #3B82F6; color: white; }
-.btn-primary, .start-btn { box-shadow: 0 8px 18px rgba(37,99,235,0.22); }
-.notice { background: #EFF6FF; border-left-color: #2563EB; color: #1E3A8A; }
-.notice strong { color: #1D4ED8; }
 </style>
 </head>
 <body>
@@ -1136,7 +1097,7 @@ body {
       </div>
 
       <div class="field">
-        <label>What kind of job do you want next? (optional)</label>
+        <label>What kind of job are you looking for? (optional)</label>
         <span class="hint">Be as specific or general as you like — or leave blank if you're not sure yet.</span>
         <input type="text" id="targetJob" placeholder="e.g. warehouse work, restaurant, any maintenance job, office work...">
       </div>
@@ -1159,7 +1120,7 @@ body {
           <option value="recently_released">Recently released (within 6 months)</option>
           <option value="released_1yr">Released within the past year</option>
           <option value="released_longer">Released more than a year ago</option>
-          <option value="pre_release">Preparing before release</option>
+          <option value="pre_release">Pre-release / still incarcerated</option>
           <option value="case_manager">Case manager using this for a client</option>
         </select>
       </div>

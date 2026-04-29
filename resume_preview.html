@@ -4,8 +4,223 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ReEntry Job Translator | Resume Preview</title>
+
+<!-- Shared design system -->
+  <link rel="stylesheet" href="/css/reentry-theme.css">
+
+  <!-- Page CSS -->
 <style>
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#F9FAFB;color:#111827}.topbar{background:linear-gradient(135deg,#2563EB 0%,#1E40AF 100%);color:white;padding:18px 6%;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px rgba(17,24,39,.12)}.brand{font-size:22px;font-weight:800}.pill{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:7px 12px;border-radius:999px;font-size:13px}.hero{background:linear-gradient(135deg,#2563EB 0%,#1E40AF 100%);color:white;padding:70px 6%;text-align:center}.hero h1{font-size:clamp(34px,6vw,58px);line-height:1.05;margin:0 0 18px}.hero p{font-size:20px;color:#DBEAFE;max-width:780px;margin:0 auto 28px}.btn{display:inline-block;background:white;color:#2563EB;padding:15px 24px;border-radius:10px;font-weight:800;text-decoration:none;box-shadow:0 12px 30px rgba(17,24,39,.16)}.wrap{max-width:980px;margin:34px auto;padding:0 18px}.notice{background:#EFF6FF;border:1px solid rgba(37,99,235,.18);border-left:4px solid #2563EB;border-radius:10px;padding:16px 18px;color:#1E3A8A;margin-bottom:22px}.card{background:white;border:1px solid rgba(17,24,39,.08);border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.08),0 8px 24px rgba(17,24,39,.06);padding:26px;margin-bottom:22px}.card h2{color:#111827;margin:0 0 8px;font-size:28px}.muted{color:#6B7280;line-height:1.6}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}.role{border:1px solid rgba(37,99,235,.18);background:#F9FAFB;border-radius:12px;padding:18px}.role strong{color:#1D4ED8}.primary{background:#2563EB;color:white;border:0;border-radius:10px;padding:13px 22px;font-weight:800;box-shadow:0 8px 18px rgba(37,99,235,.22)}.resume{overflow:hidden;padding:0}.resume-head{background:linear-gradient(135deg,#2563EB 0%,#1E40AF 100%);padding:28px;color:white}.resume-head small{color:#BFDBFE;text-transform:uppercase;letter-spacing:.14em}.resume-body{padding:28px}.label{font-size:12px;text-transform:uppercase;letter-spacing:.18em;color:#2563EB;font-weight:800;border-bottom:1px solid rgba(17,24,39,.08);padding-bottom:10px;margin-bottom:18px}.chip{display:inline-block;background:#EFF6FF;border:1px solid rgba(37,99,235,.18);color:#1D4ED8;border-radius:8px;padding:7px 10px;margin:4px;font-size:14px}.bullet{padding-left:20px}.bullet li{margin:10px 0;line-height:1.55}.pathway{background:#EFF6FF;border-left:4px solid #2563EB;border-radius:0 10px 10px 0;padding:16px;color:#111827}</style>
+
+body {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+  background: var(--cream);
+  color: var(--text);
+}
+
+h1, h2, h3 {
+  font-family: 'Fraunces', serif;
+}
+
+/* Top bar */
+.topbar {
+  background: var(--green);
+  color: white;
+  padding: 18px 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.brand {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.pill {
+  background: rgba(255,255,255,.14);
+  border: 1px solid rgba(255,255,255,.25);
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+}
+
+/* Hero */
+.hero {
+  background: var(--green);
+  color: white;
+  padding: 70px 6%;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: clamp(34px,6vw,58px);
+  line-height: 1.05;
+  margin: 0 0 18px;
+}
+
+.hero p {
+  font-size: 20px;
+  color: rgba(255,255,255,.78);
+  max-width: 780px;
+  margin: 0 auto 28px;
+}
+
+/* Base buttons */
+.btn {
+  display: inline-block;
+  background: white;
+  color: var(--green);
+  padding: 15px 24px;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+}
+
+/* White button hover */
+.btn:hover {
+  background: var(--green);
+  color: white;
+}
+
+/* Primary (green) button */
+.primary {
+  background: var(--green);
+  color: white;
+  border: 0;
+  border-radius: var(--radius-sm);
+  padding: 13px 22px;
+  font-weight: 800;
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+}
+
+/* Primary hover */
+.primary:hover {
+  background: var(--green2);
+}
+
+.primary {
+  background: var(--green);
+  color: white;
+  border: 0;
+  border-radius: 10px;
+  padding: 13px 22px;
+  font-weight: 800;
+  box-shadow: var(--shadow-md);
+}
+
+/* Layout */
+.wrap {
+  max-width: 980px;
+  margin: 34px auto;
+  padding: 0 18px;
+}
+
+.card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 26px;
+  margin-bottom: 22px;
+}
+
+.card h2 {
+  color: var(--text);
+  margin: 0 0 8px;
+  font-size: 28px;
+}
+
+.muted {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px,1fr));
+  gap: 14px;
+}
+
+.role {
+  border: 1px solid var(--border);
+  background: var(--cream);
+  border-radius: 12px;
+  padding: 18px;
+}
+
+.role strong {
+  color: var(--green);
+}
+
+/* Resume */
+.resume {
+  overflow: hidden;
+  padding: 0;
+}
+
+.resume-head {
+  background: var(--green);
+  padding: 28px;
+  color: white;
+}
+
+.resume-head small {
+  color: rgba(255,255,255,.72);
+  text-transform: uppercase;
+  letter-spacing: .14em;
+}
+
+.resume-body {
+  padding: 28px;
+}
+
+.label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .18em;
+  color: var(--green);
+  font-weight: 800;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+  margin-bottom: 18px;
+}
+
+.chip {
+  display: inline-block;
+  background: var(--green-light);
+  border: 1px solid var(--border);
+  color: var(--green);
+  border-radius: 8px;
+  padding: 7px 10px;
+  margin: 4px;
+  font-size: 14px;
+}
+
+.bullet {
+  padding-left: 20px;
+}
+
+.bullet li {
+  margin: 10px 0;
+  line-height: 1.55;
+}
+
+.pathway {
+  background: var(--green-light);
+  border-left: 4px solid var(--green);
+  border-radius: 0 10px 10px 0;
+  padding: 16px;
+  color: var(--text);
+}
+
+</style>
+
 </head>
 <body>
 <header class="topbar"><div class="brand">ReEntry Job Translator</div><div class="pill">✓ No signup</div></header>
