@@ -13,21 +13,6 @@
 
 <style>
 
-:root {
-  --ink: #1a1a1a;
-  --forest: #2f7d4f;
-  --pine: #25663f;
-  --sage: #22c55e;
-  --gold: #e8602c;
-  --gold-lt: #fdf0eb;
-  --mist: #eaf6ef;
-  --parchment: #f3ede3;
-  --border: #e2dbd0;
-  --border-lt: #eee7dd;
-  --mid: #5f5f5f;
-  --slate: #444;
-}
-
 /* ── RESET & ROOT ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; font-size: 16px; }
@@ -1577,7 +1562,20 @@ function renderOutput(r) {
   `).join('');
   const quickWinsHTML = (r.quick_wins || []).map(tip => `<li style="font-size:0.88rem;color:var(--ink);padding-left:18px;position:relative;line-height:1.65;margin-bottom:6px;font-weight:300;"><span style="position:absolute;left:0;color:var(--gold);">→</span>${escapeHtml(tip)}</li>`).join('');
   const onetAttribution = r.onet ? `<div class="resume-section"><div class="rs-label">O*NET attribution</div><p style="font-size:0.82rem;color:var(--mid);line-height:1.6;">${escapeHtml(r.onet.attribution || '')}</p><p style="font-size:0.82rem;color:var(--mid);"><a href="${escapeHtml(r.onet.sourceUrl || 'https://services.onetcenter.org/')}" target="_blank" rel="noreferrer">O*NET Web Services</a>${r.onet.version ? ' · Database version ' + escapeHtml(r.onet.version) : ''}</p></div>` : '';
+  const fairEmployers = getFairChanceEmployers(
+  r.payload?.location,
+  r.payload?.targetRole
+);
 
+const employerHTML = fairEmployers.map(e => `
+  <div style="background:var(--parchment);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;">
+    <strong style="color:var(--forest);">${e.name}</strong>
+    <div style="font-size:0.75rem;color:var(--mid);margin:4px 0;">${e.note}</div>
+    <a href="${e.link}" target="_blank" style="font-size:0.75rem;color:var(--green);text-decoration:underline;">
+      View jobs →
+    </a>
+  </div>
+`).join('');
   doc.innerHTML = `
     <div class="resume-header">
       <div class="resume-candidate">Professional resume language ·</div>
@@ -1589,6 +1587,17 @@ function renderOutput(r) {
       <div class="resume-section"><div class="rs-label">Transferable skills</div><div class="skills-wrap" id="skillsWrap">${skillsHTML}</div><div class="section-copy-bar"><button class="btn-icon" onclick="copySkills()">📋 Copy skills</button></div></div>
       <div class="resume-section"><div class="rs-label">Pathways to target</div><div style="display:flex;flex-wrap:wrap;gap:10px;">${industriesHTML}</div></div>
       <div class="resume-section"><div class="rs-label">Your career pathway</div><div class="pathway-note" id="pathwayText">${escapeHtml(r.career_pathway || '')}</div></div>
+      <div class="resume-section">
+  <div class="rs-label">Fair chance employers near you</div>
+
+  <div style="display:flex;flex-direction:column;gap:10px;">
+    ${employerHTML}
+  </div>
+
+  <p style="font-size:0.75rem;color:var(--mid);margin-top:10px;">
+    These employers are known to consider applicants with a record. Always apply honestly and focus on your skills and experience.
+  </p>
+</div>
       <div class="resume-section"><div class="rs-label">Quick wins for your job search</div><ul style="list-style:none;padding:0;margin:0;">${quickWinsHTML}</ul></div>
       ${onetAttribution}
     </div>`;
@@ -1687,6 +1696,69 @@ document.addEventListener('DOMContentLoaded', () => {
   initForm();
   showScreen('screen-form');
 });
+
+function getFairChanceEmployers(location, targetRole) {
+  const base = [
+    {
+      name: "Amazon",
+      roles: ["warehouse"],
+      locations: ["nj", "pa", "any"],
+      note: "High-volume hiring for warehouse and logistics roles",
+      link: "https://www.amazon.jobs"
+    },
+    {
+      name: "UPS",
+      roles: ["warehouse"],
+      locations: ["nj", "pa", "any"],
+      note: "Package handling and seasonal warehouse jobs",
+      link: "https://www.jobs-ups.com"
+    },
+    {
+      name: "Home Depot",
+      roles: ["retail", "general"],
+      locations: ["any"],
+      note: "Retail and stocking roles with consistent hiring",
+      link: "https://careers.homedepot.com"
+    },
+    {
+      name: "Walmart",
+      roles: ["retail", "warehouse"],
+      locations: ["any"],
+      note: "Stocking and fulfillment roles",
+      link: "https://careers.walmart.com"
+    },
+    {
+      name: "Aramark",
+      roles: ["foodservice", "facilities"],
+      locations: ["nj", "pa", "any"],
+      note: "Food service and facilities contracts",
+      link: "https://careers.aramark.com"
+    },
+    {
+      name: "Sodexo",
+      roles: ["foodservice", "facilities"],
+      locations: ["nj", "pa", "any"],
+      note: "Hospitals, schools, and institutional roles",
+      link: "https://jobs.sodexo.com"
+    }
+  ];
+
+  const loc = (location || "").toLowerCase();
+
+  return base.filter(e => {
+    const roleMatch =
+      !targetRole ||
+      e.roles.includes(targetRole) ||
+      e.roles.includes("general");
+
+    const locationMatch =
+      !loc ||
+      e.locations.includes("any") ||
+      e.locations.some(l => loc.includes(l));
+
+    return roleMatch && locationMatch;
+  });
+}
 </script>
 </body>
 </html>
