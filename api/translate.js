@@ -171,18 +171,18 @@ export default async function handler(req, res) {
     if (!process.env.OPENAI_API_KEY) {
       return json(res, 200, fallbackResponse(body));
     }
-const prompt = `
-You are a reentry workforce translator, ATS resume assistant, and O*NET-aligned career helper.
+	const prompt = `
+	You are a reentry workforce translator, ATS resume assistant, and O*NET-aligned career helper.
 
-Your job is to convert nontraditional work history into employer-ready resume language. The output should help the user explain real work experience in professional terms without exaggeration, stigma, or unsafe claims.
+	Your job is to convert nontraditional work history into employer-ready resume language. The output should help the user explain real work experience in professional terms without exaggeration, stigma, or unsafe claims.
 
-Core goals:
+	Core goals:
 - Translate the user's actual duties into clear resume language.
 - Use truthful ATS-friendly keywords that match the user's real experience.
 - Align work experience with relevant O*NET-style occupational categories, work activities, and transferable skills.
 - Recommend realistic entry-level job pathways the user could apply for now.
 
-Strict rules:
+	Strict rules:
 - Do not mention incarceration, prison, jail, inmate, offender, felon, convict, justice-impacted, formerly incarcerated, correctional facility, or similar background-identifying terms.
 - Do not invent credentials, certifications, licenses, job authority, leadership, numbers, tools, or outcomes the user did not provide.
 - Translate the setting, not the stigma. Use neutral terms like structured work environment, high-volume kitchen, facilities support, laundry operations, records support, warehouse support, grounds maintenance, customer service, or team-based operations.
@@ -201,7 +201,7 @@ Strict rules:
 - Write for a person who may need plain language and may be applying from a phone.
 - Return valid JSON only. No markdown, commentary, explanations, or code fences.
 
-Output rules:
+	Output rules:
 - The summary should be 2–3 sentences.
 - The summary should include 3–6 relevant ATS-friendly keywords naturally.
 - Each experience should include 3–5 resume bullets.
@@ -211,7 +211,7 @@ Output rules:
 - Pathways should include 3–5 realistic job titles.
 - Interview tips should include 3 short talking points that help the user explain the experience professionally without mentioning background details.
 
-Use this exact JSON structure:
+	Use this exact JSON structure:
 
 {
   "summary": "",
@@ -280,67 +280,4 @@ ${JSON.stringify(body)}
   } catch (err) {
     return json(res, 200, fallbackResponse(req.body || {}));
   }
-}
-
-function getFairChanceEmployers(location, targetRole) {
-  const base = [
-    {
-      name: "Amazon",
-      roles: ["warehouse"],
-      locations: ["nj", "pa", "any"],
-      note: "High-volume hiring for warehouse and logistics roles",
-      link: "https://www.amazon.jobs"
-    },
-    {
-      name: "UPS",
-      roles: ["warehouse"],
-      locations: ["nj", "pa", "any"],
-      note: "Package handling and seasonal warehouse jobs",
-      link: "https://www.jobs-ups.com"
-    },
-    {
-      name: "Home Depot",
-      roles: ["retail", "general"],
-      locations: ["any"],
-      note: "Retail and stocking roles with consistent hiring",
-      link: "https://careers.homedepot.com"
-    },
-    {
-      name: "Walmart",
-      roles: ["retail", "warehouse"],
-      locations: ["any"],
-      note: "Stocking, fulfillment, and store positions",
-      link: "https://careers.walmart.com"
-    },
-    {
-      name: "Aramark",
-      roles: ["foodservice", "facilities"],
-      locations: ["nj", "pa", "any"],
-      note: "Food service and facility support contracts",
-      link: "https://careers.aramark.com"
-    },
-    {
-      name: "Sodexo",
-      roles: ["foodservice", "facilities"],
-      locations: ["nj", "pa", "any"],
-      note: "Hospitals, schools, and institutional roles",
-      link: "https://jobs.sodexo.com"
-    }
-  ];
-
-  const loc = (location || "").toLowerCase();
-
-  return base.filter(e => {
-    const roleMatch =
-      !targetRole ||
-      e.roles.includes(targetRole) ||
-      e.roles.includes("general");
-
-    const locationMatch =
-      !loc ||
-      e.locations.includes("any") ||
-      e.locations.some(l => loc.includes(l));
-
-    return roleMatch && locationMatch;
-  });
 }
