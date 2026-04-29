@@ -1,0 +1,183 @@
+:root {
+  --cream: #faf7f2;
+  --cream2: #f3ede3;
+  --white: #ffffff;
+  --green: #1c3d2e;
+  --green2: #234d3a;
+  --green-light: #e8f0eb;
+  --terra: #e8602c;
+  --terra-light: #fdf0eb;
+  --text: #1a1a1a;
+  --muted: #6b6b6b;
+  --border: #e2dbd0;
+  --shadow-sm: 0 1px 3px rgba(28,61,46,0.08), 0 1px 2px rgba(28,61,46,0.04);
+  --shadow-md: 0 4px 16px rgba(28,61,46,0.10), 0 2px 6px rgba(28,61,46,0.06);
+  --shadow-lg: 0 12px 40px rgba(28,61,46,0.14), 0 4px 12px rgba(28,61,46,0.08);
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Fraunces', Georgia, serif;
+  color: var(--text);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+p {
+  color: var(--muted);
+}
+
+a {
+  color: inherit;
+}
+
+.container,
+.wrap,
+.main,
+.output-wrap {
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card,
+.resume-doc,
+.role,
+.example-card,
+.step-card,
+.why-card,
+.org-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary,
+.primary,
+.start-btn,
+.nav-cta {
+  background: var(--green) !important;
+  color: #ffffff !important;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+}
+
+.btn-primary:hover,
+.primary:hover,
+.start-btn:hover,
+.nav-cta:hover {
+  background: var(--green2) !important;
+}
+
+.btn-secondary,
+.btn-ghost,
+.btn-icon,
+.demo-btn {
+  background: transparent;
+  color: var(--green);
+  border: 1px solid var(--green);
+  border-radius: var(--radius-sm);
+}
+
+.btn-secondary:hover,
+.btn-ghost:hover,
+.btn-icon:hover,
+.demo-btn:hover {
+  background: var(--green-light);
+}
+
+.topbar,
+.resume-header,
+.resume-head,
+.hero {
+  background: var(--green) !important;
+  color: #ffffff !important;
+}
+
+.topbar *,
+.resume-header *,
+.resume-head *,
+.hero * {
+  color: inherit;
+}
+
+.notice,
+.pathway-note,
+.pathway,
+.skill-chip,
+.chip {
+  background: var(--green-light) !important;
+  border-color: var(--border) !important;
+  color: var(--green) !important;
+}
+
+.section-tag,
+.wl-eyebrow {
+  color: var(--terra) !important;
+  background: var(--terra-light);
+}
+
+.rs-label,
+.label,
+.role strong,
+.exp-title,
+.card-title,
+.output-headline,
+.loading-title,
+.wr-title {
+  color: var(--green) !important;
+}
+
+.bullet-list li::before {
+  background: var(--green) !important;
+}
+
+input,
+select,
+textarea {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  color: var(--text);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--green) !important;
+  box-shadow: 0 0 0 3px rgba(28,61,46,0.12);
+}
+
+.step-item.active .step-num,
+.exp-num {
+  background: var(--green) !important;
+  border-color: var(--green) !important;
+  color: #ffffff !important;
+}
+
+.step-item.done .step-num {
+  background: var(--green2) !important;
+  border-color: var(--green2) !important;
+  color: #ffffff !important;
+}
