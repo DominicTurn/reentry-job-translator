@@ -46,6 +46,7 @@
       justify-content: center;
       gap: 14px;
       flex-wrap: wrap;
+      margin-top: 20px;
     }
 
     .org-section,
@@ -103,6 +104,40 @@
         grid-template-columns: 1fr;
       }
     }
+
+    /* FORCE BUTTON STYLING ON LINKS */
+.btn-primary,
+.btn-secondary {
+  display: inline-block;
+  padding: 14px 22px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* PRIMARY (CTA) */
+.btn-primary {
+  background: var(--terra);
+  color: #ffffff !important;
+  border: none;
+  box-shadow: 0 6px 18px rgba(232, 96, 44, 0.25);
+}
+
+.btn-primary:hover {
+  background: var(--terra-dark);
+}
+
+/* SECONDARY */
+.btn-secondary {
+  background: transparent;
+  color: var(--green) !important;
+  border: 2px solid var(--green);
+}
+
+.btn-secondary:hover {
+  background: var(--green-light);
+}
   </style>
 </head>
 
@@ -190,6 +225,7 @@
       <a href="mailto:privacy@reentryjobtranslator.com" class="btn-primary">Contact Us</a>
     </div>
   </section>
+  <center><a href="/index.html">Back Home</a></center>
 
 </body>
 </html>
