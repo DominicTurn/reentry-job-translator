@@ -79,10 +79,12 @@ a {
 }
 
 /* DARK HEADER AREAS */
-.topbar,
 .hero {
-  background: var(--green);
-  color: #ffffff;
+  background: linear-gradient(
+    135deg,
+    #2f5e47 0%,   /* lighter green */
+    #1c3d2e 100%
+  );
 }
 
 .topbar *,
