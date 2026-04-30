@@ -6,15 +6,15 @@
   --cream2: #f3ede3;
   --white: #ffffff;
 
-  --green: #2f5e47;       /* main UI green (lighter) */
-  --green2: #254f3c;      /* hover / darker contrast */
-  --green-light: #edf5f1; /* softer background */
+  --green: #2f5e47;        /* lighter main green */
+  --green2: #254f3c;       /* hover */
+  --green-light: #edf5f1;  /* soft background */
 
   --terra: #e8602c;
   --terra-light: #fdf0eb;
 
   --text: #111827;
-  --muted: #6b7280;
+  --muted: #4b5563;
   --border: #e2dbd0;
 
   --shadow-sm: 0 1px 3px rgba(28,61,46,0.08);
@@ -83,24 +83,32 @@ a {
   box-shadow: var(--shadow-sm);
 }
 
+.topbar * {
+  color: inherit;
+}
+
 /* =========================
    HERO
 ========================= */
 .hero {
   background: linear-gradient(
     135deg,
-    #2f5e47 0%,
-    #1c3d2e 100%
+    #3f7f64 0%,
+    #2f5e47 100%
   );
-  color: #000000;
+  color: #ffffff;
   padding: 70px 6%;
   text-align: center;
 }
 
+.hero * {
+  color: inherit;
+}
 
 .hero h1 {
   font-size: clamp(34px,6vw,58px);
   margin-bottom: 18px;
+  color: #ffffff;
 }
 
 .hero h1 em,
@@ -127,6 +135,7 @@ a {
   border-radius: var(--radius-sm);
   font-weight: 800;
   box-shadow: var(--shadow-md);
+  transition: 0.2s ease;
 }
 
 .btn:hover,
@@ -140,7 +149,11 @@ a {
 ========================= */
 .card,
 .resume-doc,
-.role {
+.role,
+.example-card,
+.step-card,
+.why-card,
+.org-card {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -148,12 +161,13 @@ a {
 }
 
 /* =========================
-   RESUME PREVIEW
+   RESUME HEADER (LIGHT)
 ========================= */
+.resume-header,
 .resume-head {
   background: var(--green-light);
-  padding: 28px;
   color: var(--text);
+  padding: 28px;
 }
 
 .resume-head small {
@@ -167,6 +181,9 @@ a {
   color: var(--text);
 }
 
+/* =========================
+   RESUME BODY
+========================= */
 .resume-body {
   padding: 28px;
 }
@@ -185,11 +202,13 @@ a {
 /* =========================
    BULLETS
 ========================= */
-.bullet {
+.bullet,
+.bullet-list {
   padding-left: 20px;
 }
 
-.bullet li {
+.bullet li,
+.bullet-list li {
   margin: 10px 0;
   line-height: 1.6;
   color: var(--text);
@@ -222,9 +241,18 @@ a {
 }
 
 /* =========================
-   FOOTER TEXT
+   FOOTER
 ========================= */
-.footer-tagline {
+footer {
+  background: var(--green);
   color: #ffffff;
-  opacity: 0.9;
+  padding: 40px 6%;
+}
+
+footer * {
+  color: inherit;
+}
+
+.footer-tagline {
+  color: rgba(255,255,255,0.9);
 }
