@@ -5,11 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ReEntry Job Translator | Resume Preview</title>
 
-
-
-  <!-- Page CSS -->
 <style>
 
+/* =========================
+   TOKENS (SELF-CONTAINED)
+========================= */
+:root {
+  --cream: #faf7f2;
+  --white: #ffffff;
+
+  --green: #2f5e47;
+  --green2: #254f3c;
+  --green-light: #edf5f1;
+
+  --text: #111827;
+  --muted: #4b5563;
+  --border: #e2dbd0;
+
+  --radius: 14px;
+  --radius-sm: 8px;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+}
+
+/* =========================
+   BASE
+========================= */
 body {
   margin: 0;
   font-family: 'Plus Jakarta Sans', Arial, sans-serif;
@@ -21,15 +43,16 @@ h1, h2, h3 {
   font-family: 'Fraunces', serif;
 }
 
-/* Top bar */
+/* =========================
+   TOPBAR
+========================= */
 .topbar {
   background: var(--green);
-  color: white;
+  color: #ffffff;
   padding: 18px 6%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: var(--shadow-sm);
 }
 
 .brand {
@@ -45,74 +68,63 @@ h1, h2, h3 {
   font-size: 13px;
 }
 
-/* Hero */
+/* =========================
+   HERO
+========================= */
 .hero {
-  background: var(--green);
-  color: #111827; /* dark text */
+  background: linear-gradient(135deg, #3f7f64 0%, #2f5e47 100%);
+  color: #ffffff;
   padding: 70px 6%;
   text-align: center;
 }
 
 .hero h1 {
   font-size: clamp(34px,6vw,58px);
-  line-height: 1.05;
-  margin: 0 0 18px;
+  margin-bottom: 18px;
 }
 
 .hero p {
   font-size: 20px;
-  color: #374151; /* readable secondary */
+  color: rgba(255,255,255,0.9);
   max-width: 780px;
   margin: 0 auto 28px;
 }
 
-/* Base buttons */
+/* =========================
+   BUTTONS
+========================= */
 .btn {
   display: inline-block;
-  background: white;
+  background: #ffffff;
   color: var(--green);
-  padding: 15px 24px;
+  padding: 14px 22px;
   border-radius: var(--radius-sm);
   font-weight: 800;
   text-decoration: none;
   box-shadow: var(--shadow-md);
-  transition: all 0.2s ease;
 }
 
-/* White button hover */
 .btn:hover {
   background: var(--green);
-  color: white;
+  color: #ffffff;
 }
 
-/* Primary (green) button */
 .primary {
   background: var(--green);
-  color: white;
-  border: 0;
+  color: #ffffff;
+  padding: 12px 22px;
   border-radius: var(--radius-sm);
-  padding: 13px 22px;
   font-weight: 800;
-  box-shadow: var(--shadow-md);
-  transition: all 0.2s ease;
+  text-decoration: none;
 }
 
-/* Primary hover */
 .primary:hover {
   background: var(--green2);
 }
 
-.primary {
-  background: var(--green);
-  color: white;
-  border: 0;
-  border-radius: 10px;
-  padding: 13px 22px;
-  font-weight: 800;
-  box-shadow: var(--shadow-md);
-}
-
-/* Layout */
+/* =========================
+   LAYOUT
+========================= */
 .wrap {
   max-width: 980px;
   margin: 34px auto;
@@ -120,26 +132,24 @@ h1, h2, h3 {
 }
 
 .card {
-  background: white;
+  background: #ffffff;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
   padding: 26px;
   margin-bottom: 22px;
 }
 
 .card h2 {
-  color: var(--text);
-  margin: 0 0 8px;
-  font-size: 28px;
+  margin-bottom: 8px;
 }
 
 .muted {
   color: var(--muted);
-  line-height: 1.6;
 }
 
-/* Grid */
+/* =========================
+   GRID
+========================= */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px,1fr));
@@ -157,16 +167,13 @@ h1, h2, h3 {
   color: var(--green);
 }
 
-/* Resume */
-.resume {
-  overflow: hidden;
-  padding: 0;
-}
-
+/* =========================
+   RESUME
+========================= */
 .resume-head {
-  background: var(--green);
+  background: var(--green-light);
   padding: 28px;
-  color: #6b7280;
+  color: var(--text);
 }
 
 .resume-head small {
@@ -175,8 +182,8 @@ h1, h2, h3 {
   letter-spacing: .14em;
 }
 
-  .resume-head h2 {
-  color: #111827;
+.resume-head h2 {
+  margin-top: 10px;
 }
 
 .resume-body {
@@ -194,6 +201,9 @@ h1, h2, h3 {
   margin-bottom: 18px;
 }
 
+/* =========================
+   CONTENT
+========================= */
 .chip {
   display: inline-block;
   background: var(--green-light);
@@ -219,22 +229,75 @@ h1, h2, h3 {
   border-left: 4px solid var(--green);
   border-radius: 0 10px 10px 0;
   padding: 16px;
-  color: var(--text);
 }
 
 </style>
 
 </head>
+
 <body>
-<header class="topbar"><div class="brand">ReEntry Job Translator</div><div class="pill">✓ No signup</div></header>
-<section class="hero"><h1>Your Experience Matters.<br>Let's Show Employers.</h1><p>See an example of how the tool turns work experience into clear resume language.</p><a class="btn" href="index.html">Build My Free Resume</a></section>
+
+<header class="topbar">
+  <div class="brand">ReEntry Job Translator</div>
+  <div class="pill">✓ No signup</div>
+</header>
+
+<section class="hero">
+  <h1>Your Experience Matters.<br>Let's Show Employers.</h1>
+  <p>See an example of how the tool turns work experience into clear resume language.</p>
+  <a class="btn" href="index.html">Build My Free Resume</a>
+</section>
+
 <main class="wrap">
-<section class="card"><h2>Turn your work experience into employer-ready resume language.</h2><div class="grid"><div class="role"><strong>Food service</strong><p class="muted">Kitchen, cooking, serving</p></div><div class="role"><strong>Maintenance</strong><p class="muted">Facilities, repairs, preventive maintenance </p></div><div class="role"><strong>Customer service</strong><p class="muted">Canteen, stocking, photographer</p></div></div><p>
-  <a href="index.html" class="primary" style="text-decoration:none;display:inline-block;">
-    Build My Free Resume →
-  </a>
-</p></section>
-<section class="card resume" id="resume"><div class="resume-head"><small>Professional resume language</small><h2 style="margin:10px 0 0">Reliable food service worker with high-volume kitchen experience.</h2></div><div class="resume-body"><div class="label">Work experience — translated</div><h3>Food Service Support Worker</h3><ul class="bullet"><li>Supported daily meal preparation and service operations while meeting time-sensitive production needs.</li><li>Maintained sanitation standards through recurring cleaning routines and food safety procedures.</li><li>Tracked supplies, supported inventory organization, and helped reduce waste.</li></ul><div class="label">Transferable skills</div><span class="chip">Food Safety</span><span class="chip">Sanitation</span><span class="chip">Inventory Support</span><span class="chip">Team Training</span><div class="label" style="margin-top:24px">Career pathway</div><div class="pathway">Start with Food Service Worker, Prep Cook, Kitchen Helper, or Cafeteria Worker roles. Move toward Kitchen Lead or Shift Lead with experience.</div></div></section>
+
+<section class="card">
+  <h2>Turn your work experience into employer-ready resume language.</h2>
+
+  <div class="grid">
+    <div class="role"><strong>Food service</strong><p class="muted">Kitchen, cooking, serving</p></div>
+    <div class="role"><strong>Maintenance</strong><p class="muted">Facilities, repairs</p></div>
+    <div class="role"><strong>Customer service</strong><p class="muted">Canteen, stocking</p></div>
+  </div>
+
+  <p>
+    <a href="index.html" class="primary">Build My Free Resume →</a>
+  </p>
+</section>
+
+<section class="card resume">
+  <div class="resume-head">
+    <small>Professional summary</small>
+    <h2>Reliable food service worker with high-volume kitchen experience.</h2>
+  </div>
+
+  <div class="resume-body">
+
+    <div class="label">Work experience — translated</div>
+
+    <h3>Food Service Support Worker</h3>
+
+    <ul class="bullet">
+      <li>Supported daily meal preparation and service operations while meeting time-sensitive production needs.</li>
+      <li>Maintained sanitation standards through recurring cleaning routines and food safety procedures.</li>
+      <li>Tracked supplies and supported inventory organization.</li>
+    </ul>
+
+    <div class="label">Transferable skills</div>
+    <span class="chip">Food Safety</span>
+    <span class="chip">Sanitation</span>
+    <span class="chip">Inventory Support</span>
+    <span class="chip">Team Training</span>
+
+    <div class="label" style="margin-top:24px">Career pathway</div>
+
+    <div class="pathway">
+      Start with Food Service Worker, Prep Cook, Kitchen Helper, or Cafeteria Worker roles. Move toward Kitchen Lead or Shift Lead with experience.
+    </div>
+
+  </div>
+</section>
+
 </main>
+
 </body>
 </html>
