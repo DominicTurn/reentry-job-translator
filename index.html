@@ -197,13 +197,25 @@ nav {
 }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 2rem; }
 .hero-trust {
-  display: flex; flex-wrap: wrap; gap: 1.25rem;
-  font-size: 0.8rem;
-  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.9); /* ✅ readable on green */
   font-weight: 500;
 }
-.hero-trust span { display: flex; align-items: center; gap: 5px; }
-.hero-trust span::before { content: '✓'; color: var(--green); font-weight: 700; }
+
+.hero-trust span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero-trust span::before {
+  content: '✓';
+  color: #a7f3d0; /* ✅ soft green check (visible on dark bg) */
+  font-weight: 700;
+}
 
 /* ── Before/After Card ──────────────────────────────────────────── */
 .transform-card {
