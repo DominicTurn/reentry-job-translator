@@ -83,10 +83,6 @@ a {
   box-shadow: var(--shadow-sm);
 }
 
-.topbar * {
-  color: inherit;
-}
-
 /* =========================
    HERO
 ========================= */
@@ -101,9 +97,6 @@ a {
   text-align: center;
 }
 
-.hero * {
-  color: inherit;
-}
 
 .hero h1 {
   font-size: clamp(34px,6vw,58px);
