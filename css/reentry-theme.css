@@ -6,15 +6,15 @@
   --cream2: #f3ede3;
   --white: #ffffff;
 
-  --green: #1c3d2e;
-  --green2: #234d3a;
-  --green-light: #e8f0eb;
+  --green: #2f5e47;       /* main UI green (lighter) */
+  --green2: #254f3c;      /* hover / darker contrast */
+  --green-light: #edf5f1; /* softer background */
 
   --terra: #e8602c;
   --terra-light: #fdf0eb;
 
-  --text: #000000;
-  --muted: #4b5563;
+  --text: #111827;
+  --muted: #6b7280;
   --border: #e2dbd0;
 
   --shadow-sm: 0 1px 3px rgba(28,61,46,0.08);
