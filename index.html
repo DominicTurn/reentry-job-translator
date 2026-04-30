@@ -132,22 +132,32 @@ nav {
   transition: all 0.2s;
   box-shadow: 0 2px 8px rgba(28,61,46,0.25);
 }
-.btn-primary:hover { background: var(--green2); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(28,61,46,0.3); }
+.hero .btn-primary {
+  background: #ffffff;
+  color: var(--green);
+}
+
+.hero .btn-primary:hover {
+  background: #f3ede3;
+}
 .btn-ghost {
   display: inline-flex; align-items: center; gap: 8px;
   background: transparent;
-  color: var(--green);
+  color: #ffffff;
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 600;
   font-size: 1rem;
   padding: 0.875rem 1.75rem;
   border-radius: var(--radius-sm);
   text-decoration: none;
-  border: 1.5px solid var(--green);
+  border: 1.5px solid rgba(255,255,255,0.6);
   cursor: pointer;
   transition: all 0.2s;
 }
-.btn-ghost:hover { background: var(--green-light); }
+.hero .btn-ghost:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: #ffffff;
+}
 .btn-terra {
   display: inline-flex; align-items: center; gap: 8px;
   background: var(--terra);
