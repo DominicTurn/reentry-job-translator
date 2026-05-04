@@ -1,6 +1,9 @@
 // api/translate.js
-// OpenAI production-grade backend for ReEntry Job Translator
+// OpenAI Production-Grade Backend for ReEntry Job Translator
 
+/** 
+ * HELPER FUNCTIONS 
+ */
 function json(res, code, payload) {
   return res.status(code).json(payload);
 }
@@ -9,152 +12,70 @@ function safeString(v) {
   return String(v || "").trim();
 }
 
-function roleLabel(category = "") {
-  const map = {
-    kitchen: "food service",
-    "facility-operations": "facilities support",
-    laundry: "laundry and linen services",
-    clerical: "administrative support",
-    warehouse: "warehouse and logistics",
-    grounds: "grounds and maintenance",
-    peer: "peer support and mentoring"
-  };
-  return map[category] || "operations support";
-}
-
+/** 
+ * FALLBACK LOGIC
+ * Used if the API is down, keys are missing, or the model fails to return JSON.
+ */
 function titleFromCategory(category = "") {
   const map = {
     kitchen: "Food Service Support Worker",
     "facility-operations": "Facilities Support Worker",
     laundry: "Laundry and Linen Services Worker",
     clerical: "Administrative Support Assistant",
-    warehouse: "Warehouse Associate",
+    canteen: "Customer Associate",
+    houseman: "Custodian",
     grounds: "Grounds Maintenance Worker",
+    orderly: "Assistant"
     peer: "Peer Support Assistant"
   };
   return map[category] || "Operations Support Worker";
 }
 
-function skillsFromCategory(category = "") {
-  const base = [
-    "Reliability",
-    "Teamwork",
-    "Following Procedures",
-    "Time Management"
-  ];
-
-  const map = {
-    kitchen: ["Food Safety", "Sanitation", "Meal Preparation"],
-    "facility-operations": [
-      "Cleaning Procedures",
-      "Safety Awareness",
-      "Detail Orientation"
-    ],
-    laundry: ["Sorting", "Workflow", "Quality Control"],
-    clerical: ["Recordkeeping", "Documentation", "Organization"],
-    warehouse: ["Inventory", "Stocking", "Material Handling"],
-    grounds: ["Equipment Use", "Cleanup", "Safety Procedures"],
-    peer: ["Communication", "Mentoring", "Conflict Resolution"]
-  };
-
-  return [...new Set([...(map[category] || []), ...base])];
-}
-
-function pathwaysFromCategory(category = "") {
-  const map = {
-    kitchen: [
-      "Food Service Worker",
-      "Prep Cook",
-      "Kitchen Helper",
-      "Cafeteria Worker"
-    ],
-    "facility-operations": [
-      "Custodian",
-      "Porter",
-      "Facilities Assistant"
-    ],
-    laundry: [
-      "Laundry Attendant",
-      "Housekeeping Aide"
-    ],
-    clerical: [
-      "Office Assistant",
-      "Records Clerk"
-    ],
-    warehouse: [
-      "Warehouse Associate",
-      "Stock Clerk",
-      "Material Handler"
-    ],
-    grounds: [
-      "Groundskeeper",
-      "Maintenance Helper"
-    ],
-    peer: [
-      "Program Assistant",
-      "Community Outreach Worker"
-    ]
-  };
-
-  return map[category] || [
-    "General Laborer",
-    "Warehouse Associate"
-  ];
-}
-
 function fallbackResponse(body) {
   const experiences = body.experiences || [];
-
-  const output = {
-    summary:
-      "Reliable candidate with hands-on experience completing daily assignments, following procedures, and supporting team operations in structured work environments.",
-    experience: experiences.map((exp) => ({
-      translated_title: titleFromCategory(exp.category),
-      duration: safeString(exp.duration),
-      onet_title: titleFromCategory(exp.category),
-      bullets: [
-        `Completed daily ${roleLabel(exp.category)} duties while following procedures and schedules.`,
-        "Worked with team members to complete tasks safely and on time.",
-        "Maintained reliable attendance and consistent performance."
-      ],
-      aligned_tasks: [
-        "Follow procedures",
-        "Complete assigned work",
-        "Support team operations"
+  return {
+    output: {
+      summary: "Reliable candidate with hands-on experience completing daily assignments and supporting team operations in structured work environments.",
+      experience: experiences.map((exp) => ({
+        translated_title: titleFromCategory(exp.category),
+        duration: safeString(exp.duration),
+        onet_title: titleFromCategory(exp.category),
+        bullets: [
+          "Maintained consistent performance in a high-volume, structured environment.",
+          "Collaborated with team members to complete daily operational tasks safely.",
+          "Followed strict schedules and procedures to ensure workflow efficiency."
+        ],
+        aligned_tasks: ["Follow procedures", "Complete assigned work", "Support team operations"]
+      })),
+      skills: ["Reliability", "Teamwork", "Following Procedures", "Time Management"],
+      pathways: ["General Laborer", "Warehouse Associate", "Facilities Assistant"],
+      interviewTips: [
+        "Focus on your punctuality and reliability.",
+        "Discuss your experience working in fast-paced environments.",
+        "Emphasize your ability to follow safety and operational protocols."
       ]
-    })),
-    skills: [
-      ...new Set(experiences.flatMap((exp) => skillsFromCategory(exp.category)))
-    ],
-    pathways: [
-      ...new Set(experiences.flatMap((exp) => pathwaysFromCategory(exp.category)))
-    ].slice(0, 5),
-    interviewTips: [
-      "Describe how you stayed reliable and consistent.",
-      "Explain the tasks you handled daily.",
-      "Mention teamwork, safety, and following procedures."
-    ]
+    }
   };
-
-  return { output };
 }
 
-function extractJson(text) {
-  const cleaned = text
-    .replace(/```json/gi, "")
-    .replace(/```/g, "")
-    .trim();
+/** 
+ * DICTIONARY MAPPING
+ * Helps the AI map institutional terms to professional equivalents.
+ */
+const SLANG_MAP = {
+  "porter": "facilities maintenance or custodial support",
+  "chow hall": "high-volume dining facility",
+  "yard": "exterior grounds and maintenance area",
+  "commissary": "inventory, stocking, and distribution center",
+  "unit": "residential wing or designated housing area",
+  "clerk": "administrative support or records assistant",
+  "tier": "specific operational department",
+  "lockdown": "operational pause or facility safety protocol"
+};
 
-  const first = cleaned.indexOf("{");
-  const last = cleaned.lastIndexOf("}");
-
-  if (first === -1 || last === -1) {
-    throw new Error("No JSON object found.");
-  }
-
-  return JSON.parse(cleaned.slice(first, last + 1));
-}
-
+/** 
+ * MAIN HANDLER 
+ */
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return json(res, 405, { error: "Method not allowed" });
@@ -163,75 +84,49 @@ export default async function handler(req, res) {
   try {
     const body = req.body || {};
     const experiences = body.experiences || [];
+    const desiredJob = body.desiredJob || "Entry-level roles matching transferable skills";
 
     if (!experiences.length) {
       return json(res, 400, { error: "No experience provided." });
     }
 
+    // Check for API Key
     if (!process.env.OPENAI_API_KEY) {
       return json(res, 200, fallbackResponse(body));
     }
-	const prompt = `
-	You are a reentry workforce translator, ATS resume assistant, and O*NET-aligned career helper.
 
-	Your job is to convert nontraditional work history into employer-ready resume language. The output should help the user explain real work experience in professional terms without exaggeration, stigma, or unsafe claims.
+    const prompt = `
+    You are a Reentry Workforce Translator and O*NET Career Specialist. 
+    Convert the following nontraditional work history into employer-ready, professional resume language.
 
-	Core goals:
-- Translate the user's actual duties into clear resume language.
-- Use truthful ATS-friendly keywords that match the user's real experience.
-- Align work experience with relevant O*NET-style occupational categories, work activities, and transferable skills.
-- Recommend realistic entry-level job pathways the user could apply for now.
+    STRICT RULES:
+    1. NEVER mention: incarceration, prison, jail, inmate, offender, felon, convict, or facility names.
+    2. Use neutral settings: "structured work environment," "high-volume dining," "facilities support."
+    3. Use the following DICTIONARY to translate terms: ${JSON.stringify(SLANG_MAP)}
+    4. Bullets must start with strong ACTION VERBS.
+    5. Prioritize ATS-friendly keywords (sanitation, inventory, safety, teamwork).
+    6. Target Goal: Align this resume for a career in: ${desiredJob}
 
-	Strict rules:
-- Do not mention incarceration, prison, jail, inmate, offender, felon, convict, justice-impacted, formerly incarcerated, correctional facility, or similar background-identifying terms.
-- Do not invent credentials, certifications, licenses, job authority, leadership, numbers, tools, or outcomes the user did not provide.
-- Translate the setting, not the stigma. Use neutral terms like structured work environment, high-volume kitchen, facilities support, laundry operations, records support, warehouse support, grounds maintenance, customer service, or team-based operations.
-- Keep every resume bullet honest, short, clear, and copy-ready.
-- Each bullet must begin with a strong action verb.
-- Use ATS-friendly keywords naturally, but do not keyword stuff.
-- Use common employer search terms only when truthful, such as inventory support, sanitation, food safety, material handling, stocking, documentation, data entry, customer service, equipment use, safety procedures, quality control, cleaning procedures, scheduling, teamwork, training support, and workflow coordination.
-- Prioritize realistic entry-level, no-license roles with clear advancement paths.
-- Do not use inflated titles such as manager, supervisor, specialist, technician, counselor, case manager, or coordinator unless the user clearly described that level of responsibility.
-- Use employer-safe translated titles such as Food Service Worker, Facilities Support Worker, Warehouse Associate, Laundry Attendant, Grounds Maintenance Worker, Office Support Assistant, Customer Service Assistant, Program Support Assistant, or Peer Support Assistant.
-- Do not use filler words like hardworking, passionate, motivated, or dedicated unless backed by a concrete action.
-- Avoid corporate buzzwords.
-- If desired job is blank, generate best-fit pathways from experience.
-- If desired job is provided, connect prior experience to that target.
-- The tone should be respectful, practical, and confidence-building.
-- Write for a person who may need plain language and may be applying from a phone.
-- Return valid JSON only. No markdown, commentary, explanations, or code fences.
+    USER DATA:
+    ${JSON.stringify(body)}
 
-	Output rules:
-- The summary should be 2–3 sentences.
-- The summary should include 3–6 relevant ATS-friendly keywords naturally.
-- Each experience should include 3–5 resume bullets.
-- Bullets should be one sentence each.
-- Aligned tasks should sound like O*NET-style work activities but stay readable.
-- Skills should include 8–14 transferable skills.
-- Pathways should include 3–5 realistic job titles.
-- Interview tips should include 3 short talking points that help the user explain the experience professionally without mentioning background details.
-
-	Use this exact JSON structure:
-
-{
-  "summary": "",
-  "experience": [
+    RETURN ONLY A VALID JSON OBJECT matching this structure:
     {
-      "translated_title": "",
-      "duration": "",
-      "onet_title": "",
-      "bullets": [],
-      "aligned_tasks": []
+      "summary": "2-3 sentences with keywords.",
+      "experience": [
+        {
+          "translated_title": "Professional Title",
+          "duration": "User-provided duration",
+          "onet_title": "Closest O*NET match",
+          "bullets": ["3-5 clear bullets"],
+          "aligned_tasks": ["3-5 O*NET style tasks"]
+        }
+      ],
+      "skills": ["8-14 transferable skills"],
+      "pathways": ["3-5 realistic job titles"],
+      "interviewTips": ["3 talking points for explaining the gap/experience professionaly"]
     }
-  ],
-  "skills": [],
-  "pathways": [],
-  "interviewTips": []
-}
-
-User data:
-${JSON.stringify(body)}
-`;
+    `;
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 20000);
@@ -241,43 +136,41 @@ ${JSON.stringify(body)}
       signal: controller.signal,
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
       },
       body: JSON.stringify({
         model: process.env.OPENAI_MODEL || "gpt-4o-mini",
-        temperature: 0.2,
+        temperature: 0.1, // Low temperature for factual consistency
+        response_format: { type: "json_object" }, // OpenAI JSON Mode
         messages: [
-          {
-            role: "system",
-            content:
-              "You produce only valid JSON for structured resume outputs."
+          { 
+            role: "system", 
+            content: "You are a resume assistant that strictly outputs valid JSON for reentry workforce development." 
           },
-          {
-            role: "user",
-            content: prompt
-          }
+          { role: "user", content: prompt }
         ]
       })
     });
 
     clearTimeout(timeout);
 
-    const data = await apiRes.json();
-
     if (!apiRes.ok) {
+      console.error("OpenAI API Error:", await apiRes.text());
       return json(res, 200, fallbackResponse(body));
     }
 
-    const text =
-      data?.choices?.[0]?.message?.content ||
-      "{}";
-
-    const parsed = extractJson(text);
+    const data = await apiRes.json();
+    const text = data?.choices?.[0]?.message?.content || "{}";
+    
+    // Parse the JSON string from OpenAI
+    const parsed = JSON.parse(text);
 
     return json(res, 200, {
       output: parsed
     });
+
   } catch (err) {
+    console.error("Fatal Handler Error:", err);
     return json(res, 200, fallbackResponse(req.body || {}));
   }
 }
