@@ -25,7 +25,7 @@ function titleFromCategory(category = "") {
     canteen: "Customer Associate",
     houseman: "Custodian",
     grounds: "Grounds Maintenance Worker",
-    orderly: "Assistant"
+    orderly: "Assistant",
     peer: "Peer Support Assistant"
   };
   return map[category] || "Operations Support Worker";
