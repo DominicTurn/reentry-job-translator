@@ -104,8 +104,15 @@ export default async function handler(req, res) {
     2. Use neutral settings: "structured work environment," "high-volume dining," "facilities support."
     3. Use the following DICTIONARY to translate terms: ${JSON.stringify(SLANG_MAP)}
     4. Bullets must start with strong ACTION VERBS.
-    5. Prioritize ATS-friendly keywords (sanitation, inventory, safety, teamwork).
+    5. Prioritize ATS-friendly keywords only when supported by the user's actual input. Do not add sanitation, inventory, safety, teamwork, or training unless the user described them.
     6. Target Goal: Align this resume for a career in: ${desiredJob}
+    7. Every resume bullet must be based on a specific task, tool, setting, responsibility, or detail from the user's input.
+8. Do not produce generic bullets that could apply to any job.
+9. If the user gives weak input, ask for no clarification; instead produce modest bullets and include "general support duties" only once.
+10. Use the user's own details whenever possible, but translate them into professional language.
+11. If the user mentions numbers, volume, equipment, schedules, training others, cleaning areas, stocking items, paperwork, safety checks, or customer interaction, include those details.
+
+Before writing the resume, identify the user's actual tasks from the provided data. Build the summary, bullets, skills, and pathways from those details only. Category labels may guide the translation, but the user's written description controls the output.
 
     USER DATA:
     ${JSON.stringify(body)}
