@@ -112,6 +112,13 @@ export default async function handler(req, res) {
 10. Use the user's own details whenever possible, but translate them into professional language.
 11. If the user mentions numbers, volume, equipment, schedules, training others, cleaning areas, stocking items, paperwork, safety checks, or customer interaction, include those details.
 
+Each bullet must include at least one of the following:
+- a task (cleaned, stocked, prepared, transported, documented)
+- an object (equipment, supplies, food, records, inventory)
+- a context (high-volume, scheduled environment, daily operations)
+
+Avoid vague phrases like "assisted with duties" or "worked with team" unless paired with a specific task.
+
 Before writing the resume, identify the user's actual tasks from the provided data. Build the summary, bullets, skills, and pathways from those details only. Category labels may guide the translation, but the user's written description controls the output.
 
     USER DATA:
