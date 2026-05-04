@@ -35,8 +35,8 @@
 body {
   margin: 0;
   font-family: 'Plus Jakarta Sans', Arial, sans-serif;
-  background: var(--cream);
-  color: var(--text);
+  background: #f7f7f7;
+  color: #111;
 }
 
 h1, h2, h3 {
@@ -44,107 +44,117 @@ h1, h2, h3 {
 }
 
 /* =========================
-   TOPBAR
+   TOP BAR (FLAT)
 ========================= */
 .topbar {
-  background: var(--green);
-  color: #ffffff;
-  padding: 18px 6%;
+  background: #ffffff;
+  color: #111;
+  padding: 16px 6%;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid #ddd;
+  box-shadow: none;
 }
 
 .brand {
-  font-size: 22px;
-  font-weight: 800;
+  font-size: 18px;
+  font-weight: 700;
 }
 
 .pill {
-  background: rgba(255,255,255,.14);
-  border: 1px solid rgba(255,255,255,.25);
-  padding: 7px 12px;
-  border-radius: 999px;
-  font-size: 13px;
+  background: #f1f1f1;
+  border: 1px solid #ddd;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
 }
 
 /* =========================
-   HERO
+   HERO (REMOVE BRAND FEEL)
 ========================= */
 .hero {
-  background: linear-gradient(135deg, #3f7f64 0%, #2f5e47 100%);
-  color: #ffffff;
-  padding: 70px 6%;
+  background: #ffffff;
+  color: #111;
+  padding: 60px 6%;
   text-align: center;
+  border-bottom: 1px solid #ddd;
 }
 
 .hero h1 {
-  font-size: clamp(34px,6vw,58px);
-  margin-bottom: 18px;
+  font-size: clamp(32px,5vw,48px);
+  margin: 0 0 14px;
 }
 
 .hero p {
-  font-size: 20px;
-  color: rgba(255,255,255,0.9);
-  max-width: 780px;
-  margin: 0 auto 28px;
+  font-size: 18px;
+  color: #555;
+  max-width: 680px;
+  margin: 0 auto 24px;
 }
 
 /* =========================
-   BUTTONS
+   BUTTONS (UTILITY STYLE)
 ========================= */
 .btn {
   display: inline-block;
-  background: #ffffff;
-  color: var(--green);
-  padding: 14px 22px;
-  border-radius: var(--radius-sm);
-  font-weight: 800;
+  background: #111;
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 4px;
+  font-weight: 600;
   text-decoration: none;
-  box-shadow: var(--shadow-md);
+  box-shadow: none;
 }
 
 .btn:hover {
-  background: var(--green);
-  color: #ffffff;
+  background: #333;
 }
 
+/* =========================
+   PRIMARY BUTTON
+========================= */
 .primary {
-  background: var(--green);
-  color: #ffffff;
-  padding: 12px 22px;
-  border-radius: var(--radius-sm);
-  font-weight: 800;
-  text-decoration: none;
+  background: #111;
+  color: #fff;
+  border-radius: 4px;
+  padding: 12px 18px;
+  font-weight: 600;
+  box-shadow: none;
 }
 
 .primary:hover {
-  background: var(--green2);
+  background: #333;
 }
 
 /* =========================
    LAYOUT
 ========================= */
 .wrap {
-  max-width: 980px;
-  margin: 34px auto;
-  padding: 0 18px;
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 0 16px;
 }
 
+/* =========================
+   CARDS (FLAT)
+========================= */
 .card {
   background: #ffffff;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 26px;
-  margin-bottom: 22px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: none;
+  padding: 22px;
+  margin-bottom: 18px;
 }
 
 .card h2 {
-  margin-bottom: 8px;
+  margin: 0 0 6px;
+  font-size: 22px;
 }
 
 .muted {
-  color: var(--muted);
+  color: #666;
 }
 
 /* =========================
@@ -152,83 +162,97 @@ h1, h2, h3 {
 ========================= */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px,1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+  gap: 12px;
 }
 
 .role {
-  border: 1px solid var(--border);
-  background: var(--cream);
-  border-radius: 12px;
-  padding: 18px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  border-radius: 4px;
+  padding: 14px;
 }
 
 .role strong {
-  color: var(--green);
+  color: #111;
 }
 
 /* =========================
-   RESUME
+   RESUME (CLEAN DOCUMENT STYLE)
 ========================= */
+.resume {
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid #ddd;
+}
+
+/* REMOVE GREEN HEADER */
 .resume-head {
-  background: var(--green-light);
-  padding: 28px;
-  color: var(--text);
+  background: #f5f5f5;
+  padding: 22px;
+  color: #111;
+  border-bottom: 1px solid #ddd;
 }
 
 .resume-head small {
-  color: #6b7280;
+  color: #777;
   text-transform: uppercase;
-  letter-spacing: .14em;
-}
-
-.resume-head h2 {
-  margin-top: 10px;
+  letter-spacing: .12em;
 }
 
 .resume-body {
-  padding: 28px;
-}
-
-.label {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: .18em;
-  color: var(--green);
-  font-weight: 800;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 10px;
-  margin-bottom: 18px;
+  padding: 22px;
 }
 
 /* =========================
-   CONTENT
+   LABELS
+========================= */
+.label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  color: #777;
+  font-weight: 700;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 8px;
+  margin-bottom: 14px;
+}
+
+/* =========================
+   CHIPS (MINIMAL)
 ========================= */
 .chip {
   display: inline-block;
-  background: var(--green-light);
-  border: 1px solid var(--border);
-  color: var(--green);
-  border-radius: 8px;
-  padding: 7px 10px;
-  margin: 4px;
-  font-size: 14px;
+  background: #f1f1f1;
+  border: 1px solid #ddd;
+  color: #333;
+  border-radius: 4px;
+  padding: 5px 8px;
+  margin: 3px;
+  font-size: 13px;
 }
 
+/* =========================
+   BULLETS
+========================= */
 .bullet {
-  padding-left: 20px;
+  padding-left: 18px;
 }
 
 .bullet li {
-  margin: 10px 0;
-  line-height: 1.55;
+  margin: 8px 0;
+  line-height: 1.5;
 }
 
+/* =========================
+   PATHWAY (PLAIN)
+========================= */
 .pathway {
-  background: var(--green-light);
-  border-left: 4px solid var(--green);
-  border-radius: 0 10px 10px 0;
-  padding: 16px;
+  background: #fafafa;
+  border-left: 3px solid #ccc;
+  border-radius: 0;
+  padding: 12px;
+  color: #333;
 }
 
 </style>
