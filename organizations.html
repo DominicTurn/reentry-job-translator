@@ -1,231 +1,1453 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReEntry Job Translator | Organization Dashboard</title>
+<meta name="description" content="A funder ready outcomes dashboard for reentry nonprofits, workforce boards, and probation and parole offices. Track resumes, applications, interviews, placements, and retention in one trusted system.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  <title>For Organizations | ReEntry Job Translator</title>
-  <meta name="description" content="Help returning citizens translate institutional work experience into employer-ready resume language. Built for reentry organizations, workforce programs, and community groups.">
-
-  <meta property="og:title" content="For Organizations | ReEntry Job Translator">
-  <meta property="og:description" content="A privacy-first resume language tool for reentry, workforce, and community programs.">
-  <meta property="og:url" content="https://reentryjobtranslator.com/organizations.html">
-  <meta property="og:type" content="website">
-
-  <meta name="twitter:card" content="summary_large_image">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="/css/reentry-theme.css">
-
-  <style>
-    .org-hero {
-      padding: 90px 20px;
-      background: var(--green-light);
-      text-align: center;
-    }
-
-    .org-hero h1 {
-      max-width: 850px;
-      margin: 0 auto 20px;
-      font-size: clamp(2.3rem, 5vw, 4rem);
-      color: var(--text);
-    }
-
-    .hero-sub {
-      max-width: 720px;
-      margin: 0 auto 30px;
-      font-size: 1.15rem;
-      color: var(--text);
-    }
-
-    .hero-actions {
-      display: flex;
-      justify-content: center;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-top: 20px;
-    }
-
-    .org-section,
-    .org-grid-section,
-    .trust-section,
-    .org-cta {
-      padding: 70px 20px;
-    }
-
-    .org-section p,
-    .trust-section p,
-    .org-cta p {
-      max-width: 760px;
-    }
-
-    .org-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 22px;
-      margin-top: 30px;
-    }
-
-    .org-card {
-      padding: 28px;
-    }
-
-    .org-card h3 {
-      margin-top: 0;
-      color: var(--green);
-    }
-
-    .trust-list {
-      margin-top: 25px;
-      padding-left: 20px;
-    }
-
-    .trust-list li {
-      margin-bottom: 10px;
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    .org-cta {
-      background: var(--white);
-      text-align: center;
-    }
-
-    .org-cta p {
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    @media (max-width: 800px) {
-      .org-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* FORCE BUTTON STYLING ON LINKS */
-.btn-primary,
-.btn-secondary {
-  display: inline-block;
-  padding: 14px 22px;
-  border-radius: var(--radius-sm);
-  font-weight: 700;
-  text-decoration: none;
-  cursor: pointer;
+:root {
+  --cream: #faf7f2;
+  --cream2: #f3ede3;
+  --white: #ffffff;
+  --green: #2f5e47;
+  --green2: #254f3c;
+  --green-light: #edf5f1;
+  --terra: #e8602c;
+  --terra-light: #fdf0eb;
+  --text: #111827;
+  --muted: #4b5563;
+  --border: #e2dbd0;
+  --shadow-sm: 0 1px 3px rgba(28,61,46,0.08);
+  --shadow-md: 0 4px 16px rgba(28,61,46,0.10);
+  --shadow-lg: 0 12px 40px rgba(28,61,46,0.14);
+  --radius: 18px;
+  --radius-sm: 10px;
+  --serif: 'Fraunces', serif;
+  --sans: 'Plus Jakarta Sans', Arial, sans-serif;
 }
 
-/* PRIMARY (CTA) */
-.btn-primary {
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--cream);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section {
+  padding: 5rem 0;
+}
+
+.section-alt {
+  background: var(--cream2);
+}
+
+.section-white {
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--terra-light);
+  border: 1px solid rgba(232,96,44,0.25);
+  border-radius: 100px;
+  padding: 6px 14px;
+  color: var(--terra);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1.15rem;
+}
+
+.kicker::before {
+  content: "";
+  width: 7px;
+  height: 7px;
   background: var(--terra);
-  color: #ffffff !important;
-  border: none;
-  box-shadow: 0 6px 18px rgba(232, 96, 44, 0.25);
+  border-radius: 50%;
+}
+
+h1, h2, h3 {
+  font-family: var(--serif);
+  letter-spacing: -0.025em;
+  line-height: 1.12;
+  color: var(--text);
+}
+
+h1 {
+  font-size: clamp(2.45rem, 5vw, 4.85rem);
+  max-width: 820px;
+}
+
+h2 {
+  font-size: clamp(1.95rem, 3.5vw, 3rem);
+}
+
+h3 {
+  font-size: 1.15rem;
+}
+
+p {
+  color: var(--muted);
+}
+
+/* Navigation */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(250,247,242,0.94);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 0;
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--serif);
+  font-weight: 700;
+  color: var(--green);
+}
+
+.nav-logo-mark {
+  width: 34px;
+  height: 34px;
+  background: var(--green);
+  border-radius: 8px;
+  color: white;
+  display: grid;
+  place-items: center;
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.nav-sub {
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+}
+
+.nav-links a {
+  font-size: 0.88rem;
+  font-weight: 650;
+  color: var(--muted);
+}
+
+.nav-links a:hover {
+  color: var(--green);
+}
+
+.nav-cta {
+  background: var(--green);
+  color: white !important;
+  padding: 0.7rem 1.15rem;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 5.75rem 0 4.5rem;
+  background:
+    radial-gradient(circle at top right, rgba(47,94,71,0.08), transparent 35%),
+    linear-gradient(180deg, #fffdf9 0%, var(--cream) 100%);
+  border-bottom: 1px solid var(--border);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.02fr 0.98fr;
+  align-items: center;
+  gap: 4rem;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--terra);
+}
+
+.hero-sub {
+  font-size: 1.1rem;
+  line-height: 1.75;
+  max-width: 650px;
+  margin: 1.45rem 0 2rem;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 1.6rem;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-light {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0.9rem 1.55rem;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
+  font-size: 0.95rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.btn-primary {
+  background: var(--green);
+  color: white;
+  box-shadow: 0 2px 8px rgba(28,61,46,0.25);
 }
 
 .btn-primary:hover {
-  background: var(--terra-dark);
+  background: var(--green2);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
-/* SECONDARY */
 .btn-secondary {
-  background: transparent;
-  color: var(--green) !important;
-  border: 2px solid var(--green);
+  background: white;
+  color: var(--green);
+  border: 1.5px solid var(--green);
 }
 
 .btn-secondary:hover {
   background: var(--green-light);
 }
-  </style>
+
+.hero-note {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.4rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 650;
+}
+
+.hero-note span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero-note span::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  background: var(--green);
+  border-radius: 50%;
+}
+
+/* Dashboard screenshot mock */
+.dashboard-preview {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.preview-head {
+  background: var(--green);
+  color: white;
+  padding: 1.25rem 1.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.preview-title strong {
+  display: block;
+  font-size: 1rem;
+}
+
+.preview-title span {
+  display: block;
+  font-size: 0.7rem;
+  opacity: 0.75;
+  margin-top: 2px;
+}
+
+.preview-pill {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 0.76rem;
+  color: rgba(255,255,255,0.86);
+  white-space: nowrap;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: var(--border);
+  gap: 1px;
+}
+
+.kpi {
+  background: white;
+  padding: 1.15rem;
+}
+
+.kpi-label {
+  font-size: 0.62rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.kpi-value {
+  font-family: var(--serif);
+  font-size: 2.15rem;
+  line-height: 1;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.kpi-value.green {
+  color: var(--green);
+}
+
+.kpi-value.terra {
+  color: var(--terra);
+}
+
+.preview-table {
+  padding: 0.9rem 1.1rem 1.2rem;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 64px 92px;
+  gap: 12px;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #eee6dc;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.table-row.header {
+  color: var(--muted);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 800;
+}
+
+.cell {
+  font-size: 0.84rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  padding: 4px 8px;
+  font-weight: 800;
+}
+
+.badge.hired {
+  color: var(--green);
+  background: var(--green-light);
+}
+
+.badge.interview {
+  color: #57439a;
+  background: #f0edff;
+}
+
+.badge.applied {
+  color: #7a4b00;
+  background: #fff1cf;
+}
+
+/* Trust strip */
+.trust-strip {
+  background: var(--green);
+  color: white;
+  padding: 1rem 0;
+}
+
+.trust-inner {
+  display: flex;
+  align-items: center;
+  gap: 1.35rem;
+  flex-wrap: wrap;
+}
+
+.trust-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.62);
+  font-weight: 800;
+}
+
+.trust-items {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.trust-items span {
+  color: rgba(255,255,255,0.86);
+  font-size: 0.88rem;
+}
+
+/* Layout blocks */
+.two-col {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.center-header {
+  max-width: 780px;
+  margin: 0 auto 2.75rem;
+  text-align: center;
+}
+
+.center-header p,
+.section-copy p {
+  font-size: 1.02rem;
+  line-height: 1.75;
+  margin-top: 0.85rem;
+}
+
+.stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.info-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.info-card strong {
+  display: block;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.info-card span {
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+/* Icons */
+.civic-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--green-light);
+  color: var(--green);
+  display: grid;
+  place-items: center;
+  margin-bottom: 1rem;
+}
+
+.civic-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Feature cards */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.15rem;
+}
+
+.feature-card,
+.who-card,
+.value-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.55rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.feature-card h3,
+.who-card h3 {
+  margin-bottom: 0.6rem;
+}
+
+.feature-card p,
+.who-card p {
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+.feature-tag {
+  display: inline-flex;
+  margin-top: 1rem;
+  background: var(--terra-light);
+  color: var(--terra);
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Value */
+.value-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.75rem;
+  align-items: center;
+}
+
+.price-box {
+  background: var(--green-light);
+  border: 1px solid rgba(47,94,71,0.18);
+  border-radius: 18px;
+  padding: 1.35rem;
+  margin-top: 1.35rem;
+}
+
+.price-box strong {
+  display: block;
+  color: var(--green);
+  font-size: 1.1rem;
+  margin-bottom: 0.35rem;
+}
+
+.value-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.value-row:last-child {
+  border-bottom: none;
+}
+
+.value-row strong {
+  color: var(--text);
+}
+
+.value-row span {
+  color: var(--muted);
+  text-align: right;
+}
+
+/* Who section */
+.who-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.15rem;
+}
+
+.who-card ul {
+  list-style: none;
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 1rem;
+}
+
+.who-card li {
+  color: var(--text);
+  font-size: 0.86rem;
+  display: flex;
+  gap: 8px;
+}
+
+.who-card li::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  background: var(--green);
+  border-radius: 50%;
+  margin-top: 9px;
+  flex: 0 0 auto;
+}
+
+/* CTA */
+.cta-section {
+  background: var(--green);
+  color: white;
+}
+
+.cta-grid {
+  display: grid;
+  grid-template-columns: 0.88fr 1.12fr;
+  gap: 3.5rem;
+  align-items: start;
+}
+
+.cta-section h2 {
+  color: white;
+}
+
+.cta-section p {
+  color: rgba(255,255,255,0.75);
+  font-size: 1.02rem;
+  line-height: 1.75;
+  margin-top: 0.85rem;
+}
+
+.cta-notes {
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.cta-notes div {
+  color: rgba(255,255,255,0.83);
+  font-size: 0.92rem;
+  display: flex;
+  gap: 8px;
+}
+
+.cta-notes div::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  background: var(--terra);
+  border-radius: 50%;
+  margin-top: 9px;
+  flex: 0 0 auto;
+}
+
+.form-wrap {
+  background: var(--white);
+  color: var(--text);
+  border-radius: 22px;
+  padding: 1.75rem;
+  box-shadow: var(--shadow-lg);
+}
+
+.form-wrap h3 {
+  margin-bottom: 0.4rem;
+}
+
+.form-wrap p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0 0 1.35rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.95rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field.full {
+  grid-column: 1 / -1;
+}
+
+.field label {
+  font-size: 0.66rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 800;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: #fffdf9;
+  border-radius: 10px;
+  padding: 0.75rem 0.85rem;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  color: var(--text);
+  outline: none;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(47,94,71,0.10);
+}
+
+.field textarea {
+  min-height: 92px;
+  resize: vertical;
+}
+
+.submit-btn {
+  width: 100%;
+  margin-top: 1.1rem;
+  border: none;
+  background: var(--terra);
+  color: white;
+  padding: 0.95rem;
+  border-radius: 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background: #d4541f;
+}
+
+.form-footnote {
+  margin-top: 0.85rem !important;
+  font-size: 0.78rem !important;
+  text-align: center;
+  color: var(--muted) !important;
+}
+
+.success-msg {
+  display: none;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.success-msg h4 {
+  color: var(--green);
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Footer */
+footer {
+  background: var(--green);
+  border-top: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.72);
+  padding: 2rem 0;
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.footer-left,
+.footer-links a {
+  font-size: 0.82rem;
+}
+
+.footer-links {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: rgba(255,255,255,0.72);
+}
+
+.footer-links a:hover {
+  color: white;
+}
+
+/* ── METRICS ───────────────────────────── */
+
+.metrics-section {
+  padding: 5rem 0;
+  background:
+    linear-gradient(180deg, #fffdf9 0%, var(--cream2) 100%);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.metrics-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--terra-light);
+  border: 1px solid rgba(232,96,44,0.25);
+  border-radius: 999px;
+  padding: 6px 14px;
+  color: var(--terra);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.section-eyebrow::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  background: var(--terra);
+  border-radius: 50%;
+}
+
+.metrics-inner h2 {
+  font-family: var(--serif);
+  font-size: clamp(34px, 4vw, 52px);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+
+.metrics-inner h2 em {
+  font-style: italic;
+  color: var(--green);
+  font-weight: 400;
+}
+
+.metrics-inner p {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: 22px;
+}
+
+.metrics-stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.metric-box {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 26px 24px;
+  box-shadow: var(--shadow-sm);
+  transition: 0.2s ease;
+}
+
+.metric-box:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.metric-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--green-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.metric-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--green);
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.metric-number {
+  font-family: var(--serif);
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--green);
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.metric-number span {
+  color: var(--terra);
+}
+
+.metric-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .metrics-inner {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+@media (max-width: 620px) {
+  .metrics-stat-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 940px) {
+  .hero-grid,
+  .two-col,
+  .value-grid,
+  .cta-grid {
+    grid-template-columns: 1fr;
+    gap: 2.4rem;
+  }
+
+  .features-grid,
+  .who-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .hero,
+  .section {
+    padding: 3.75rem 0;
+  }
+}
+
+@media (max-width: 620px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .form-grid,
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .table-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .table-row.header {
+    display: none;
+  }
+
+  .hero-actions a {
+    width: 100%;
+  }
+
+  .value-row {
+    display: block;
+  }
+
+  .value-row span {
+    display: block;
+    text-align: left;
+    margin-top: 0.25rem;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <section class="org-hero">
-    <div class="container">
-      <p class="section-tag">For Organizations</p>
+<nav>
+  <div class="container nav-inner">
+    <a class="nav-logo" href="/index.html">
+      <span class="nav-logo-mark">RJ</span>
+      <span>
+        ReEntry Job Translator
+        <span class="nav-sub">Organization Dashboard</span>
+      </span>
+    </a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#value">Procurement Fit</a>
+      <a href="#who">Who It Serves</a>
+      <a href="#request" class="nav-cta">Request Demo</a>
+    </div>
+  </div>
+</nav>
 
-      <h1>Help your clients turn real experience into employer-ready language.</h1>
-
+<header class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="kicker">Built for reentry programs</div>
+      <h1>Prove your impact. <em>Win your grants </em> Keep people employed.</h1>
       <p class="hero-sub">
-        ReEntry Job Translator helps returning citizens translate institutional work experience into clear resume language they can use for job applications, workforce programs, and career planning.
+        The ReEntry Job Translator organization dashboard helps reentry nonprofits, workforce boards, and probation and parole teams track client progress from resume to applications, interviews, placement, and retention.
       </p>
-
       <div class="hero-actions">
-        <a href="/index.html" class="btn-primary">Try the Tool</a>
-        <a href="mailto:privacy@reentryjobtranslator.com" class="btn-secondary">Contact Us</a>
+        <a href="#request" class="btn-primary">Request the pilot program</a>
+        <a href="#features" class="btn-secondary">View dashboard features</a>
+      </div>
+      <div class="hero-note">
+        <span>Program directors</span>
+        <span>Case managers</span>
+        <span>Grant teams</span>
+        <span>Public sector partners</span>
       </div>
     </div>
-  </section>
 
-  <section class="org-section">
-    <div class="container">
-      <h2>Built for reentry, workforce, and community programs</h2>
-
-      <p>
-        Many people returning home have real work experience, but that experience is often hard to explain on a traditional resume. Kitchen work, sanitation, laundry, maintenance, clerical work, canteen operations, orderly roles, and facility jobs all build transferable skills.
-      </p>
-
-      <p>
-        ReEntry Job Translator helps turn that experience into professional language without exaggerating credentials or hiding the truth.
-      </p>
-    </div>
-  </section>
-
-  <section class="org-grid-section">
-    <div class="container">
-      <h2>How organizations can use it</h2>
-
-      <div class="org-grid">
-        <div class="org-card">
-          <h3>Resume Workshops</h3>
-          <p>Use the tool during job-readiness classes to help participants quickly create stronger resume bullets.</p>
+    <div class="dashboard-preview" aria-label="Dashboard preview">
+      <div class="preview-head">
+        <div class="preview-title">
+          <strong>Outcomes Dashboard</strong>
+          <span>Last 90 days · Camden County pilot</span>
         </div>
+        <div class="preview-pill">Export ready</div>
+      </div>
 
-        <div class="org-card">
-          <h3>Case Management</h3>
-          <p>Help clients identify transferable skills and prepare for employment conversations.</p>
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div class="kpi-label">Clients served</div>
+          <div class="kpi-value">142</div>
         </div>
+        <div class="kpi">
+          <div class="kpi-label">Clients hired</div>
+          <div class="kpi-value green">89</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Placement rate</div>
+          <div class="kpi-value terra">62.7%</div>
+        </div>
+      </div>
 
-        <div class="org-card">
-          <h3>Workforce Programs</h3>
-          <p>Support job seekers with practical language they can use for applications, interviews, and career pathways.</p>
+      <div class="preview-table">
+        <div class="table-row header">
+          <div>Client ID</div>
+          <div>Case Manager</div>
+          <div>Apps</div>
+          <div>Stage</div>
+        </div>
+        <div class="table-row">
+          <div class="cell">DW 1001</div>
+          <div class="cell">J. Torres</div>
+          <div class="cell">12</div>
+          <div><span class="badge hired">Hired</span></div>
+        </div>
+        <div class="table-row">
+          <div class="cell">RM 1002</div>
+          <div class="cell">A. Patel</div>
+          <div class="cell">7</div>
+          <div><span class="badge interview">Interview</span></div>
+        </div>
+        <div class="table-row">
+          <div class="cell">TJ 1003</div>
+          <div class="cell">A. Patel</div>
+          <div class="cell">5</div>
+          <div><span class="badge applied">Applied</span></div>
+        </div>
+        <div class="table-row">
+          <div class="cell">CL 1004</div>
+          <div class="cell">S. Rivera</div>
+          <div class="cell">9</div>
+          <div><span class="badge hired">Hired</span></div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</header>
 
-  <section class="trust-section">
-    <div class="container">
-      <h2>Privacy-first by design</h2>
+<div class="trust-strip">
+  <div class="container trust-inner">
+    <div class="trust-label">Built for</div>
+    <div class="trust-items">
+      <span>Reentry nonprofits</span>
+      <span>Workforce boards</span>
+      <span>Probation and parole offices</span>
+      <span>Community colleges</span>
+      <span>Residential programs</span>
+    </div>
+  </div>
+</div>
 
+<section class="section">
+  <div class="container two-col">
+    <div class="section-copy">
+      <div class="kicker">The problem</div>
+      <h2>Your team is doing the work. The outcomes are hard to prove.</h2>
       <p>
-        ReEntry Job Translator does not require users to create an account. The tool is designed for simple, no-login access so individuals can get help without unnecessary barriers.
+        Every grant renewal, board meeting, and agency partnership depends on clear employment data. Most programs still track resumes, applications, interviews, and retention across spreadsheets, notes, emails, and individual case files.
+      </p>
+    </div>
+
+    <div class="stack">
+      <div class="info-card">
+        <strong>Disconnected tracking</strong>
+        <span>Case managers may know client progress, but directors cannot see the full employment pipeline in one place.</span>
+      </div>
+      <div class="info-card">
+        <strong>Slow reporting</strong>
+        <span>Grant and board reports take hours or days to compile, and the numbers can be stale by the time they are submitted.</span>
+      </div>
+      <div class="info-card">
+        <strong>Missed retention milestones</strong>
+        <span>30, 60, and 90 day check ins are easy to miss without a simple follow up queue.</span>
+      </div>
+      <div class="info-card">
+        <strong>Privacy sensitive population</strong>
+        <span>Programs need outcome visibility without over collecting sensitive personal or conviction history data.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-white" id="features">
+  <div class="container">
+    <div class="center-header">
+      <div class="kicker">What you get</div>
+      <h2>Everything your funders need to see. From your dashboard.</h2>
+      <p>
+        Designed for practical program reporting, staff visibility, and board level outcome conversations.
+      </p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="civic-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 19V5"></path><path d="M4 19h16"></path><path d="M8 16v-5"></path><path d="M12 16V8"></path><path d="M16 16v-7"></path></svg>
+        </div>
+        <h3>Real time KPI dashboard</h3>
+        <p>Track clients served, resumes built, applications submitted, interviews, hires, and placement rate in one view.</p>
+        <span class="feature-tag">Director view</span>
+      </div>
+
+      <div class="feature-card">
+        <div class="civic-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16"></path><path d="M7 12h10"></path><path d="M10 18h4"></path></svg>
+        </div>
+        <h3>Pipeline funnel</h3>
+        <p>See where clients are moving forward and where they are dropping off from resume to application to interview to hire.</p>
+        <span class="feature-tag">Bottleneck visibility</span>
+      </div>
+
+      <div class="feature-card">
+        <div class="civic-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M7 3h7l3 3v15H7z"></path><path d="M14 3v4h4"></path><path d="M9 12h6"></path><path d="M9 16h6"></path></svg>
+        </div>
+        <h3>Grant report exports</h3>
+        <p>Create clean snapshots by program, location, case manager, or date range for funders, board packets, and renewals.</p>
+        <span class="feature-tag">Report ready</span>
+      </div>
+
+      <div class="feature-card">
+        <div class="civic-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 3v2"></path><path d="M18 8a6 6 0 0 0-12 0c0 7-2 7-2 9h16c0-2-2-2-2-9"></path><path d="M10 21h4"></path></svg>
+        </div>
+        <h3>Retention follow up queue</h3>
+        <p>Surface clients due for 30, 60, and 90 day check ins so staff can document employment retention before it gets lost.</p>
+        <span class="feature-tag">Retention tracking</span>
+      </div>
+
+      <div class="feature-card">
+        <div class="civic-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </div>
+        <h3>Role based staff access</h3>
+        <p>Case managers see their assigned clients. Directors see program wide outcomes. Admins manage organization settings.</p>
+        <span class="feature-tag">Staff controls</span>
+      </div>
+
+      <div class="feature-card">
+        <div class="civic-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>
+        </div>
+        <h3>Privacy conscious design</h3>
+        <p>Use client IDs or aliases, avoid unnecessary sensitive data, and focus on employment activity and measurable outcomes.</p>
+        <span class="feature-tag">Built for reentry</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS -->
+<section class="metrics-section" id="demo">
+  <div class="metrics-inner">
+    <div class="fade-up">
+      <div class="section-eyebrow">The numbers</div>
+      <h2>Employment is the single biggest driver of <em>reduced recidivism.</em></h2>
+      <p>Your outcomes aren't just good for clients — they're the evidence that wins your next grant, secures your next partnership, and keeps your program funded.</p>
+      <p>The dashboard turns every successful placement into a data point you can take to a funder.</p>
+    </div>
+    <div class="metrics-stat-grid fade-up">
+      <div class="metric-box">
+        <div class="metric-number">600<span>K+</span></div>
+        <div class="metric-label">released from US prisons annually</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-number">68<span>%</span></div>
+        <div class="metric-label">rearrested within 3 years</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-number">3<span>x</span></div>
+        <div class="metric-label">lower rearrest rate with stable employment</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-number">$7.5K</div>
+        <div class="metric-label">cost to pilot — for 60 days</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section" id="value">
+  <div class="container value-grid">
+    <div class="section-copy">
+      <div class="kicker">Procurement fit</div>
+      <h2>Built for programs with real budgets, not hobby pricing.</h2>
+      <p>
+        For agencies spending up to $35,000 annually on workforce tools, reporting systems, pilot programs, or grant funded services, this is positioned as a focused employment outcomes layer for justice involved clients.
+      </p>
+      <div class="price-box">
+        <strong>Suggested annual range: $17,500 to $35,000</strong>
+        <p>Final pricing can vary by location count, staff users, client volume, onboarding, reporting needs, and grant funded implementation scope.</p>
+      </div>
+    </div>
+
+    <div class="value-card">
+      <div class="value-row"><strong>Best entry point</strong><span>60 day paid pilot</span></div>
+      <div class="value-row"><strong>Primary buyer</strong><span>Program director or executive director</span></div>
+      <div class="value-row"><strong>Budget source</strong><span>Workforce, reentry, compliance, grants</span></div>
+      <div class="value-row"><strong>Core value</strong><span>Outcome visibility and reporting</span></div>
+      <div class="value-row"><strong>Expansion path</strong><span>Multi program or county wide rollout</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="who">
+  <div class="container">
+    <div class="center-header">
+      <div class="kicker">Who it serves</div>
+      <h2>Built for the organizations supporting successful reentry.</h2>
+    </div>
+
+    <div class="who-grid">
+      <div class="who-card">
+        <h3>Reentry nonprofits</h3>
+        <p>Track every client from resume creation to employment retention and prepare cleaner reports for public and private funders.</p>
+        <ul>
+          <li>Case manager workflows</li>
+          <li>Grant outcome snapshots</li>
+          <li>Program wide visibility</li>
+        </ul>
+      </div>
+
+      <div class="who-card">
+        <h3>Probation and parole offices</h3>
+        <p>Monitor employment readiness and job search activity across caseloads without creating unnecessary complexity for officers.</p>
+        <ul>
+          <li>Officer level views</li>
+          <li>Employment milestone tracking</li>
+          <li>Supervisor reporting</li>
+        </ul>
+      </div>
+
+      <div class="who-card">
+        <h3>Workforce boards and colleges</h3>
+        <p>Support justice involved participants with structured resume translation and measurable employment pathway reporting.</p>
+        <ul>
+          <li>Cohort tracking</li>
+          <li>Career pathway visibility</li>
+          <li>Partner ready reporting</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section cta-section" id="request">
+  <div class="container cta-grid">
+    <div>
+      <div class="kicker" style="background:rgba(255,255,255,0.12); color:white; border-color:rgba(255,255,255,0.18);">Start the conversation</div>
+      <h2>Request a dashboard demo.</h2>
+      <p>
+        Use the form to start a paid pilot conversation. The goal is simple: prove value, capture outcomes, and give your staff a system that is easier than scattered spreadsheets.
       </p>
 
-      <ul class="trust-list">
-        <li>No account required</li>
-        <li>No payment required for individuals</li>
-        <li>No resume database</li>
-        <li>Built to support dignity, privacy, and employment readiness</li>
-      </ul>
+      <div class="cta-notes">
+        <div>60 day paid pilot available for qualifying organizations</div>
+        <div>Designed around reentry employment workflows</div>
+        <div>Annual implementation range available for funded programs</div>
+        <div>No client conviction history required for dashboard use</div>
+      </div>
     </div>
-  </section>
 
-  <section class="org-cta">
-    <div class="container">
-      <h2>Want to use this with your program?</h2>
+    <div class="form-wrap">
+      <h3>Request access</h3>
+      <p>Submit your organization details and we will follow up to schedule a dashboard walkthrough.</p>
 
-      <p>
-        We are currently building partnerships with reentry organizations, workforce programs, and community groups that support returning citizens.
-      </p>
+      <div id="form-body">
+        <div class="form-grid">
+          <div class="field">
+            <label>First name</label>
+            <input type="text" id="f-first" placeholder="Sandra">
+          </div>
 
-      <a href="mailto:privacy@reentryjobtranslator.com" class="btn-primary">Contact Us</a>
+          <div class="field">
+            <label>Last name</label>
+            <input type="text" id="f-last" placeholder="Rivera">
+          </div>
+
+          <div class="field full">
+            <label>Work email</label>
+            <input type="email" id="f-email" placeholder="s.rivera@organization.org">
+          </div>
+
+          <div class="field full">
+            <label>Organization name</label>
+            <input type="text" id="f-org" placeholder="Center for Employment Opportunities">
+          </div>
+
+          <div class="field full">
+            <label>Organization type</label>
+            <select id="f-type">
+              <option value="">Select one</option>
+              <option>Reentry nonprofit</option>
+              <option>Workforce development board</option>
+              <option>Probation or parole office</option>
+              <option>Community college</option>
+              <option>Halfway house or residential program</option>
+              <option>Day reporting center</option>
+              <option>State or county corrections</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label>Approximate clients served per year</label>
+            <select id="f-size">
+              <option value="">Select one</option>
+              <option>Under 50</option>
+              <option>50 to 150</option>
+              <option>150 to 500</option>
+              <option>500 to 1000</option>
+              <option>Over 1000</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label>Current tracking process</label>
+            <textarea id="f-current" placeholder="Spreadsheets, case management system, paper files, shared drive"></textarea>
+          </div>
+        </div>
+
+        <button class="submit-btn" onclick="submitForm()">Request my demo</button>
+        <p class="form-footnote">Paid pilot conversations only. Client data remains private.</p>
+      </div>
+
+      <div class="success-msg" id="success-msg">
+        <h4>Request received</h4>
+        <p>We will follow up with <span id="confirm-email"></span>.</p>
+      </div>
     </div>
-  </section>
-  <center><a href="/index.html">Back Home</a></center>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-left">© 2026 ReEntry Job Translator · Organization Dashboard</div>
+    <div class="footer-links">
+      <a href="/index.html">Resume Tool</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="mailto:info@reentryjobtranslator.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function submitForm() {
+  const first = document.getElementById('f-first').value.trim();
+  const last = document.getElementById('f-last').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const org = document.getElementById('f-org').value.trim();
+  const type = document.getElementById('f-type').value;
+  const size = document.getElementById('f-size').value;
+
+  if (!first || !last || !email || !org || !type || !size) {
+    alert('Please fill in all required fields.');
+    return;
+  }
+
+  document.getElementById('form-body').style.display = 'none';
+  document.getElementById('success-msg').style.display = 'block';
+  document.getElementById('confirm-email').textContent = email;
+
+  console.log('Organization demo request:', { first, last, email, org, type, size });
+}
+</script>
 
 </body>
 </html>
