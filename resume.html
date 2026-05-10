@@ -351,25 +351,39 @@ body {
 }
 
 .btn-primary {
-  background: var(--green);
-  color: var(--cream);
-  border: none;
+  background: var(--blue);
+  color: #ffffff;
+
+  border: 2px solid var(--black);
+
   border-radius: var(--radius-sm);
-  padding: 11px 24px;
+
+  padding: 14px 28px;
+
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 500;
-  cursor: pointer;
+  font-size: 0.92rem;
+  font-weight: 700;
   letter-spacing: 0.02em;
-  transition: background 0.15s, transform 0.1s;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s,
+    transform 0.1s,
+    box-shadow 0.1s;
+
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+
+  box-shadow: 5px 5px 0 var(--black);
 }
 
-.btn-primary:hover { background: var(--pine); }
-.btn-primary:active { transform: scale(0.98); }
-.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.btn-primary:hover {
+  background: #0f36d8;
+  transform: translate(3px, 3px);
+  box-shadow: 2px 2px 0 var(--black);
+}
 
 .btn-secondary {
   background: white;
