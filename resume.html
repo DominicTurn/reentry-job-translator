@@ -1300,7 +1300,7 @@ body {
 
 
 
-    <!-- ── Email Capture ─────────────────────────────────────────────── -->
+   <!-- ── Email Capture ─────────────────────────────────────────────── -->
 <section class="email-section">
   <div class="container">
     <div class="email-card">
@@ -1317,23 +1317,27 @@ body {
       </p>
 
       <form
-        action="https://preview.mailerlite.io/forms/1942762/187040686964475630/share"
+        class="email-row"
+        action="https://assets.mailerlite.com/jsonp/1942762/forms/187043042420590366/subscribe"
         method="post"
         target="_blank"
-        class="email-row"
       >
 
         <input
           type="email"
-          name="email"
+          name="fields[email]"
           class="email-input"
           placeholder="your@email.com"
+          autocomplete="email"
           required
         >
 
         <button class="btn-terra" type="submit">
           Get Free Tips →
         </button>
+
+        <input type="hidden" name="ml-submit" value="1">
+        <input type="hidden" name="anticsrf" value="true">
 
       </form>
 
@@ -1961,5 +1965,6 @@ async function handleEmailSignup(button) {
 }
 
 </script>
+<script src="https://groot.mailerlite.com/js/w/webforms.min.js"></script>
 </body>
 </html>
