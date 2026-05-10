@@ -193,16 +193,17 @@ nav {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
   font-family: 'Plus Jakarta Sans', Arial, sans-serif;
   font-weight: 900;
-  font-size: 0.98rem;
-  padding: 0.95rem 1.35rem;
+  font-size: 1.08rem;
+  padding: 1.2rem 2rem;
   border: 4px solid var(--black);
   cursor: pointer;
   text-transform: uppercase;
   box-shadow: 6px 6px 0 var(--black);
   transition: transform 0.12s ease, box-shadow 0.12s ease;
+  min-height: 64px;
 }
 
 .btn-primary,
@@ -278,6 +279,12 @@ nav {
   line-height: 1.5;
   font-weight: 700;
   color: #242424;
+}
+
+.hero-actions .btn-primary {
+  font-size: 1.18rem;
+  padding: 1.35rem 2.4rem;
+  min-height: 72px;
 }
 
 .hero-actions {
@@ -762,14 +769,21 @@ footer {
 .fade-up-4 { animation-delay: 0.2s; opacity: 0; }
 
 /* ── Responsive ─────────────────────────────────────────────────── */
-@media (max-width: 900px) {
-  .hero-grid,
-  .steps-grid,
-  .why-grid,
-  .examples-grid,
-  .org-grid {
-    grid-template-columns: 1fr;
+@media (max-width: 600px) {
+  .btn-primary,
+  .btn-ghost,
+  .btn-terra,
+  .btn-white,
+  .btn-white-ghost {
+    font-size: 1rem;
+    padding: 1.1rem 1.4rem;
+    min-height: 60px;
   }
+
+  .hero-actions .btn-primary {
+    min-height: 68px;
+  }
+}
 
   .hero-grid {
     transform: none;
