@@ -1319,7 +1319,7 @@ body {
       </p>
 
       <form
-  class="email-row ml-block-form"
+  class="email-row"
   action="https://assets.mailerlite.com/jsonp/1942762/forms/187043042420590366/subscribe"
   method="post"
       >
@@ -1917,40 +1917,6 @@ function getFairChanceEmployers(location, targetRole) {
 
     return roleMatch && locationMatch;
   });
-}
-
-  const originalText = button.textContent;
-  button.disabled = true;
-  button.textContent = 'Sending...';
-
-  try {
-    const res = await fetch('/api/capture-email', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email,
-        source: 'translation_page',
-        targetRole: lastRequestPayload?.targetRole || '',
-        location: lastRequestPayload?.location || ''
-      })
-    });
-
-    if (!res.ok) throw new Error('Email capture failed');
-
-    input.value = '';
-    if (note) {
-      note.textContent = 'You’re signed up. Check your email for updates and job search tips.';
-      note.style.color = 'var(--forest)';
-    }
-  } catch (err) {
-    if (note) {
-      note.textContent = 'Email signup is not connected yet. Your resume translation still works.';
-      note.style.color = '#7F1D1D';
-    }
-  } finally {
-    button.disabled = false;
-    button.textContent = originalText;
-  }
 }
 
 </script>
