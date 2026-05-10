@@ -1,6 +1,5 @@
 // api/translate.js
 // ReEntry Job Translator – Beta-Ready Backend for Vercel Serverless (Plain Vercel)
-// Rating target: 18/19 (robust, safe fallback, strong guardrails, minimal surprises)
 
 /**
  * Helpers
@@ -33,7 +32,6 @@ function cleanupBullets(bullets, maxLen = 240) {
  * Redaction / neutralization of stigmatizing terms.
  * - Institutions -> "structured work environment"
  * - Identity/legal labels -> "[redacted]"
- * - Phrases handled without fragile \\b wrapping
  */
 function redactSensitiveText(v) {
   const s = safeString(v);
@@ -72,19 +70,29 @@ function redactSensitiveText(v) {
  */
 function sanitizeInput(obj) {
   const experiences = Array.isArray(obj?.experiences) ? obj.experiences : [];
-  const desiredJob = safeString(obj?.desiredJob);
+
+  const desiredJob = safeString(
+    obj?.desiredJob || obj?.supportNote || obj?.targetRole
+  );
 
   const normalizedExperiences = experiences.map((exp) => {
     const e = exp || {};
+
     return {
       category: safeString(e.category),
+      title: redactSensitiveText(e.title),
+      organization: redactSensitiveText(e.organization),
       duration: safeString(e.duration),
-      description: redactSensitiveText(e.description),
-      notes: redactSensitiveText(e.notes)
+      // accept frontend "details" and backend "description"
+      description: redactSensitiveText(e.description || e.details || ""),
+      notes: redactSensitiveText(e.notes || "")
     };
   });
 
-  return { experiences: normalizedExperiences, desiredJob };
+  return {
+    experiences: normalizedExperiences,
+    desiredJob
+  };
 }
 
 /**
@@ -137,7 +145,9 @@ function fallbackResponse(cleanBody) {
       summary:
         "Reliable candidate with hands-on experience completing assigned tasks and supporting daily operations in structured work environments.",
       experience: experiences.map((exp) => {
-        const title = titleFromCategory(exp.category);
+        const title =
+          safeString(exp.title) ||
+          titleFromCategory(exp.category);
         return {
           translated_title: title,
           duration: safeString(exp.duration) || "Not specified",
@@ -175,20 +185,6 @@ function fallbackResponse(cleanBody) {
 }
 
 /**
- * Dictionary mapping passed to model
- */
-const SLANG_MAP = {
-  porter: "facilities maintenance or custodial support",
-  "chow hall": "high-volume dining facility",
-  yard: "exterior grounds and maintenance area",
-  commissary: "inventory, stocking, and distribution center",
-  unit: "residential wing or designated housing area",
-  clerk: "administrative support or records assistant",
-  tier: "specific operational department",
-  lockdown: "operational pause or facility safety protocol"
-};
-
-/**
  * Validate model output shape
  */
 function isValidAiOutput(parsed) {
@@ -196,7 +192,6 @@ function isValidAiOutput(parsed) {
 
   if (!safeString(parsed.summary)) return false;
   if (!Array.isArray(parsed.experience) || parsed.experience.length === 0) return false;
-
   if (!Array.isArray(parsed.skills) || parsed.skills.length === 0) return false;
   if (!Array.isArray(parsed.pathways) || parsed.pathways.length === 0) return false;
   if (!Array.isArray(parsed.interviewTips) || parsed.interviewTips.length === 0) return false;
@@ -226,9 +221,8 @@ module.exports = async (req, res) => {
 
   try {
     cleanBody = sanitizeInput(req.body || {});
-    const experiences = cleanBody.experiences;
 
-    if (!Array.isArray(experiences) || experiences.length === 0) {
+    if (!Array.isArray(cleanBody.experiences) || cleanBody.experiences.length === 0) {
       return json(res, 400, { error: "Experiences must be a non-empty array." });
     }
 
@@ -251,11 +245,15 @@ module.exports = async (req, res) => {
       }))
     };
 
+    // Use boundedBody.experiences as the authoritative count for later slice cap
+    const boundedExperienceCount = boundedBody.experiences.length;
+
     const prompt = `
 You are a Reentry Workforce Translator and O*NET Career Specialist.
 Convert the following nontraditional work history into employer-ready, professional resume language.
 
 STRICT RULES:
+- Use the user's original role title as context when generating translated titles and bullets.
 - Do not mention incarceration, prison, jail, inmate, offender, felon, convict, justice-impacted, formerly incarcerated, correctional facility, or similar background-identifying terms.
 - Do not invent credentials, certifications, licenses, job authority, leadership, numbers, tools, or outcomes the user did not provide.
 - Translate the setting, not the stigma. Use neutral terms like structured work environment, high-volume kitchen, facilities support, laundry operations, records support, warehouse support, grounds maintenance, customer service, or team-based operations.
@@ -274,7 +272,7 @@ STRICT RULES:
 - Write for a person who may need plain language and may be applying from a phone.
 - Return valid JSON only. No markdown, commentary, explanations, or code fences.
 
-	Output rules:
+Output rules:
 - The summary should be 2–3 sentences.
 - The summary should include 3–6 relevant ATS-friendly keywords naturally.
 - Each experience should include 3–5 resume bullets.
@@ -284,9 +282,8 @@ STRICT RULES:
 - Pathways should include 3–5 realistic job titles.
 - Interview tips should include 3 short talking points that help the user explain the experience professionally without mentioning background details.
 
-
 USER DATA:
-${JSON.stringify(boundedBody)}
+${JSON.stringify(boundedBody, null, 2)}
 
 RETURN ONLY VALID JSON matching this exact structure:
 {
@@ -373,16 +370,16 @@ RETURN ONLY VALID JSON matching this exact structure:
       return json(res, 200, fallbackResponse(cleanBody));
     }
 
-    // Enforce experience count alignment (cap extras)
-    if (parsed.experience.length > experiences.length) {
-      parsed.experience = parsed.experience.slice(0, experiences.length);
+    // Enforce experience count alignment against bounded input (cap extras)
+    if (parsed.experience.length > boundedExperienceCount) {
+      parsed.experience = parsed.experience.slice(0, boundedExperienceCount);
     }
 
     // Cleanup outputs to reduce UI edge cases
     parsed.summary = safeString(parsed.summary);
     parsed.skills = cleanupStringArray(parsed.skills, 80);
     parsed.pathways = cleanupStringArray(parsed.pathways, 80);
-    parsed.interviewTips = cleanupStringArray(parsed.interviewTips, 160);
+    parsed.interviewTips = cleanupStringArray(parsed.interviewTips, 200);
 
     parsed.experience = parsed.experience.map((exp) => ({
       ...exp,
