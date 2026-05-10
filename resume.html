@@ -1309,23 +1309,33 @@ body {
         Stay connected
       </div>
 
-      <h2>Get job search tips & updates</h2>
+      <h2>Get job search tips</h2>
 
       <p>
         Optional: receive practical resume tips, interview guidance,
         and second-chance employment resources.
       </p>
 
-      <div class="email-row">
-        <a
-          href="https://preview.mailerlite.io/forms/1942762/187040686964475630/share"
-          target="_blank"
-          rel="noopener"
-          class="btn-terra"
+      <form
+        action="https://preview.mailerlite.io/forms/1942762/187040686964475630/share"
+        method="post"
+        target="_blank"
+        class="email-row"
+      >
+
+        <input
+          type="email"
+          name="email"
+          class="email-input"
+          placeholder="your@email.com"
+          required
         >
+
+        <button class="btn-terra" type="submit">
           Get Free Tips →
-        </a>
-      </div>
+        </button>
+
+      </form>
 
       <p class="email-note">
         No spam. Unsubscribe anytime.
