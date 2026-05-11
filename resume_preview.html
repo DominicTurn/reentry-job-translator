@@ -4,322 +4,531 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ReEntry Job Translator | Resume Preview</title>
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,400&display=swap" rel="stylesheet">
 <style>
-
-/* =========================
-   TOKENS (SELF-CONTAINED)
-========================= */
 :root {
-  --cream: #faf7f2;
-  --white: #ffffff;
-
-  --green: #2f5e47;
-  --green2: #254f3c;
-  --green-light: #edf5f1;
-
-  --text: #111827;
-  --muted: #4b5563;
-  --border: #e2dbd0;
-
-  --radius: 14px;
-  --radius-sm: 8px;
-
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
-  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+  --ink:        #181310;
+  --ink-soft:   #3a342c;
+  --cream:      #f0e8d5;
+  --cream-alt:  #e5dbc8;
+  --cream-card: #faf6ef;
+  --white:      #fdfaf5;
+  --green:      #1c5535;
+  --green-mid:  #2a7a4e;
+  --green-pale: #e3f0e9;
+  --rust:       #b83d1b;
+  --gold:       #c99c18;
+  --gold-bright:#e8b420;
+  --gold-pale:  #fdf3d0;
+  --org-bg:     #122a1e;
 }
 
-/* =========================
-   BASE
-========================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
 body {
-  margin: 0;
-  font-family: 'Plus Jakarta Sans', Arial, sans-serif;
-  background: #f7f7f7;
-  color: #111;
+  font-family: 'Barlow', Arial, sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.58;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
 }
 
-h1, h2, h3 {
-  font-family: 'Fraunces', serif;
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: multiply;
 }
 
-/* =========================
-   TOP BAR (FLAT)
-========================= */
+a { color: inherit; text-decoration: none; }
+p { color: var(--ink-soft); font-weight: 500; }
+
+h1, h2 {
+  font-family: 'Fraunces', Georgia, serif;
+  color: var(--ink);
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+h3 {
+  font-family: 'Barlow Condensed', Arial Narrow, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+
+/* ── Topbar ───────────────────────────────────────────────── */
 .topbar {
-  background: #ffffff;
-  color: #111;
-  padding: 16px 6%;
+  background: var(--green);
+  padding: 0.8rem 5%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #ddd;
-  box-shadow: none;
+  border-bottom: 4px solid var(--ink);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-.brand {
-  font-size: 18px;
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Barlow Condensed', Arial Narrow, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.topbar-mark {
+  width: 34px;
+  height: 34px;
+  background: var(--gold-bright);
+  border: 3px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 0.82rem;
+  font-weight: 900;
+  color: var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.topbar-pill {
+  font-family: 'Barlow Condensed', Arial Narrow, sans-serif;
+  font-size: 0.76rem;
   font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(255,255,255,0.1);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  padding: 5px 12px;
+  color: rgba(255,255,255,0.9);
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.pill {
-  background: #f1f1f1;
-  border: 1px solid #ddd;
-  padding: 6px 10px;
-  border-radius: 4px;
-  font-size: 12px;
+.topbar-pill::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: #4ade80;
+  border-radius: 50%;
 }
 
-/* =========================
-   HERO (REMOVE BRAND FEEL)
-========================= */
+/* ── Hero ─────────────────────────────────────────────────── */
 .hero {
-  background: #ffffff;
-  color: #111;
-  padding: 60px 6%;
+  background: var(--org-bg);
+  color: white;
+  padding: 5rem 5%;
   text-align: center;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 4px solid var(--ink);
 }
 
 .hero h1 {
-  font-size: clamp(32px,5vw,48px);
-  margin: 0 0 14px;
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.hero h1 em {
+  font-style: normal;
+  color: var(--gold-bright);
 }
 
 .hero p {
-  font-size: 18px;
-  color: #555;
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.78);
   max-width: 680px;
-  margin: 0 auto 24px;
+  margin: 0 auto 2rem;
+  font-weight: 500;
 }
 
-/* =========================
-   BUTTONS (UTILITY STYLE)
-========================= */
-.btn {
-  display: inline-block;
-  background: #111;
-  color: #fff;
-  padding: 12px 18px;
-  border-radius: 4px;
-  font-weight: 600;
-  text-decoration: none;
-  box-shadow: none;
-}
-
-.btn:hover {
-  background: #333;
-}
-
-/* =========================
-   PRIMARY BUTTON
-========================= */
-.primary {
-  background: #111;
-  color: #fff;
-  border-radius: 4px;
-  padding: 12px 18px;
-  font-weight: 600;
-  box-shadow: none;
-}
-
-.primary:hover {
-  background: #333;
-}
-
-/* =========================
-   LAYOUT
-========================= */
-.wrap {
-  max-width: 900px;
-  margin: 30px auto;
-  padding: 0 16px;
-}
-
-/* =========================
-   CARDS (FLAT)
-========================= */
-.card {
-  background: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: none;
-  padding: 22px;
-  margin-bottom: 18px;
-}
-
-.card h2 {
-  margin: 0 0 6px;
-  font-size: 22px;
-}
-
-.muted {
-  color: #666;
-}
-
-/* =========================
-   GRID
-========================= */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
-  gap: 12px;
-}
-
-.role {
-  border: 1px solid #ddd;
-  background: #fafafa;
-  border-radius: 4px;
-  padding: 14px;
-}
-
-.role strong {
-  color: #111;
-}
-
-/* =========================
-   RESUME (CLEAN DOCUMENT STYLE)
-========================= */
-.resume {
-  overflow: hidden;
-  padding: 0;
-  border: 1px solid #ddd;
-}
-
-/* REMOVE GREEN HEADER */
-.resume-head {
-  background: #f5f5f5;
-  padding: 22px;
-  color: #111;
-  border-bottom: 1px solid #ddd;
-}
-
-.resume-head small {
-  color: #777;
+.btn-hero {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--gold-bright);
+  color: var(--ink);
+  font-family: 'Barlow Condensed', Arial Narrow, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  letter-spacing: .12em;
+  padding: 1rem 2rem;
+  border: 3.5px solid var(--ink);
+  box-shadow: 5px 5px 0 rgba(255,255,255,0.2);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.btn-hero:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 rgba(255,255,255,0.2);
+}
+
+/* ── Wrap ─────────────────────────────────────────────────── */
+.wrap {
+  max-width: 960px;
+  margin: 2.5rem auto;
+  padding: 0 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ── Cards ────────────────────────────────────────────────── */
+.card {
+  background: var(--cream-card);
+  border: 4px solid var(--ink);
+  box-shadow: 7px 7px 0 var(--ink);
+  padding: 2rem;
+}
+
+.card-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.6rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+  line-height: 1.05;
+}
+
+.card-sub {
+  font-size: 0.93rem;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+/* Section label */
+.section-label {
+  font-family: 'Barlow Condensed', Arial Narrow, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--cream-alt);
+  padding-bottom: 0.6rem;
+}
+
+/* Role grid */
+.role-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  margin-top: 1rem;
+}
+
+.role-card {
+  border: 3px solid var(--ink);
+  background: var(--cream);
+  padding: 1rem;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.role-card strong {
+  font-family: 'Barlow Condensed', Arial Narrow, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--green);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.role-card p {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  font-weight: 500;
+  margin: 0;
+}
+
+/* CTA link */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--rust);
+  color: #fff;
+  font-family: 'Barlow Condensed', Arial Narrow, sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.85rem 1.6rem;
+  border: 3.5px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+  margin-top: 1.25rem;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.btn-primary:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+/* ── Resume preview card ──────────────────────────────────── */
+.resume-card {
+  background: var(--white);
+  border: 4px solid var(--ink);
+  box-shadow: 7px 7px 0 var(--green);
+  overflow: hidden;
+}
+
+.resume-head {
+  background: var(--green);
+  padding: 1.75rem 2rem;
+  border-bottom: 4px solid var(--ink);
+}
+
+.resume-head-eyebrow {
+  font-family: 'Barlow Condensed', Arial Narrow, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 0.5rem;
+}
+
+.resume-head h2 {
+  font-family: 'Barlow', Arial, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #fff;
+  line-height: 1.6;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 .resume-body {
-  padding: 22px;
+  padding: 1.75rem 2rem;
 }
 
-/* =========================
-   LABELS
-========================= */
-.label {
-  font-size: 11px;
+.rs-label {
+  font-family: 'Barlow Condensed', Arial Narrow, sans-serif;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  letter-spacing: .14em;
-  color: #777;
-  font-weight: 700;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 8px;
-  margin-bottom: 14px;
+  color: var(--gold);
+  margin-bottom: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-/* =========================
-   CHIPS (MINIMAL)
-========================= */
-.chip {
-  display: inline-block;
-  background: #f1f1f1;
-  border: 1px solid #ddd;
-  color: #333;
-  border-radius: 4px;
-  padding: 5px 8px;
-  margin: 3px;
-  font-size: 13px;
+.rs-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--cream-alt);
 }
 
-/* =========================
-   BULLETS
-========================= */
-.bullet {
+.exp-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin-bottom: 0.75rem;
+}
+
+.bullet-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bullet-list li {
+  font-size: 0.93rem;
+  color: var(--ink-soft);
   padding-left: 18px;
+  position: relative;
+  line-height: 1.65;
+  font-weight: 500;
 }
 
-.bullet li {
-  margin: 8px 0;
-  line-height: 1.5;
+.bullet-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 6px;
+  height: 6px;
+  background: var(--green);
 }
 
-/* =========================
-   PATHWAY (PLAIN)
-========================= */
-.pathway {
-  background: #fafafa;
-  border-left: 3px solid #ccc;
-  border-radius: 0;
-  padding: 12px;
-  color: #333;
+.skills-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 1.5rem;
 }
 
+.skill-chip {
+  background: var(--green-pale);
+  border: 2px solid var(--green);
+  padding: 5px 10px;
+  font-family: 'Barlow Condensed', Arial Narrow, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--green);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pathway-block {
+  background: var(--gold-pale);
+  border-left: 4px solid var(--gold-bright);
+  border: 3px solid var(--ink);
+  padding: 1rem 1.1rem;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  line-height: 1.65;
+  font-weight: 500;
+}
+
+/* ── Final CTA ───────────────────────────────────────────── */
+.final-cta {
+  background: var(--cream-alt);
+  border: 4px solid var(--ink);
+  box-shadow: 7px 7px 0 var(--ink);
+  padding: 2.5rem;
+  text-align: center;
+}
+
+.final-cta h2 {
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  margin-bottom: 0.75rem;
+}
+
+.final-cta p {
+  max-width: 480px;
+  margin: 0 auto 1.5rem;
+  font-size: 1rem;
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .hero { padding: 3.5rem 5%; }
+  .wrap { padding: 0 1rem; }
+  .card, .resume-card, .final-cta { padding: 1.35rem; }
+  .resume-body { padding: 1.25rem; }
+  .role-grid { grid-template-columns: 1fr 1fr; }
+}
 </style>
-
 </head>
-
 <body>
 
 <header class="topbar">
-  <div class="brand">ReEntry Job Translator</div>
-  <div class="pill">✓ No signup</div>
+  <div class="topbar-brand">
+    <div class="topbar-mark">RJ</div>
+    ReEntry Job Translator
+  </div>
+  <div class="topbar-pill">No signup</div>
 </header>
 
 <section class="hero">
-  <h1>Your Experience Matters.<br>Let's Show Employers.</h1>
-  <p>See an example of how the tool turns work experience into clear resume language.</p>
-  <a class="btn" href="index.html">Build My Free Resume</a>
+  <h1>Your experience matters.<br><em>Let's show employers.</em></h1>
+  <p>See an example of how the tool turns work experience into clear, employer-ready resume language — automatically.</p>
+  <a class="btn-hero" href="index.html">Build My Free Resume →</a>
 </section>
 
 <main class="wrap">
 
-<section class="card">
-  <h2>Turn your work experience into employer-ready resume language.</h2>
-
-  <div class="grid">
-    <div class="role"><strong>Food service</strong><p class="muted">Kitchen, cooking, serving</p></div>
-    <div class="role"><strong>Maintenance</strong><p class="muted">Facilities, repairs</p></div>
-    <div class="role"><strong>Customer service</strong><p class="muted">Canteen, stocking</p></div>
-  </div>
-
-  <p>
-    <a href="index.html" class="primary">Build My Free Resume →</a>
-  </p>
-</section>
-
-<section class="card resume">
-  <div class="resume-head">
-    <small>Professional summary</small>
-    <h2>Reliable food service worker with high-volume kitchen experience.</h2>
-  </div>
-
-  <div class="resume-body">
-
-    <div class="label">Work experience — translated</div>
-
-    <h3>Food Service Support Worker</h3>
-
-    <ul class="bullet">
-      <li>Supported daily meal preparation and service operations while meeting time-sensitive production needs.</li>
-      <li>Maintained sanitation standards through recurring cleaning routines and food safety procedures.</li>
-      <li>Tracked supplies and supported inventory organization.</li>
-    </ul>
-
-    <div class="label">Transferable skills</div>
-    <span class="chip">Food Safety</span>
-    <span class="chip">Sanitation</span>
-    <span class="chip">Inventory Support</span>
-    <span class="chip">Team Training</span>
-
-    <div class="label" style="margin-top:24px">Career pathway</div>
-
-    <div class="pathway">
-      Start with Food Service Worker, Prep Cook, Kitchen Helper, or Cafeteria Worker roles. Move toward Kitchen Lead or Shift Lead with experience.
+  <!-- What it translates -->
+  <div class="card">
+    <div class="card-title">Turn your work experience into employer-ready language</div>
+    <p class="card-sub">Whatever role you held — in a kitchen, on maintenance, in the laundry room — the tool finds the civilian job language behind it.</p>
+    <div class="role-grid">
+      <div class="role-card">
+        <strong>Food service</strong>
+        <p>Kitchen, cooking, serving, cafeteria</p>
+      </div>
+      <div class="role-card">
+        <strong>Maintenance</strong>
+        <p>Facilities, repairs, porter, custodian</p>
+      </div>
+      <div class="role-card">
+        <strong>Customer service</strong>
+        <p>Canteen, stocking, distribution</p>
+      </div>
     </div>
-
+    <a href="resume.html" class="btn-primary">Build My Free Resume →</a>
   </div>
-</section>
+
+  <!-- Sample resume output -->
+  <div class="resume-card" id="resume">
+    <div class="resume-head">
+      <div class="resume-head-eyebrow">Professional resume language — example output</div>
+      <h2>Reliable food service worker with high-volume kitchen experience, consistent sanitation practices, and demonstrated ability to support daily operations in structured environments.</h2>
+    </div>
+    <div class="resume-body">
+
+      <div class="rs-label">Work experience — translated</div>
+      <div class="exp-title">Food Service Support Worker</div>
+      <ul class="bullet-list">
+        <li>Supported daily meal preparation and service operations for 300+ individuals while meeting time-sensitive production needs.</li>
+        <li>Maintained kitchen sanitation standards through recurring cleaning routines and food safety procedures.</li>
+        <li>Tracked supplies, supported inventory organization, and helped reduce waste through careful portion control.</li>
+        <li>Trained new team members on equipment use, sanitation expectations, and daily workflow requirements.</li>
+      </ul>
+
+      <div class="rs-label">Transferable skills</div>
+      <div class="skills-wrap" style="margin-bottom:1.5rem;">
+        <span class="skill-chip">Food Safety</span>
+        <span class="skill-chip">Sanitation</span>
+        <span class="skill-chip">Inventory Support</span>
+        <span class="skill-chip">Team Training</span>
+        <span class="skill-chip">High-Volume Ops</span>
+        <span class="skill-chip">Workflow Coordination</span>
+      </div>
+
+      <div class="rs-label">Career pathway</div>
+      <div class="pathway-block">
+        Start with Food Service Worker, Prep Cook, Kitchen Helper, or Cafeteria Worker roles. With experience and certifications, move toward Kitchen Lead, Shift Lead, or Food Service Supervisor.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Final CTA -->
+  <div class="final-cta">
+    <h2>Ready to translate<br>your experience?</h2>
+    <p>Free for individuals. No login. No account. Works on any phone.</p>
+    <a href="resume.html" class="btn-primary" style="display:inline-flex;">Get My Free Resume →</a>
+  </div>
 
 </main>
 
