@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Organization Login | ReEntry Job Translator</title>
+  <meta name="description" content="Secure organization dashboard for reentry and workforce employment outcome tracking." />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --navy: #0C2340;
+      --navy-mid: #1A3A5C;
+      --blue: #1B5EA8;
+      --blue-mid: #2E74C0;
+      --blue-light: #EAF1FB;
+      --blue-border: #B8D0EC;
+      --accent: #C8971A;
+      --page: #F2F5F9;
+      --surface: #FFFFFF;
+      --border: #D4DDE8;
+      --text: #0C2340;
+      --text-mid: #3A5068;
+      --text-muted: #6B8096;
+      --green-bg: #E6F2EC;
+      --green-tx: #1A5C35;
+      --amber-bg: #FDF3DC;
+      --amber-tx: #7A5200;
+      --shadow: 0 18px 45px rgba(12, 35, 64, 0.12);
+      --shadow-sm: 0 8px 22px rgba(12, 35, 64, 0.08);
+      --radius: 12px;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--page);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .topbar {
+      height: 56px;
+      background: var(--navy);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 7px;
+      background: var(--blue-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16);
+    }
+
+    .logo-mark span {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+    }
+
+    .brand-title {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: #9DB4CE;
+      margin-top: 1px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      color: #AEC2D9;
+    }
+
+    .secure-pill {
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.06);
+      border-radius: 999px;
+      padding: 6px 12px;
+      color: #C6D6E8;
+    }
+
+    .main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 54px 28px 34px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.75fr);
+      gap: 34px;
+      align-items: stretch;
+      margin-bottom: 34px;
+    }
+
+    .hero-copy {
+      background:
+        linear-gradient(135deg, rgba(234,241,251,0.95), rgba(255,255,255,0.98)),
+        linear-gradient(90deg, rgba(27,94,168,0.06), rgba(200,151,26,0.04));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 38px;
+      min-height: 440px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue);
+      background: var(--blue-light);
+      border: 1px solid var(--blue-border);
+      border-radius: 999px;
+      padding: 7px 11px;
+      margin-bottom: 18px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-size: clamp(34px, 4.5vw, 56px);
+      line-height: 0.98;
+      letter-spacing: -0.055em;
+      color: var(--navy);
+      max-width: 760px;
+      margin-bottom: 18px;
+    }
+
+    .lead {
+      font-size: 17px;
+      line-height: 1.65;
+      color: var(--text-mid);
+      max-width: 660px;
+    }
+
+    .metric-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 34px;
+    }
+
+    .mini-kpi {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--blue);
+      border-radius: 9px;
+      padding: 14px;
+    }
+
+    .mini-kpi:nth-child(4) {
+      border-top-color: var(--accent);
+    }
+
+    .mini-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 6px;
+    }
+
+    .mini-value {
+      font-size: 21px;
+      font-weight: 800;
+      color: var(--navy);
+    }
+
+    .login-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 30px;
+      min-height: 440px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--blue), var(--accent));
+    }
+
+    .login-head {
+      margin-bottom: 24px;
+      padding-top: 4px;
+    }
+
+    .login-head h2 {
+      font-size: 24px;
+      letter-spacing: -0.03em;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .login-head p {
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--text-muted);
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-mid);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 7px;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 13px 13px;
+      font-size: 14px;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(27,94,168,0.12);
+    }
+
+    .form-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 4px 0 18px;
+      gap: 12px;
+    }
+
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .remember input {
+      width: auto;
+      box-shadow: none;
+    }
+
+    .forgot {
+      font-size: 12px;
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .btn {
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      padding: 13px 16px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+    }
+
+    .btn-primary {
+      background: var(--blue);
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(27,94,168,0.18);
+    }
+
+    .btn-primary:hover {
+      background: #164f8e;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      margin-top: 10px;
+      background: var(--blue-light);
+      color: var(--blue);
+      border: 1px solid var(--blue-border);
+    }
+
+    .btn-secondary:hover {
+      background: #dceafa;
+    }
+
+    .security-note {
+      margin-top: 22px;
+      background: #F8FAFD;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 13px;
+      font-size: 12px;
+      line-height: 1.55;
+      color: var(--text-muted);
+    }
+
+    .security-note strong {
+      color: var(--navy);
+    }
+
+    .platform-section {
+      display: grid;
+      grid-template-columns: 0.92fr 1.08fr;
+      gap: 24px;
+      margin-bottom: 34px;
+      align-items: stretch;
+    }
+
+    .section-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .section-tag {
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .section-card h2 {
+      font-size: 28px;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      margin-bottom: 13px;
+      color: var(--navy);
+    }
+
+    .section-card p {
+      color: var(--text-mid);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .feature-list {
+      margin-top: 22px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .feature {
+      display: flex;
+      gap: 11px;
+      padding: 13px;
+      background: #F8FAFD;
+      border: 1px solid #E2E9F2;
+      border-radius: 9px;
+    }
+
+    .feature-icon {
+      width: 27px;
+      height: 27px;
+      background: var(--blue-light);
+      color: var(--blue);
+      border: 1px solid var(--blue-border);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .feature strong {
+      display: block;
+      font-size: 13px;
+      color: var(--navy);
+      margin-bottom: 3px;
+    }
+
+    .feature span {
+      display: block;
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--text-muted);
+    }
+
+    .dashboard-preview {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .preview-top {
+      background: var(--navy);
+      color: #fff;
+      padding: 13px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .preview-title {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .preview-org {
+      font-size: 10px;
+      color: #9DB4CE;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 999px;
+      padding: 4px 8px;
+    }
+
+    .preview-body {
+      padding: 16px;
+      background: var(--page);
+    }
+
+    .preview-kpis {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .preview-kpi {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--blue);
+      border-radius: 7px;
+      padding: 10px;
+    }
+
+    .preview-kpi small {
+      display: block;
+      font-size: 8px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 5px;
+    }
+
+    .preview-kpi b {
+      font-size: 18px;
+      color: var(--navy);
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .preview-panel {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 12px;
+      min-height: 125px;
+    }
+
+    .preview-panel h3 {
+      font-size: 9px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-bottom: 12px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 62px 1fr 28px;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 9px;
+      color: var(--text-muted);
+    }
+
+    .bar-track {
+      height: 18px;
+      background: var(--page);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .bar {
+      height: 100%;
+      background: var(--blue);
+      border-radius: 4px;
+    }
+
+    .queue-item {
+      padding: 8px;
+      border-radius: 6px;
+      border-left: 3px solid var(--accent);
+      background: var(--amber-bg);
+      margin-bottom: 7px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 10px;
+      color: var(--amber-tx);
+    }
+
+    .preview-table {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      overflow: hidden;
+    }
+
+    .preview-table-head {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      background: var(--blue-light);
+      color: var(--navy);
+      font-size: 9px;
+      font-weight: 800;
+      padding: 8px 10px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .preview-table-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      padding: 8px 10px;
+      border-top: 1px solid #EEF2F6;
+      font-size: 10px;
+      color: var(--text-mid);
+    }
+
+    .status {
+      width: fit-content;
+      background: var(--green-bg);
+      color: var(--green-tx);
+      border-radius: 999px;
+      padding: 2px 7px;
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    .cta {
+      background: var(--navy);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 26px;
+    }
+
+    .cta h2 {
+      font-size: 25px;
+      letter-spacing: -0.035em;
+      margin-bottom: 7px;
+    }
+
+    .cta p {
+      color: #B9CBE0;
+      font-size: 14px;
+      line-height: 1.55;
+      max-width: 650px;
+    }
+
+    .cta-actions {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 132px;
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 13px;
+      font-weight: 800;
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
+    .cta-primary {
+      background: #fff;
+      color: var(--navy);
+    }
+
+    .cta-secondary {
+      color: #D3E1F1;
+      background: rgba(255,255,255,0.06);
+    }
+
+    footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      font-size: 11px;
+      color: var(--text-muted);
+      padding: 0 2px 20px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    @media (max-width: 960px) {
+      .hero,
+      .platform-section {
+        grid-template-columns: 1fr;
+      }
+
+      .metric-strip,
+      .preview-kpis {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .cta {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .topbar {
+        height: auto;
+        padding: 14px 18px;
+        align-items: flex-start;
+        gap: 12px;
+        flex-direction: column;
+      }
+
+      .main {
+        padding: 28px 16px;
+      }
+
+      .hero-copy,
+      .login-card,
+      .section-card,
+      .cta {
+        padding: 22px;
+      }
+
+      .metric-strip,
+      .preview-kpis,
+      .preview-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-row,
+      footer,
+      .cta-actions {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      h1 {
+        font-size: 36px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <a class="brand" href="/">
+      <div class="logo-mark"><span>RJT</span></div>
+      <div>
+        <div class="brand-title">ReEntry Job Translator</div>
+        <div class="brand-sub">Workforce Outcomes Platform</div>
+      </div>
+    </a>
+
+    <div class="top-actions">
+      <span>Organization Access</span>
+      <span class="secure-pill">Secure Staff Login</span>
+    </div>
+  </header>
+  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const SUPABASE_URL = "https://qufnnmryzxsrddrhlesl.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF1Zm5ubXJ5enhzcmRkcmhsZXNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3NTc2NzgsImV4cCI6MjA5MzMzMzY3OH0.RZcyQ92Iqav7ldC72JqnHS9q22TexhSJllR2RYpIKZw";
+
+  const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+  async function requireLogin() {
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (!session) {
+      window.location.href = "/dashboard_login_index.html";
+      return;
+    }
+
+    console.log("Logged in:", session.user.email);
+  }
+
+  requireLogin();
+</script>
+
+
+  <main class="main">
+    <section class="hero" aria-label="Organization login">
+      <div class="hero-copy">
+        <div>
+          <div class="eyebrow"><span class="dot"></span> Civic workforce technology</div>
+          <h1>Employment outcome tracking for reentry organizations.</h1>
+          <p class="lead">
+            Track resumes, applications, interviews, placements, and retention follow-ups from one secure dashboard built for reentry, workforce, and community-based programs.
+          </p>
+        </div>
+
+        <div class="metric-strip" aria-label="Platform metric examples">
+          <div class="mini-kpi">
+            <div class="mini-label">Clients</div>
+            <div class="mini-value">128</div>
+          </div>
+          <div class="mini-kpi">
+            <div class="mini-label">Applications</div>
+            <div class="mini-value">742</div>
+          </div>
+          <div class="mini-kpi">
+            <div class="mini-label">Interviews</div>
+            <div class="mini-value">96</div>
+          </div>
+          <div class="mini-kpi">
+            <div class="mini-label">Placements</div>
+            <div class="mini-value">41</div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="login-card" aria-label="Staff login form">
+        <div>
+          <div class="login-head">
+            <h2>Organization Login</h2>
+            <p>
+              Access your organization dashboard to manage clients, monitor employment progress, and export outcome reports.
+            </p>
+          </div>
+
+          <form action="#" method="post">
+            <div class="field">
+              <label for="email">Organization Email</label>
+              <input id="email" name="email" type="email" placeholder="name@organization.org" autocomplete="email" required />
+            </div>
+
+            <div class="field">
+              <label for="password">Password</label>
+              <input id="password" name="password" type="password" placeholder="Enter password" autocomplete="current-password" required />
+            </div>
+
+            <div class="form-row">
+              <label class="remember">
+                <input type="checkbox" name="remember" />
+                Remember this device
+              </label>
+              <a class="forgot" href="#">Forgot password?</a>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Secure Login</button>
+            <button class="btn btn-secondary" type="button">Request Organization Access</button>
+          </form>
+
+          <div class="security-note">
+            <strong>Protected organization portal.</strong><br />
+            Role-based access, organization-level data isolation, and secure cloud infrastructure.
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="platform-section" aria-label="Platform overview">
+      <div class="section-card">
+        <div class="section-tag">Built for agencies</div>
+        <h2>Turn daily casework into measurable workforce outcomes.</h2>
+        <p>
+          ReEntry Job Translator helps programs document progress from translated experience to job placement. Staff can monitor each client’s employment pathway while leadership can export clear reports for pilots, grants, and board updates.
+        </p>
+
+        <div class="feature-list">
+          <div class="feature">
+            <div class="feature-icon">1</div>
+            <div>
+              <strong>Placement reporting</strong>
+              <span>Track clients served, applications submitted, interviews completed, hires, and retention milestones.</span>
+            </div>
+          </div>
+
+          <div class="feature">
+            <div class="feature-icon">2</div>
+            <div>
+              <strong>Staff collaboration</strong>
+              <span>Give case managers and directors appropriate access to client progress and organization-level metrics.</span>
+            </div>
+          </div>
+
+          <div class="feature">
+            <div class="feature-icon">3</div>
+            <div>
+              <strong>Exportable records</strong>
+              <span>Prepare reports for funders, workforce boards, nonprofit leadership, and public-sector partners.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-preview" aria-label="Dashboard preview">
+        <div class="preview-top">
+          <div class="preview-title">Employment Outcomes Dashboard</div>
+          <div class="preview-org">Example Organization</div>
+        </div>
+
+        <div class="preview-body">
+          <div class="preview-kpis">
+            <div class="preview-kpi"><small>Clients served</small><b>5</b></div>
+            <div class="preview-kpi"><small>Applications</small><b>36</b></div>
+            <div class="preview-kpi"><small>Interviewed</small><b>3</b></div>
+            <div class="preview-kpi"><small>Hired</small><b>2</b></div>
+          </div>
+
+          <div class="preview-grid">
+            <div class="preview-panel">
+              <h3>Employment Pipeline</h3>
+              <div class="bar-row"><span>Resume</span><div class="bar-track"><div class="bar" style="width:100%"></div></div><span>100%</span></div>
+              <div class="bar-row"><span>Applied</span><div class="bar-track"><div class="bar" style="width:80%;background:#2E74C0"></div></div><span>80%</span></div>
+              <div class="bar-row"><span>Interview</span><div class="bar-track"><div class="bar" style="width:60%;background:#C8971A"></div></div><span>60%</span></div>
+              <div class="bar-row"><span>Hired</span><div class="bar-track"><div class="bar" style="width:40%;background:#1A5C35"></div></div><span>40%</span></div>
+            </div>
+
+            <div class="preview-panel">
+              <h3>Retention Queue</h3>
+              <div class="queue-item"><span>DW-1001</span><strong>30-day check</strong></div>
+              <div class="queue-item" style="background:#E6F2EC;color:#1A5C35;border-left-color:#1A5C35"><span>CL-1004</span><strong>60-day check</strong></div>
+              <p style="font-size:10px;color:#6B8096;text-align:center;margin-top:8px;">2 clients need follow-up today</p>
+            </div>
+          </div>
+
+          <div class="preview-table">
+            <div class="preview-table-head">
+              <span>Client ID</span>
+              <span>Stage</span>
+              <span>Days Active</span>
+            </div>
+            <div class="preview-table-row">
+              <span>DW-1001</span>
+              <span class="status">Hired</span>
+              <span>45d</span>
+            </div>
+            <div class="preview-table-row">
+              <span>RM-1002</span>
+              <span class="status" style="background:#EEF0FA;color:#3A3B8A;">Interviewing</span>
+              <span>30d</span>
+            </div>
+            <div class="preview-table-row">
+              <span>TJ-1003</span>
+              <span class="status" style="background:#FDF3DC;color:#7A5200;">Applied</span>
+              <span>20d</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta" aria-label="Pilot program call to action">
+      <div>
+        <h2>Interested in an organizational deployment?</h2>
+        <p>
+          ReEntry Job Translator is available for pilot programs, nonprofit workforce teams, reentry service providers, and public-sector partners.
+        </p>
+      </div>
+
+      <div class="cta-actions">
+        <a class="cta-btn cta-primary" href="mailto:contact@reentryjobtranslator.com">Schedule Demo</a>
+        <a class="cta-btn cta-secondary" href="/">Back to Main Site</a>
+      </div>
+    </section>
+
+    <footer>
+      <span>© 2026 ReEntry Job Translator. All rights reserved.</span>
+      <div class="footer-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Security</a>
+      </div>
+    </footer>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const SUPABASE_URL = "https://qufnnmryzxsrddrhlesl.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF1Zm5ubXJ5enhzcmRkcmhsZXNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3NTc2NzgsImV4cCI6MjA5MzMzMzY3OH0.RZcyQ92Iqav7ldC72JqnHS9q22TexhSJllR2RYpIKZw";
+
+  const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+  const form = document.querySelector("form");
+
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const email = document.querySelector("#email").value.trim();
+    const password = document.querySelector("#password").value;
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) {
+      alert("Login failed: " + error.message);
+      return;
+    }
+
+    window.location.href = "/dashboard.html";
+  });
+</script>
+</body>
+</html>
