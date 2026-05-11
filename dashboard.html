@@ -1,0 +1,611 @@
+# dashboard.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Organization Dashboard | ReEntry Job Translator</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --navy: #0C2340;
+      --navy-mid: #1A3A5C;
+      --blue: #1B5EA8;
+      --blue-light: #EAF1FB;
+      --blue-border: #B8D0EC;
+      --accent: #C8971A;
+      --page: #F2F5F9;
+      --surface: #FFFFFF;
+      --border: #D4DDE8;
+      --text: #0C2340;
+      --text-mid: #3A5068;
+      --text-muted: #6B8096;
+      --green-bg: #E6F2EC;
+      --green-text: #1A5C35;
+      --amber-bg: #FDF3DC;
+      --amber-text: #7A5200;
+      --shadow: 0 12px 32px rgba(12,35,64,0.08);
+      --radius: 10px;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--page);
+      color: var(--text);
+    }
+
+    .topbar {
+      height: 60px;
+      background: var(--navy);
+      border-bottom: 4px solid var(--accent);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .brand h1 {
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+
+    .brand p {
+      font-size: 11px;
+      color: #AFC4DD;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .top-actions button {
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.08);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: calc(100vh - 60px);
+    }
+
+    .sidebar {
+      background: #F8FAFD;
+      border-right: 1px solid var(--border);
+      padding: 22px 16px;
+    }
+
+    .sidebar-section {
+      margin-bottom: 28px;
+    }
+
+    .sidebar-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 11px 12px;
+      border-radius: 8px;
+      color: var(--text-mid);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .sidebar a.active {
+      background: var(--blue-light);
+      color: var(--blue);
+      border: 1px solid var(--blue-border);
+    }
+
+    .main {
+      padding: 28px;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 26px;
+    }
+
+    .page-header h2 {
+      font-size: 32px;
+      letter-spacing: -0.04em;
+      margin-bottom: 6px;
+    }
+
+    .page-header p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .status-pill {
+      background: var(--green-bg);
+      color: var(--green-text);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 4px solid var(--blue);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .metric-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .metric-value {
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .metric-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-header h3 {
+      font-size: 16px;
+    }
+
+    .card-body {
+      padding: 18px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      text-align: left;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--text-muted);
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 14px 0;
+      border-bottom: 1px solid #EEF2F6;
+      font-size: 14px;
+      color: var(--text-mid);
+    }
+
+    .stage {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .stage.hired {
+      background: var(--green-bg);
+      color: var(--green-text);
+    }
+
+    .stage.interviewing {
+      background: #EEF0FA;
+      color: #3A3B8A;
+    }
+
+    .stage.applied {
+      background: var(--amber-bg);
+      color: var(--amber-text);
+    }
+
+    .queue-item {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      background: #FCFDFE;
+    }
+
+    .queue-item strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .queue-item span {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .loading {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 1100px) {
+      .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 800px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        padding: 0 16px;
+      }
+
+      .main {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">RJT</div>
+      <div>
+        <h1>ReEntry Job Translator</h1>
+        <p>Organization Workforce Dashboard</p>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <button onclick="logout()">Sign Out</button>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Navigation</div>
+
+        <a href="#" class="active">Dashboard</a>
+        <a href="#">Clients</a>
+        <a href="#">Placements</a>
+        <a href="#">Reports</a>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-label">Organization</div>
+
+        <a href="#">Staff Access</a>
+        <a href="#">Settings</a>
+      </div>
+    </aside>
+
+    <main class="main">
+
+      <div class="page-header">
+        <div>
+          <h2>Employment Outcomes Dashboard</h2>
+          <p>Track workforce activity, placements, and retention reporting.</p>
+        </div>
+
+        <div class="status-pill">
+          Organization Access Active
+        </div>
+      </div>
+
+      <section class="metrics-grid">
+
+        <div class="metric-card">
+          <div class="metric-label">Clients Served</div>
+          <div class="metric-value" id="clientsServed">--</div>
+          <div class="metric-sub">Total enrolled clients</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label">Resumes Built</div>
+          <div class="metric-value" id="resumesBuilt">--</div>
+          <div class="metric-sub">Resume completion count</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label">Applications</div>
+          <div class="metric-value" id="applicationsSubmitted">--</div>
+          <div class="metric-sub">Applications submitted</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label">Interviews</div>
+          <div class="metric-value" id="clientsInterviewed">--</div>
+          <div class="metric-sub">Interview activity</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label">Placement Rate</div>
+          <div class="metric-value" id="placementRate">--</div>
+          <div class="metric-sub">Current hiring percentage</div>
+        </div>
+
+      </section>
+
+      <section class="content-grid">
+
+        <div class="card">
+          <div class="card-header">
+            <h3>Client Pipeline</h3>
+          </div>
+
+          <div class="card-body">
+            <table>
+              <thead>
+                <tr>
+                  <th>Client</th>
+                  <th>Applications</th>
+                  <th>Interviews</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+
+              <tbody id="clientsTableBody">
+                <tr>
+                  <td colspan="4" class="loading">Loading client records...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>Retention Follow-Ups</h3>
+          </div>
+
+          <div class="card-body" id="followupList">
+
+            <div class="queue-item">
+              <strong>30-Day Employment Check</strong>
+              <span>Review recently hired clients for retention updates.</span>
+            </div>
+
+            <div class="queue-item">
+              <strong>Placement Reporting Review</strong>
+              <span>Verify monthly workforce reporting metrics.</span>
+            </div>
+
+            <div class="queue-item">
+              <strong>Interview Follow-Up Queue</strong>
+              <span>Review active interview-stage client records.</span>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <script>
+
+    const SUPABASE_URL = "https://qufnnmryzxsrddrhlesl.supabase.co";
+
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF1Zm5ubXJ5enhzcmRkcmhsZXNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3NTc2NzgsImV4cCI6MjA5MzMzMzY3OH0.RZcyQ92Iqav7ldC72JqnHS9q22TexhSJllR2RYpIKZw";
+
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
+    async function requireAuth() {
+
+      const {
+        data: { session }
+      } = await supabaseClient.auth.getSession();
+
+      if (!session) {
+        window.location.href = "/login.html";
+        return null;
+      }
+
+      return session;
+    }
+
+    async function loadDashboardSummary() {
+
+      const { data, error } = await supabaseClient
+        .from("dashboard_summary")
+        .select("*")
+        .limit(1)
+        .single();
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      document.getElementById("clientsServed").textContent = data.clients_served ?? 0;
+
+      document.getElementById("resumesBuilt").textContent = data.resumes_built ?? 0;
+
+      document.getElementById("applicationsSubmitted").textContent = data.applications_submitted ?? 0;
+
+      document.getElementById("clientsInterviewed").textContent = data.clients_interviewed ?? 0;
+
+      document.getElementById("placementRate").textContent = `${data.placement_rate ?? 0}%`;
+    }
+
+    async function loadClients() {
+
+      const { data, error } = await supabaseClient
+        .from("clients")
+        .select("client_code,total_applications,total_interviews,pipeline_stage")
+        .order("created_at", { ascending: false })
+        .limit(10);
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      const tableBody = document.getElementById("clientsTableBody");
+
+      if (!data || data.length === 0) {
+
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="4">No client records found.</td>
+          </tr>
+        `;
+
+        return;
+      }
+
+      tableBody.innerHTML = "";
+
+      data.forEach(client => {
+
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td>${client.client_code}</td>
+          <td>${client.total_applications}</td>
+          <td>${client.total_interviews}</td>
+          <td>
+            <span class="stage ${client.pipeline_stage}">
+              ${client.pipeline_stage}
+            </span>
+          </td>
+        `;
+
+        tableBody.appendChild(row);
+      });
+    }
+
+    async function logout() {
+
+      await supabaseClient.auth.signOut();
+
+      window.location.href = "/login.html";
+    }
+
+    async function initializeDashboard() {
+
+      const session = await requireAuth();
+
+      if (!session) return;
+
+      await loadDashboardSummary();
+
+      await loadClients();
+    }
+
+    initializeDashboard();
+
+  </script>
+
+</body>
+</html>
+
