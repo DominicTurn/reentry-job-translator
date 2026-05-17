@@ -284,137 +284,17 @@ nav {
   border-radius: 50%;
 }
 
-/* Dashboard screenshot mock */
+/* Dashboard screenshot */
 .dashboard-preview {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: 22px;
   box-shadow: var(--shadow-lg);
   overflow: hidden;
+  line-height: 0;
 }
 
-.preview-head {
-  background: var(--green);
-  color: white;
-  padding: 1.25rem 1.35rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
 
-.preview-title strong {
-  display: block;
-  font-size: 1rem;
-}
-
-.preview-title span {
-  display: block;
-  font-size: 0.7rem;
-  opacity: 0.75;
-  margin-top: 2px;
-}
-
-.preview-pill {
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.18);
-  border-radius: 999px;
-  padding: 6px 10px;
-  font-size: 0.76rem;
-  color: rgba(255,255,255,0.86);
-  white-space: nowrap;
-}
-
-.kpi-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  background: var(--border);
-  gap: 1px;
-}
-
-.kpi {
-  background: white;
-  padding: 1.15rem;
-}
-
-.kpi-label {
-  font-size: 0.62rem;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 800;
-  margin-bottom: 6px;
-}
-
-.kpi-value {
-  font-family: var(--serif);
-  font-size: 2.15rem;
-  line-height: 1;
-  font-weight: 700;
-  color: var(--text);
-}
-
-.kpi-value.green {
-  color: var(--green);
-}
-
-.kpi-value.terra {
-  color: var(--terra);
-}
-
-.preview-table {
-  padding: 0.9rem 1.1rem 1.2rem;
-}
-
-.table-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 64px 92px;
-  gap: 12px;
-  align-items: center;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #eee6dc;
-}
-
-.table-row:last-child {
-  border-bottom: none;
-}
-
-.table-row.header {
-  color: var(--muted);
-  font-size: 0.62rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 800;
-}
-
-.cell {
-  font-size: 0.84rem;
-}
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  font-size: 0.72rem;
-  padding: 4px 8px;
-  font-weight: 800;
-}
-
-.badge.hired {
-  color: var(--green);
-  background: var(--green-light);
-}
-
-.badge.interview {
-  color: #57439a;
-  background: #f0edff;
-}
-
-.badge.applied {
-  color: #7a4b00;
-  background: #fff1cf;
-}
 
 /* Trust strip */
 .trust-strip {
@@ -989,17 +869,8 @@ footer {
     padding: 0 1rem;
   }
 
-  .form-grid,
-  .kpi-grid {
+  .form-grid {
     grid-template-columns: 1fr;
-  }
-
-  .table-row {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .table-row.header {
-    display: none;
   }
 
   .hero-actions a {
@@ -1059,62 +930,13 @@ footer {
       </div>
     </div>
 
-    <div class="dashboard-preview" aria-label="Dashboard preview">
-      <div class="preview-head">
-        <div class="preview-title">
-          <strong>Outcomes Dashboard</strong>
-          <span>Last 90 days · Camden County pilot</span>
-        </div>
-        <div class="preview-pill">Export ready</div>
-      </div>
-
-      <div class="kpi-grid">
-        <div class="kpi">
-          <div class="kpi-label">Clients served</div>
-          <div class="kpi-value">142</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Clients hired</div>
-          <div class="kpi-value green">89</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Placement rate</div>
-          <div class="kpi-value terra">62.7%</div>
-        </div>
-      </div>
-
-      <div class="preview-table">
-        <div class="table-row header">
-          <div>Client ID</div>
-          <div>Case Manager</div>
-          <div>Apps</div>
-          <div>Stage</div>
-        </div>
-        <div class="table-row">
-          <div class="cell">DW 1001</div>
-          <div class="cell">J. Torres</div>
-          <div class="cell">12</div>
-          <div><span class="badge hired">Hired</span></div>
-        </div>
-        <div class="table-row">
-          <div class="cell">RM 1002</div>
-          <div class="cell">A. Patel</div>
-          <div class="cell">7</div>
-          <div><span class="badge interview">Interview</span></div>
-        </div>
-        <div class="table-row">
-          <div class="cell">TJ 1003</div>
-          <div class="cell">A. Patel</div>
-          <div class="cell">5</div>
-          <div><span class="badge applied">Applied</span></div>
-        </div>
-        <div class="table-row">
-          <div class="cell">CL 1004</div>
-          <div class="cell">S. Rivera</div>
-          <div class="cell">9</div>
-          <div><span class="badge hired">Hired</span></div>
-        </div>
-      </div>
+    <div class="dashboard-preview" aria-label="Employment Outcomes Dashboard screenshot">
+      <img
+        src="organizationdashboard.png"
+        alt="Employment Outcomes Dashboard showing client pipeline, KPI stats, and retention follow-ups"
+        width="100%"
+        style="display:block;width:100%;height:auto;"
+      >
     </div>
   </div>
 </header>
