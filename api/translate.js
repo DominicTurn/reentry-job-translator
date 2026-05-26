@@ -1,9 +1,6 @@
 // api/translate.js
-// ReEntry Job Translator – Beta-Ready Backend for Vercel Serverless (Plain Vercel)
+// ReEntry Job Translator – Anthropic Claude Sonnet Backend for Vercel Serverless
 
-/**
- * Helpers
- */
 function json(res, code, payload) {
   res.statusCode = code;
   res.setHeader("Content-Type", "application/json; charset=utf-8");
@@ -28,20 +25,12 @@ function cleanupBullets(bullets, maxLen = 240) {
     .map((b) => (b.length > maxLen ? b.slice(0, maxLen - 3).trimEnd() + "..." : b));
 }
 
-/**
- * Redaction / neutralization of stigmatizing terms.
- * - Institutions -> "structured work environment"
- * - Identity/legal labels -> "[redacted]"
- */
 function redactSensitiveText(v) {
   const s = safeString(v);
   if (!s) return "";
 
   const rules = [
-    {
-      re: /\b(prison|jail|lockup|penitentiary|correctional\s+facility|corrections)\b/gi,
-      to: "structured work environment"
-    },
+    { re: /\b(prison|jail|lockup|penitentiary|correctional\s+facility|corrections)\b/gi, to: "structured work environment" },
     { re: /\b(inmate|prisoner|offender|felon|convict)\b/gi, to: "[redacted]" },
     { re: /\b(parole|probation)\b/gi, to: "[redacted]" },
     { re: /\bincarceration\b/gi, to: "[redacted]" },
@@ -52,22 +41,13 @@ function redactSensitiveText(v) {
   let out = s;
   for (const { re, to } of rules) out = out.replace(re, to);
 
-  // Collapse repeated tokens and normalize whitespace
-  out = out
+  return out
     .replace(/\[redacted\](\s*(\||,|\/)\s*\[redacted\])+/gi, "[redacted]")
-    .replace(
-      /structured work environment(\s*(\||,|\/)\s*structured work environment)+/gi,
-      "structured work environment"
-    )
+    .replace(/structured work environment(\s*(\||,|\/)\s*structured work environment)+/gi, "structured work environment")
     .replace(/\s{2,}/g, " ")
     .trim();
-
-  return out;
 }
 
-/**
- * Safe input shaping
- */
 function sanitizeInput(obj) {
   const experiences = Array.isArray(obj?.experiences) ? obj.experiences : [];
 
@@ -83,7 +63,6 @@ function sanitizeInput(obj) {
       title: redactSensitiveText(e.title),
       organization: redactSensitiveText(e.organization),
       duration: safeString(e.duration),
-      // accept frontend "details" and backend "description"
       description: redactSensitiveText(e.description || e.details || ""),
       notes: redactSensitiveText(e.notes || "")
     };
@@ -95,11 +74,9 @@ function sanitizeInput(obj) {
   };
 }
 
-/**
- * Category -> fallback title
- */
 function titleFromCategory(category = "") {
   const key = safeString(category).toLowerCase();
+
   const map = {
     kitchen: "Food Service Support Worker",
     "facility-operations": "Facilities Support Worker",
@@ -111,12 +88,10 @@ function titleFromCategory(category = "") {
     orderly: "Environmental Services Assistant",
     peer: "Peer Support Assistant"
   };
+
   return map[key] || "Operations Support Worker";
 }
 
-/**
- * Fallback bullets based ONLY on user text.
- */
 function bulletsFromExperience(exp, title) {
   const desc = safeString(exp?.description);
   const notes = safeString(exp?.notes);
@@ -145,9 +120,8 @@ function fallbackResponse(cleanBody) {
       summary:
         "Reliable candidate with hands-on experience completing assigned tasks and supporting daily operations in structured work environments.",
       experience: experiences.map((exp) => {
-        const title =
-          safeString(exp.title) ||
-          titleFromCategory(exp.category);
+        const title = safeString(exp.title) || titleFromCategory(exp.category);
+
         return {
           translated_title: title,
           duration: safeString(exp.duration) || "Not specified",
@@ -184,9 +158,6 @@ function fallbackResponse(cleanBody) {
   };
 }
 
-/**
- * Validate model output shape
- */
 function isValidAiOutput(parsed) {
   if (!parsed || typeof parsed !== "object") return false;
 
@@ -208,11 +179,19 @@ function isValidAiOutput(parsed) {
   return true;
 }
 
-/**
- * Vercel Serverless entrypoint
- */
+function extractJson(content) {
+  const text = safeString(content);
+  const firstBrace = text.indexOf("{");
+  const lastBrace = text.lastIndexOf("}");
+
+  if (firstBrace === -1 || lastBrace === -1 || lastBrace <= firstBrace) {
+    throw new Error("No JSON object found in model response.");
+  }
+
+  return JSON.parse(text.slice(firstBrace, lastBrace + 1));
+}
+
 module.exports = async (req, res) => {
-  // Method guard
   if (req.method !== "POST") {
     return json(res, 405, { error: "Method not allowed" });
   }
@@ -226,16 +205,12 @@ module.exports = async (req, res) => {
       return json(res, 400, { error: "Experiences must be a non-empty array." });
     }
 
-    const desiredJob =
-      cleanBody.desiredJob || "Entry-level roles matching transferable skills";
-
-    // If no key, still return useful output (beta-friendly)
-    if (!process.env.OPENAI_API_KEY) {
+    if (!process.env.ANTHROPIC_API_KEY) {
       return json(res, 200, fallbackResponse(cleanBody));
     }
 
-    // Beta guardrail: bound free text sizes to avoid prompt bloat
     const MAX_FIELD_LEN = 4000;
+
     const boundedBody = {
       ...cleanBody,
       experiences: cleanBody.experiences.map((e) => ({
@@ -245,7 +220,6 @@ module.exports = async (req, res) => {
       }))
     };
 
-    // Use boundedBody.experiences as the authoritative count for later slice cap
     const boundedExperienceCount = boundedBody.experiences.length;
 
     const prompt = `
@@ -268,6 +242,9 @@ STRICT RULES:
 - Avoid corporate buzzwords.
 - If desired job is blank, generate best-fit pathways from experience.
 - If desired job is provided, connect prior experience to that target.
+- Keep outputs concise and practical.
+- Do not repeat ideas across bullets.
+- Bullets should usually stay under 25 words.
 - The tone should be respectful, practical, and confidence-building.
 - Write for a person who may need plain language and may be applying from a phone.
 - Return valid JSON only. No markdown, commentary, explanations, or code fences.
@@ -303,35 +280,36 @@ RETURN ONLY VALID JSON matching this exact structure:
 }
 `;
 
-    // Timeout protection
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 20000);
 
     let apiRes;
+
     try {
-      apiRes = await fetch("https://api.openai.com/v1/chat/completions", {
+      apiRes = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         signal: controller.signal,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
+          "x-api-key": process.env.ANTHROPIC_API_KEY,
+          "anthropic-version": "2023-06-01"
         },
         body: JSON.stringify({
-          model: process.env.OPENAI_MODEL || "gpt-4o-mini",
+          model: process.env.ANTHROPIC_MODEL || "claude-sonnet-4-6",
+          max_tokens: 4000,
           temperature: 0.1,
-          response_format: { type: "json_object" },
+          system:
+            "You are a resume assistant. Output ONLY a valid JSON object matching the requested schema. No markdown, no commentary, no extra keys.",
           messages: [
             {
-              role: "system",
-              content:
-                "You are a resume assistant. Output ONLY a valid JSON object matching the schema. No markdown, no extra keys."
-            },
-            { role: "user", content: prompt }
+              role: "user",
+              content: prompt
+            }
           ]
         })
       });
     } catch (e) {
-      console.error("OpenAI Fetch Error:", e);
+      console.error("Anthropic Fetch Error:", e);
       return json(res, 200, fallbackResponse(cleanBody));
     } finally {
       clearTimeout(timeout);
@@ -339,43 +317,39 @@ RETURN ONLY VALID JSON matching this exact structure:
 
     if (!apiRes || !apiRes.ok) {
       const errText = apiRes ? await apiRes.text() : "No response";
-      console.error("OpenAI API Error:", errText);
+      console.error("Anthropic API Error:", errText);
       return json(res, 200, fallbackResponse(cleanBody));
     }
 
-    // Parse outer response safely as text first
     const raw = await apiRes.text();
+
     let outer;
     try {
       outer = JSON.parse(raw);
     } catch (e) {
-      console.error("OpenAI Non-JSON Response:", raw);
+      console.error("Anthropic Non-JSON Response:", raw);
       return json(res, 200, fallbackResponse(cleanBody));
     }
 
-    const content = outer?.choices?.[0]?.message?.content || "{}";
+    const content = outer?.content?.[0]?.text || "{}";
 
-    // Parse model JSON content
     let parsed;
     try {
-      parsed = JSON.parse(content);
+      parsed = extractJson(content);
     } catch (e) {
       console.error("Model JSON Parse Error:", content);
       return json(res, 200, fallbackResponse(cleanBody));
     }
 
-    // Validate shape
     if (!isValidAiOutput(parsed)) {
       console.error("Invalid AI structure:", parsed);
       return json(res, 200, fallbackResponse(cleanBody));
     }
 
-    // Enforce experience count alignment against bounded input (cap extras)
     if (parsed.experience.length > boundedExperienceCount) {
       parsed.experience = parsed.experience.slice(0, boundedExperienceCount);
     }
 
-    // Cleanup outputs to reduce UI edge cases
     parsed.summary = safeString(parsed.summary);
     parsed.skills = cleanupStringArray(parsed.skills, 80);
     parsed.pathways = cleanupStringArray(parsed.pathways, 80);
@@ -391,8 +365,8 @@ RETURN ONLY VALID JSON matching this exact structure:
     }));
 
     return json(res, 200, { output: parsed });
-  } catch (err) {
-    console.error("Fatal Handler Error:", err);
-    return json(res, 200, fallbackResponse(cleanBody || req.body || {}));
+  } catch (e) {
+    console.error("Translate Handler Error:", e);
+    return json(res, 200, fallbackResponse(cleanBody || { experiences: [] }));
   }
 };
