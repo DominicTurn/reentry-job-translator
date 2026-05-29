@@ -25,15 +25,18 @@ function cleanupBullets(bullets, maxLen = 240) {
     .map((b) => (b.length > maxLen ? b.slice(0, maxLen - 3).trimEnd() + "..." : b));
 }
 
+function sanitizeSessionId(v) {
+  const s = safeString(v).slice(0, 100);
+  return /^[a-zA-Z0-9_-]+$/.test(s) ? s : null;
+}
+
 function redactSensitiveText(v) {
   const s = safeString(v);
   if (!s) return "";
 
   const rules = [
-    { re: /\b(prison|jail|lockup|penitentiary|correctional\s+facility|corrections)\b/gi, to: "structured work environment" },
-    { re: /\b(inmate|prisoner|offender|felon|convict)\b/gi, to: "[redacted]" },
-    { re: /\b(parole|probation)\b/gi, to: "[redacted]" },
-    { re: /\bincarceration\b/gi, to: "[redacted]" },
+    { re: /\b(correctional\s+facility|penitentiary|corrections|prison|jail|lockup)\b/gi, to: "structured work environment" },
+    { re: /\b(formerly\s+incarcerated|justice-impacted|incarceration|inmate|prisoner|offender|felon|convict|parole|probation)\b/gi, to: "[redacted]" },
     { re: /locked\s+up/gi, to: "[redacted]" },
     { re: /behind\s+bars/gi, to: "[redacted]" }
   ];
@@ -114,6 +117,11 @@ function bulletsFromExperience(exp, title) {
 
 function fallbackResponse(cleanBody) {
   const experiences = Array.isArray(cleanBody?.experiences) ? cleanBody.experiences : [];
+  const desiredJob = safeString(cleanBody?.desiredJob);
+
+  const pathways = desiredJob
+    ? [desiredJob, "General Laborer", "Warehouse Associate", "Facilities Assistant", "Food Service Worker"]
+    : ["General Laborer", "Warehouse Associate", "Facilities Assistant", "Food Service Worker", "Custodian"];
 
   return {
     output: {
@@ -142,13 +150,7 @@ function fallbackResponse(cleanBody) {
         "Safety Awareness",
         "Team Support"
       ],
-      pathways: [
-        "General Laborer",
-        "Warehouse Associate",
-        "Facilities Assistant",
-        "Food Service Worker",
-        "Custodian"
-      ],
+      pathways,
       interviewTips: [
         "Describe the specific tasks you completed and the setting where you performed them.",
         "Share how you stayed consistent with daily expectations and basic safety practices.",
@@ -189,6 +191,46 @@ function extractJson(content) {
   }
 
   return JSON.parse(text.slice(firstBrace, lastBrace + 1));
+}
+
+async function saveTranslationToSupabase(req, cleanBody, parsed) {
+  if (!process.env.SUPABASE_URL || !process.env.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF1Zm5ubXJ5enhzcmRkcmhsZXNsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3Nzc1NzY3OCwiZXhwIjoyMDkzMzMzNjc4fQ.UAOOx5lTEG9TsCl6cyWVmeDAte5vhyoQBLn5bZ_rHLI) {
+    console.error("Missing Supabase environment variables");
+    return;
+  }
+
+  const firstExp = parsed.experience?.[0] || {};
+
+  const saveRes = await fetch(
+    `${process.env.SUPABASE_URL}/rest/v1/translations`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: process.env.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF1Zm5ubXJ5enhzcmRkcmhsZXNsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3Nzc1NzY3OCwiZXhwIjoyMDkzMzMzNjc4fQ.UAOOx5lTEG9TsCl6cyWVmeDAte5vhyoQBLn5bZ_rHLI,
+        Authorization: `Bearer ${process.env.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF1Zm5ubXJ5enhzcmRkcmhsZXNsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3Nzc1NzY3OCwiZXhwIjoyMDkzMzMzNjc4fQ.UAOOx5lTEG9TsCl6cyWVmeDAte5vhyoQBLn5bZ_rHLI}`,
+        Prefer: "return=minimal"
+      },
+      body: JSON.stringify({
+        session_id: sanitizeSessionId(req.headers["x-session-id"]),
+        user_location: null,
+        original_input: JSON.stringify(cleanBody),
+        translated_role: safeString(firstExp.translated_title) || null,
+        onet_role: safeString(firstExp.onet_title) || null,
+        completed: true,
+        downloaded: false,
+        email_captured: false
+      })
+    }
+  );
+
+  if (!saveRes.ok) {
+    const errText = await saveRes.text();
+    console.error("Supabase insert failed:", errText);
+    return;
+  }
+
+  console.log("Translation saved to Supabase");
 }
 
 module.exports = async (req, res) => {
@@ -281,7 +323,7 @@ RETURN ONLY VALID JSON matching this exact structure:
 `;
 
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 20000);
+    const timeout = setTimeout(() => controller.abort(), 15000);
 
     let apiRes;
 
@@ -363,6 +405,12 @@ RETURN ONLY VALID JSON matching this exact structure:
       bullets: cleanupBullets(exp.bullets, 240),
       aligned_tasks: cleanupStringArray(exp.aligned_tasks, 80)
     }));
+
+    try {
+      await saveTranslationToSupabase(req, cleanBody, parsed);
+    } catch (err) {
+      console.error("Supabase save error:", err);
+    }
 
     return json(res, 200, { output: parsed });
   } catch (e) {
