@@ -202,27 +202,49 @@ async function saveTranslationToSupabase(req, cleanBody, parsed) {
   const firstExp = parsed.experience?.[0] || {};
 
   const saveRes = await fetch(
-    `${process.env.SUPABASE_URL}/rest/v1/translations`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        apikey: process.env.SUPABASE_SERVICE_ROLE_KEY,
-        Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
-        Prefer: "return=minimal"
-      },
-      body: JSON.stringify({
-        session_id: sanitizeSessionId(req.headers["x-session-id"]),
-        user_location: null,
-        original_input: JSON.stringify(cleanBody),
-        translated_role: safeString(firstExp.translated_title) || null,
-        onet_role: safeString(firstExp.onet_title) || null,
-        completed: true,
-        downloaded: false,
-        email_captured: false
-      })
-    }
-  );
+  `${process.env.SUPABASE_URL}/rest/v1/translations`,
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      apikey: process.env.SUPABASE_SERVICE_ROLE_KEY,
+      Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
+      Prefer: "return=minimal"
+    },
+    body: JSON.stringify({
+      session_id: sanitizeSessionId(req.headers["x-session-id"]),
+      user_location: null,
+
+      original_input: JSON.stringify(cleanBody),
+
+      translated_role: safeString(firstExp.translated_title) || null,
+      onet_role: safeString(firstExp.onet_title) || null,
+
+      desired_job: cleanBody.desiredJob || null,
+
+      translation_json: parsed,
+
+      experience_count: Array.isArray(parsed.experience)
+        ? parsed.experience.length
+        : 0,
+
+      skills: parsed.skills || [],
+      pathways: parsed.pathways || [],
+      interview_tips: parsed.interviewTips || [],
+
+      source: "reentry_job_translator",
+
+      model_used:
+        process.env.ANTHROPIC_MODEL || "claude-sonnet-4-6",
+
+      status: "completed",
+
+      completed: true,
+      downloaded: false,
+      email_captured: false
+    })
+  }
+);
 
   if (!saveRes.ok) {
     const errText = await saveRes.text();
