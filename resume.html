@@ -1467,18 +1467,19 @@ function addExperience() {
           '<input type="text" id="roleTitle' + idx + '" placeholder="e.g. kitchen worker, porter, laundry clerk..." oninput="updateExp(' + idx + ')">' +
         '</div>' +
         '<div class="field">' +
-          '<label>How long did you do this work?</label>' +
-          '<select id="duration' + idx + '" onchange="updateExp(' + idx + ')">' +
-            '<option value="">Select duration</option>' +
-            '<option>Less than 1 year</option>
-              <option>2 years</option> +
-              <option>3 years</option> +
-              <option>4 years</option> +
-              <option>5 years</option> +
-              <option>6 years</option> +
-              <option>7+ years</option> +
-          '</select>' +
-        '</div>' +
+  '<label>How long did you do this work?</label>' +
+  '<select id="duration' + idx + '" onchange="updateExp(' + idx + ')">' +
+    '<option value="">Select duration</option>' +
+    '<option>Less than 1 year</option>' +
+    '<option>1 year</option>' +
+    '<option>2 years</option>' +
+    '<option>3 years</option>' +
+    '<option>4 years</option>' +
+    '<option>5 years</option>' +
+    '<option>6 years</option>' +
+    '<option>7+ years</option>' +
+  '</select>' +
+'</div>' +
         '<div class="field">' +
           '<label>Describe what you actually did day-to-day</label>' +
           '<span class="hint">Include numbers if you remember them: people served, rooms cleaned, supplies tracked, team members trained, tools used.</span>' +
