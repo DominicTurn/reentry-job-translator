@@ -194,7 +194,7 @@ function extractJson(content) {
 }
 
 async function saveTranslationToSupabase(req, cleanBody, parsed) {
-  if (!process.env.SUPABASE_URL || !process.env.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF1Zm5ubXJ5enhzcmRkcmhsZXNsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3Nzc1NzY3OCwiZXhwIjoyMDkzMzMzNjc4fQ.UAOOx5lTEG9TsCl6cyWVmeDAte5vhyoQBLn5bZ_rHLI) {
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
     console.error("Missing Supabase environment variables");
     return;
   }
@@ -207,8 +207,8 @@ async function saveTranslationToSupabase(req, cleanBody, parsed) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        apikey: process.env.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF1Zm5ubXJ5enhzcmRkcmhsZXNsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3Nzc1NzY3OCwiZXhwIjoyMDkzMzMzNjc4fQ.UAOOx5lTEG9TsCl6cyWVmeDAte5vhyoQBLn5bZ_rHLI,
-        Authorization: `Bearer ${process.env.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF1Zm5ubXJ5enhzcmRkcmhsZXNsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3Nzc1NzY3OCwiZXhwIjoyMDkzMzMzNjc4fQ.UAOOx5lTEG9TsCl6cyWVmeDAte5vhyoQBLn5bZ_rHLI}`,
+        apikey: process.env.SUPABASE_SERVICE_ROLE_KEY,
+        Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
         Prefer: "return=minimal"
       },
       body: JSON.stringify({
